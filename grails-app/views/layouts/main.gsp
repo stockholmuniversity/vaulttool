@@ -50,7 +50,7 @@
         <g:if test="${flash.message}">
             <div class="row btn-success">
                 <div class="col-sm-12">
-                    ${flash.error}
+                    ${flash.message}
                 </div>
             </div>
         </g:if>
