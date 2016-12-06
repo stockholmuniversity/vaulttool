@@ -21,6 +21,18 @@ class DashboardController {
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
         [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
     }
+    def search() {
+        String secret = params?.secret?:""
+        if(secret.empty) {
+            redirect(actionName: "index")
+            return
+        }
+        def keyTree = vaultRestService.getSecretTree(session.token)
+
+        List<MetaData> metaDatas = MetaData.findAllBySecretKeyInList(keyTree).findAll{it.title.contains(secret) || it.description.contains(secret)}
+        [metadatas: metaDatas]
+
+    }
 
     def secret() {
         String key = params.key?:null

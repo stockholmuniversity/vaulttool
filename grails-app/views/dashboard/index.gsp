@@ -25,6 +25,16 @@
                 <td><g:submitButton class="btn btn-primary" name="submit" value="Create secret"/></td>
             </g:form>
         </tr>
+        <tr>
+            <td></td><td></td><td></td><td></td>
+            <g:form action="search">
+                <td>Search - Secret</td>
+                <td title="Only nonalphanumeric 7-bit ascii characters whitout whitespace allowed.">
+                    <input type="text" maxlength="60" name="secret" value=""/>
+                </td>
+                <td><g:submitButton class="btn btn-primary" name="submit" value="Search secret"/></td>
+            </g:form>
+        </tr>
     </table>
 
 <g:form action="index">
