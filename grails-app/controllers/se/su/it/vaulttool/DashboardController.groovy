@@ -9,10 +9,17 @@ class DashboardController {
         String selectedPath = params?.selectedPath?:""
 
         def paths = vaultRestService.getPaths(session.token)
+        List<Map<String, MetaData>> secretMetaData = []
         def secrets = vaultRestService.listSecrets(session.token, selectedPath)
+
         secrets.removeAll {it.endsWith("/")}
+        if(secrets) {
+            secrets.each {String secret ->
+                secretMetaData << [secret: secret, metadata: MetaData.findBySecretKey(selectedPath+secret)]
+            }
+        }
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
-        [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secrets]
+        [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
     }
 
     def secret() {
