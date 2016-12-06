@@ -30,7 +30,7 @@
 <g:form action="index">
     <ul>
         <g:each in="${secrets}" var="secret">
-            <li><g:link action="secret" params='[key: "${selectedPath}${secret}"]'>${secret}</g:link></li>
+            <li><g:link action="secret" params='[key: "${selectedPath}${secret.secret}"]'>${secret.secret} (${secret.metadata?.title?:""})</g:link></li>
         </g:each>
     </ul>
 </g:form>
