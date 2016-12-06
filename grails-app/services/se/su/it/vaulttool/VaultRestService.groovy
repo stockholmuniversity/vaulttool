@@ -142,4 +142,38 @@ class VaultRestService {
         }
         return paths
     }
+
+    List<String> getCapabilities(String token, String path) {
+        Map body = ["token": token, "path": "secret/" + path]
+        Map response = postJsonByUrlAndType(token, "/v1/sys/capabilities-self", body, null)
+
+        return response?.data?.capabilities?:[]
+    }
+
+    List<Map<String,String>> getPolicies(String token) {
+        List<Map<String,String>> policies = []
+        Map response = getJsonByUrlAndType(token, "/v1/sys/policy", null)
+
+        if(response?.data?.policies) {
+            response.data.policies.each {String policy ->
+                Map response2 = getJsonByUrlAndType(token, "/v1/sys/policy/${policy}", null)
+                policies << [policy: response2?.data?.name?:"", rules: response2?.data?.rules?:""]
+            }
+        }
+        return policies
+    }
+
+    List<Map<String,List<String>>> getAppRoles(String token) {
+        List<Map<String,List<String>>> appRoles = []
+        Map query = ["list":true]
+        Map response = getJsonByUrlAndType(token, "/v1/auth/approle/role", query)
+
+        if(response?.data?.keys) {
+            response.data.keys.each {String appRole ->
+                Map response2 = getJsonByUrlAndType(token, "/v1/auth/approle/role/${appRole}", null)
+                appRoles << [appRole: appRole, policies: response2?.data?.policies?:[]]
+            }
+        }
+        return appRoles
+    }
 }

@@ -12,10 +12,10 @@ class LoginInterceptor {
     }
 
     boolean before() {
-        if (Environment.current == Environment.DEVELOPMENT) {
+        if (Environment.current == Environment.DEVELOPMENT && !request.getAttribute("REMOTE_USER")) {
             session.uid = "testl"
             session.displayname = "Testlisa Testsson"
-            session.group = "testgroup"
+            session.group = "sysadmin"
         } else {
             if (request.getAttribute("REMOTE_USER")) {
                 session.uid = request.getAttribute("REMOTE_USER")
@@ -47,10 +47,18 @@ class LoginInterceptor {
             }
         }
         if(!session.token) {
-            String entitlementToken = vaultRestService.getEntitlementToken(grailsApplication.config.vault.nekottoor, session.group)
-            if(entitlementToken) {
-                session.token = entitlementToken
+            if(session.group == "sysadmin") {
+                session.token = grailsApplication.config.vault.nekottoor
+            } else {
+                String entitlementToken = vaultRestService.getEntitlementToken(grailsApplication.config.vault.nekottoor, session.group)
+                if (entitlementToken) {
+                    session.token = entitlementToken
+                }
             }
+        }
+        if(controllerName == "admin" && session.group != "sysadmin") {
+            redirect(controller: "public", action: "index")
+            return false
         }
         true
     }

@@ -11,8 +11,8 @@ class DashboardController {
         def paths = vaultRestService.getPaths(session.token)
         def secrets = vaultRestService.listSecrets(session.token, selectedPath)
         secrets.removeAll {it.endsWith("/")}
-
-        [selectedPath: selectedPath, paths: paths, secrets: secrets]
+        def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
+        [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secrets]
     }
 
     def secret() {
