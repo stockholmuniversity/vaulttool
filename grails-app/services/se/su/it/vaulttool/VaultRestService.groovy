@@ -95,11 +95,9 @@ class VaultRestService {
         Map response = getJsonByUrlAndType(token, "/v1/secret/$key", null)
         Entry entry = new Entry()
         entry.key           = response?.data?.key?:null
-        entry.title         = response?.data?.title?:null
-        entry.description   = response?.data?.description?:null
+        entry.userName      = response?.data?.userName?:null
         entry.pwd           = response?.data?.pwd?:null
         entry.binaryData    = response?.data?.binaryData?:null
-        entry.fileName      = response?.data?.fileName?:null
         return entry
     }
 
@@ -107,7 +105,7 @@ class VaultRestService {
         Map query = ["list":true]
         Map response = getJsonByUrlAndType(token, "/v1/secret/${path}", query)
 
-        return response?.data?.keys?:null
+        return response?.data?.keys?:[]
     }
 
     Map putSecret(String token, String key, Entry secret) {

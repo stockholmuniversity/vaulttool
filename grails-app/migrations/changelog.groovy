@@ -1,6 +1,6 @@
 databaseChangeLog = {
 
-    changeSet(author: "jqvar (generated)", id: "1481023399256-1") {
+    changeSet(author: "jqvar (generated)", id: "1481027867461-1") {
         createTable(tableName: "meta_data") {
             column(autoIncrement: "true", name: "id", type: "BIGINT") {
                 constraints(primaryKey: "true", primaryKeyName: "meta_dataPK")
@@ -14,15 +14,15 @@ databaseChangeLog = {
                 constraints(nullable: "false")
             }
 
-            column(name: "description", type: "VARCHAR(255)")
+            column(name: "description", type: "CLOB")
 
             column(name: "file_name", type: "VARCHAR(255)")
 
-            column(name: "key", type: "VARCHAR(255)") {
+            column(name: "last_updated", type: "datetime") {
                 constraints(nullable: "false")
             }
 
-            column(name: "last_updated", type: "datetime") {
+            column(name: "secret_key", type: "VARCHAR(255)") {
                 constraints(nullable: "false")
             }
 
@@ -30,7 +30,7 @@ databaseChangeLog = {
         }
     }
 
-    changeSet(author: "jqvar (generated)", id: "1481023399256-2") {
-        addUniqueConstraint(columnNames: "key", constraintName: "UC_META_DATAKEY_COL", tableName: "meta_data")
+    changeSet(author: "jqvar (generated)", id: "1481027867461-2") {
+        addUniqueConstraint(columnNames: "secret_key", constraintName: "UC_META_DATASECRET_KEY_COL", tableName: "meta_data")
     }
 }

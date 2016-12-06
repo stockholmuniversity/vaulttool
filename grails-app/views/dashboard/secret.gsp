@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>VAULTTOOL - Secret (${secret.title})</title>
+    <title>VAULTTOOL - Secret (${metadata.title})</title>
 
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
     <asset:javascript src="secret.js"/>
@@ -16,11 +16,15 @@
         <table style="border: none;">
             <tr>
                 <td>Title</td>
-                <td><input type="text" name="title" value="${secret.title}"/></td>
+                <td><input type="text" name="title" value="${metadata.title}"/></td>
             </tr>
             <tr>
                 <td>Description</td>
-                <td><textarea name="description" rows="4" cols="100">${secret.description}</textarea></td>
+                <td><textarea name="description" rows="4" cols="100">${metadata.description}</textarea></td>
+            </tr>
+            <tr>
+                <td>Username</td>
+                <td><input type="text" name="userName" value="${secret.userName}"/></td>
             </tr>
             <tr>
                 <td>Password</td>
@@ -36,11 +40,11 @@
     <hr>
     <table style="border: none;">
         <tr>
-            <g:if test="${secret.fileName && secret.binaryData}">
+            <g:if test="${metadata.fileName && secret.binaryData}">
                 <td>
                     <g:form action="download">
                         <g:hiddenField name="key" value="${secret.key}"/>
-                        <g:submitButton class="btn btn-primary" name="submit" value="Download ${secret.fileName}"/>
+                        <g:submitButton class="btn btn-primary" name="submit" value="Download ${metadata.fileName}"/>
                     </g:form>
                 </td>
             </g:if>
