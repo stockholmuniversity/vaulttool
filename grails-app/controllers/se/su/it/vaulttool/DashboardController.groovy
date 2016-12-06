@@ -38,7 +38,8 @@ class DashboardController {
             redirect(action: "index")
         }
 
-        [secret: response]
+        MetaData metaData = MetaData.findBySecretKey(key)
+        [secret: response, metadata: metaData]
     }
 
     def updateSecret() {
@@ -50,7 +51,6 @@ class DashboardController {
             redirect(actionName: "index")
             return
         }
-
         Entry entry = vaultRestService.getSecret(session.token, key)
         if(!entry) {
             String errorMsg = "Failed when trying to update secret ${key}. Error was: Secret not found."
@@ -59,10 +59,13 @@ class DashboardController {
             redirect(actionName: "index")
             return
         }
+        MetaData metaData = MetaData.findOrCreateBySecretKey(key)
+        metaData.secretKey      = key
+        metaData.title          = params?.title?:""
+        metaData.description    = params?.description?:""
 
         entry.key           = key
-        entry.title         = params?.title?:""
-        entry.description   = params?.description?:""
+        entry.userName      = params?.userName?:""
         entry.pwd           = params?.password?:""
 
         Map response = vaultRestService.putSecret(session.token, key, entry)
@@ -72,6 +75,7 @@ class DashboardController {
             flash.error = errorMsg
         } else {
             flash.message = "Successfully updated secret ${key}"
+            metaData.save()
         }
         return redirect(action: "secret", params: [key: key])
     }
@@ -109,6 +113,12 @@ class DashboardController {
             flash.error = errorMsg
             return redirect(action: "index")
         }
+        MetaData metaData = new MetaData()
+        metaData.secretKey = key
+        metaData.title = ""
+        metaData.description = ""
+        metaData.fileName = ""
+        metaData.save()
         flash.message = "Successfully created secret ${key}"
         return redirect(action: "secret", params: [key: key])
     }
@@ -130,6 +140,8 @@ class DashboardController {
             flash.error = errorMsg
             return redirect(action: "secret", params: [key: key])
         }
+        MetaData metaData = MetaData.findBySecretKey(key)
+        metaData.delete()
         flash.message = "Successfully deletet secret ${key}"
         redirect(actionName: "index")
     }
@@ -162,13 +174,14 @@ class DashboardController {
         }
 
         entry.binaryData = f.bytes
-        entry.fileName = f.originalFilename
         Map response = vaultRestService.putSecret(session.token, key, entry)
         if(response) {
             String errorMsg = "Failed when trying to upload file for secret ${key}. Error was: ${response.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
         } else {
+            MetaData metaData = MetaData.findBySecretKey(key)
+            metaData.fileName = f.originalFilename
             flash.message = "Successfully uploaded file to secret ${key}"
         }
         return redirect(action: "secret", params: [key: key])
@@ -192,9 +205,9 @@ class DashboardController {
             redirect(actionName: "index")
             return
         }
-
+        MetaData metaData = MetaData.findBySecretKey(key)
         response.setContentType("application/octet-stream")
-        response.setHeader("Content-disposition", "filename=\"${entry.fileName}\"")
+        response.setHeader("Content-disposition", "filename=\"${metaData.fileName}\"")
         response.setContentLength(entry.binaryData.size())
         response.outputStream << entry.binaryData
     }
