@@ -3,6 +3,8 @@ package se.su.it.vaulttool
 import org.apache.commons.mail.SimpleEmail
 
 class UtilityService {
+    def grailsApplication
+    def vaultRestService
 
     def sendEmail(String subject, String msg, String to) {
         SimpleEmail email = new SimpleEmail()
@@ -14,6 +16,6 @@ class UtilityService {
         //email.setAuthentication(username,password)
         //email.setSmtpPort(port)
 
-        email.send()
+        //email.send()
     }
 }
