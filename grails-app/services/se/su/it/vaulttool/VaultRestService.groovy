@@ -4,6 +4,7 @@ import groovy.json.JsonSlurper
 import groovyx.net.http.HTTPBuilder
 
 class VaultRestService {
+    static final public VAULTTOOLUSERSPATHNAME = "vaulttoolusers"
     def grailsApplication
     private HTTPBuilder http = null
 
@@ -173,5 +174,29 @@ class VaultRestService {
             }
         }
         return appRoles
+    }
+
+    List<String> listUserSecrets(String token) {
+        Map query = ["list":true]
+        Map response = getJsonByUrlAndType(token, "/v1/secret/${VAULTTOOLUSERSPATHNAME}/", query)
+
+        return response?.data?.keys?:[]
+    }
+
+    User getUserSecret(String token, String key) {
+        Map response = getJsonByUrlAndType(token, "/v1/secret/${VAULTTOOLUSERSPATHNAME}/$key", null)
+        User user = new User()
+        user.key = response?.data?.key?:null
+        user.smsNumber  = response?.data?.smsNumber?:null
+
+        return user
+    }
+
+    Map putUserSecret(String token, String key, User secret) {
+        return putJsonByUrlAndType(token,"/v1/secret/${VAULTTOOLUSERSPATHNAME}/${key}", secret.asMap(), null)
+    }
+
+    Map deleteUserSecret(String token, String key) {
+        return deleteJsonByUrlAndType(token,"/v1/secret/${VAULTTOOLUSERSPATHNAME}/${key}", null, null)
     }
 }
