@@ -29,7 +29,7 @@ class DashboardController {
         }
         def keyTree = vaultRestService.getSecretTree(session.token)
 
-        List<MetaData> metaDatas = MetaData.findAllBySecretKeyInList(keyTree).findAll{it.title.contains(secret) || it.description.contains(secret)}
+        List<MetaData> metaDatas = MetaData.findAllBySecretKeyInList(keyTree).findAll{it.secretKey.contains(secret) || it.title.contains(secret) || it.description.contains(secret)}
         [metadatas: metaDatas]
 
     }

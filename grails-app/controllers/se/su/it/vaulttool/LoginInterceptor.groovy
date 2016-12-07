@@ -5,6 +5,7 @@ import grails.util.Environment
 
 class LoginInterceptor {
     int order = 30
+    def utilityService
     def vaultRestService
 
     LoginInterceptor() {
@@ -25,12 +26,16 @@ class LoginInterceptor {
             if (request.getAttribute("displayName")) {
                 session.displayname = request.getAttribute("displayName")
             }
+            if (request.getAttribute("mail")) {
+                session.email = request.getAttribute("mail")
+            }
             if (session.group) {
 
             } else if (request.getAttribute("entitlement")) {
                 def entitlements = request.getAttribute("entitlement").split(";")
                 def entitlement = entitlements.find { String ent -> ent.toLowerCase().startsWith("urn:mace:swami.se:gmai:su-vaulttool:") }
                 if (!entitlement) {
+                    log.error("User (${session.uid?:"Unknown User"}) does not have the right entitlement!")
                     redirect(controller: "public", action: "index")
                     return false
                 }
@@ -38,14 +43,32 @@ class LoginInterceptor {
                 if (entParts.size() == 6) {
                     session.group = entParts[5]
                 } else {
+                    log.error("User (${session.uid?:"Unknown User"}) does not have the right entitlement!")
                     redirect(controller: "public", action: "index")
                     return false
                 }
             } else {
+                log.error("User (${session.uid?:"Unknown User"}) does not have the right entitlement!")
                 redirect(controller: "public", action: "index")
                 return false
             }
         }
+
+        /*if(!session.email && request.getAttribute("REMOTE_USER")) {
+            log.error("User (${session.uid?:"Unknown User"}) missing email, cant do second auth!")
+            redirect(controller: "public", action: "index")
+            return false
+        }
+        if(!session.secondauth && !session.secondauthkey && request.getAttribute("REMOTE_USER")) {
+            session.secondauthkey = generator( (('A'..'Z')+('0'..'9')).join(), 5 )
+            String message = """This is the verification code to enter at Vaulttool.\n${session.secondauthkey}\n\nHave a nice day!"""
+            utilityService.sendEmail("Vaulttool verification code", message, session.email)
+            redirect(controller: "public", action: "secondauth")
+            return false
+        } else if(!session.secondauth && session.secondauthkey && request.getAttribute("REMOTE_USER")) {
+            redirect(controller: "public", action: "secondauth")
+            return false
+        }*/
         if(!session.token) {
             if(session.group == "sysadmin") {
                 session.token = grailsApplication.config.vault.nekottoor
@@ -67,5 +90,11 @@ class LoginInterceptor {
 
     void afterView() {
         // no-op
+    }
+
+    private generator = { String alphabet, int n ->
+        new Random().with {
+            (1..n).collect { alphabet[ nextInt( alphabet.length() ) ] }.join()
+        }
     }
 }
