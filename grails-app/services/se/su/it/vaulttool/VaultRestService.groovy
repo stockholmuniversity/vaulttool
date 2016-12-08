@@ -187,6 +187,15 @@ class VaultRestService {
         return appRoles
     }
 
+    Map postApprole(String token, String appRole, List<String> policies) {
+        Map body = ["policies": policies.join(",")]
+        return putJsonByUrlAndType(token,"/v1/auth/approle/role/${appRole}", body, null)
+    }
+
+    Map deleteApprole(String token, String appRole) {
+        return deleteJsonByUrlAndType(token,"/v1/auth/approle/role/${appRole}", null, null)
+    }
+
     List<String> listUserSecrets(String token) {
         Map query = ["list":true]
         Map response = getJsonByUrlAndType(token, "/v1/secret/${VAULTTOOLUSERSPATHNAME}/", query)
