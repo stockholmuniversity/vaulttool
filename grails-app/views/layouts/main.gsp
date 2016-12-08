@@ -61,7 +61,7 @@
         </div>
     </div>
 
-    <div class="footer" role="contentinfo"></div>
+    <div class="footer" role="contentinfo">Vaulttool version&nbsp;${grailsApplication.metadata.getApplicationVersion()}&nbsp;${InetAddress?.getLocalHost()?.getHostName()}</div>
 
     <div id="spinner" class="spinner" style="display:none;">
         <g:message code="spinner.alt" default="Loading&hellip;"/>

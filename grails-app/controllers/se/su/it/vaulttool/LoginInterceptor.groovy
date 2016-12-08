@@ -18,6 +18,9 @@ class LoginInterceptor {
             session.displayname = "Testlisa Testsson"
             session.group = "sysadmin"
         } else {
+            if (request.eppn) {
+                session.eppn = request.eppn
+            }
             if (request.getAttribute("REMOTE_USER")) {
                 session.uid = request.getAttribute("REMOTE_USER")
             } else if (request.eppn) {
@@ -54,21 +57,31 @@ class LoginInterceptor {
             }
         }
 
-        /*if(!session.email && request.getAttribute("REMOTE_USER")) {
-            log.error("User (${session.uid?:"Unknown User"}) missing email, cant do second auth!")
+        if(!session.eppn && request.getAttribute("REMOTE_USER")) {
+            log.error("User (${session.uid?:"Unknown User"}) missing eppn, cant do second auth!")
             redirect(controller: "public", action: "index")
             return false
         }
         if(!session.secondauth && !session.secondauthkey && request.getAttribute("REMOTE_USER")) {
-            session.secondauthkey = generator( (('A'..'Z')+('0'..'9')).join(), 5 )
-            String message = """This is the verification code to enter at Vaulttool.\n${session.secondauthkey}\n\nHave a nice day!"""
-            utilityService.sendEmail("Vaulttool verification code", message, session.email)
-            redirect(controller: "public", action: "secondauth")
-            return false
+            User user = vaultRestService.getUserSecret(grailsApplication.config.vault.nekottoor,session.eppn)
+            String rootEppn = grailsApplication.config.vault.rooteppn?:null
+            String rootSmsNumber = grailsApplication.config.vault.rootsms?:null
+            if ((user && user.smsNumber && user.smsNumber.length() > 2) || (rootEppn && rootSmsNumber && rootSmsNumber.length() > 2 && rootEppn == session.eppn)) {
+                session.secondauthkey = generator((('A'..'Z') + ('0'..'9')).join(), 5)
+                String message = """This is the verification code to enter at Vaulttool.\n${session.secondauthkey}\n\nHave a nice day!"""
+                Sms sms = new Sms(msg: message, rcpt: (user && user.smsNumber && user.smsNumber.length() > 2)?user.smsNumber:rootSmsNumber)
+                utilityService.sendSms(sms)
+                redirect(controller: "public", action: "secondauth")
+                return false
+            } else {
+                log.error("User (${session.uid?:"Unknown User"}) does not have a registered cellphone number!")
+                redirect(controller: "public", action: "index")
+                return false
+            }
         } else if(!session.secondauth && session.secondauthkey && request.getAttribute("REMOTE_USER")) {
             redirect(controller: "public", action: "secondauth")
             return false
-        }*/
+        }
         if(!session.token) {
             if(session.group == "sysadmin") {
                 session.token = grailsApplication.config.vault.nekottoor
