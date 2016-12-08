@@ -48,7 +48,7 @@
                 </g:if>
             </div>
             <div class="col-sm-1">
-                <g:link action="deleteUser" params='[policy: "${policy.policy}"]'>Delete</g:link></li>
+                <g:link action="deletePolicy" params='[policy: "${policy.policy}"]'>Delete</g:link></li>
             </div>
         </div>
     </g:each>
