@@ -128,6 +128,7 @@ class AdminController {
             flash.error = errorMsg
             return redirect(action: "policies")
         }
+        flash.message = "Successfully created policy ${policyName}"
 
         redirect(action: "policies")
     }
@@ -152,6 +153,70 @@ class AdminController {
         flash.message = "Successfully deleted policy ${policy}"
 
         redirect(action: "policies")
+    }
+
+    def approles() {
+        List<Map<String,String>> policies = vaultRestService.getPolicies(session.token)
+        List<Map<String,List<String>>> appRoles = vaultRestService.getAppRoles(session.token)
+
+        [approles: appRoles, policies: policies]
+    }
+
+    def createApprole() {
+        String          appRoleName  = params?.name?:""
+        List<String>    policies  = []
+
+        if(appRoleName.empty) {
+            String errorMsg = "Failed when trying to create/update approle. Error was: No name supplied."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "approles")
+            return
+        }
+        if(params.policies && params.policies instanceof String[]) {
+            policies = params.policies
+        } else if(params.policies && params.policies instanceof String) {
+            policies = [params.policies]
+        }
+        if(policies.size() <= 0) {
+            String errorMsg = "Failed when trying to create/update approle. Error was: No policy supplied."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "approles")
+            return
+        }
+        Map response = vaultRestService.postApprole(session.token, appRoleName, policies)
+        if(response) {
+            String errorMsg = "Failed when trying to create/update approle ${appRoleName}. Error was: ${response.status?:'Unknown Error'}"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            return redirect(action: "approles")
+        }
+
+        flash.message = "Successfully created approle ${appRoleName}"
+        redirect(action: "approles")
+    }
+
+    def deleteApprole() {
+        String approle = params?.approle?:null
+        if(!approle) {
+            String errorMsg = "Failed when trying to delete approle. Error was: No approle name supplied.}"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "approles")
+            return
+        }
+
+        Map response = vaultRestService.deleteApprole(session.token, approle)
+        if(response) {
+            String errorMsg = "Failed when trying to delete approle ${approle}. Error was: ${response.status?:'Unknown Error'}"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            return redirect(action: "approles")
+        }
+        flash.message = "Successfully deleted approle ${approle}"
+
+        redirect(action: "approles")
     }
 
     def policiesAndAppRoles() {
