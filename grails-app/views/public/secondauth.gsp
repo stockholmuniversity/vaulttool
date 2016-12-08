@@ -17,7 +17,7 @@
     <div class="col-sm-12">
         <g:form action="secondauth">
             <input type="text" name="verificationcode" value=""/>
-            <g:submitButton name="submit" value="Verify"/>
+            <g:submitButton class="btn btn-primary" name="submit" value="Verify"/>
         </g:form>
     </div>
 </div>

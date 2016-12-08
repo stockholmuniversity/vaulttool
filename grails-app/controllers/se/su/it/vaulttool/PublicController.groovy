@@ -14,6 +14,6 @@ class PublicController {
         } else if(enteredCode){
             flash.error = "Code Mismatch, please try again."
         }
-        []
+        [dummy: "dummy"]
     }
 }
