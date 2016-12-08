@@ -62,7 +62,7 @@ class AdminController {
             String errorMsg = "Failed when trying to delete user. Error was: No secret supplied.}"
             log.error(errorMsg)
             flash.error = errorMsg
-            redirect(actionName: "index")
+            redirect(action: "user")
             return
         }
 
@@ -71,7 +71,7 @@ class AdminController {
             String errorMsg = "Failed when trying to delete user ${key}. Error was: ${response.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
-            return redirect(action: "secret", params: [key: key])
+            return redirect(action: "user")
         }
         UserData userData = UserData.findBySecretKey(key)
         userData.delete()
@@ -128,6 +128,28 @@ class AdminController {
             flash.error = errorMsg
             return redirect(action: "policies")
         }
+
+        redirect(action: "policies")
+    }
+
+    def deletePolicy() {
+        String policy = params?.policy?:null
+        if(!policy) {
+            String errorMsg = "Failed when trying to delete policy. Error was: No policy name supplied.}"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "policies")
+            return
+        }
+
+        Map response = vaultRestService.deletePolicy(session.token, policy)
+        if(response) {
+            String errorMsg = "Failed when trying to delete policy ${policy}. Error was: ${response.status?:'Unknown Error'}"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            return redirect(action: "policies")
+        }
+        flash.message = "Successfully deleted policy ${policy}"
 
         redirect(action: "policies")
     }

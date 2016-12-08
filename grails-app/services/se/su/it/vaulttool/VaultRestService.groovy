@@ -206,4 +206,8 @@ class VaultRestService {
     Map putPolicy(String token, Policy policy) {
         return putJsonByUrlAndType(token,"/v1/sys/policy/${policy.name}", policy.asMap(), null)
     }
+
+    Map deletePolicy(String token, String policy) {
+        return deleteJsonByUrlAndType(token,"/v1/sys/policy/${policy}", null, null)
+    }
 }
