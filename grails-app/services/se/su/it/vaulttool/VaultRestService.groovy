@@ -5,6 +5,7 @@ import groovyx.net.http.HTTPBuilder
 
 class VaultRestService {
     static final public VAULTTOOLUSERSPATHNAME = "vaulttoolusers"
+    static final public VAULTTOOLSECRETSPATHNAME = "vaulttoolsecrets"
     def grailsApplication
     private HTTPBuilder http = null
 
@@ -93,7 +94,7 @@ class VaultRestService {
     }
 
     Entry getSecret(String token, String key) {
-        Map response = getJsonByUrlAndType(token, "/v1/secret/$key", null)
+        Map response = getJsonByUrlAndType(token, "/v1/secret/${VAULTTOOLSECRETSPATHNAME}/$key", null)
         Entry entry = new Entry()
         entry.key           = response?.data?.key?:null
         entry.userName      = response?.data?.userName?:null
@@ -104,17 +105,17 @@ class VaultRestService {
 
     List<String> listSecrets(String token, String path = "") {
         Map query = ["list":true]
-        Map response = getJsonByUrlAndType(token, "/v1/secret/${path}", query)
+        Map response = getJsonByUrlAndType(token, "/v1/secret/${VAULTTOOLSECRETSPATHNAME}/${path}", query)
 
         return response?.data?.keys?:[]
     }
 
     Map putSecret(String token, String key, Entry secret) {
-        return putJsonByUrlAndType(token,"/v1/secret/${key}", secret.asMap(), null)
+        return putJsonByUrlAndType(token,"/v1/secret/${VAULTTOOLSECRETSPATHNAME}/${key}", secret.asMap(), null)
     }
 
     Map deleteSecret(String token, String key) {
-        return deleteJsonByUrlAndType(token,"/v1/secret/${key}", null, null)
+        return deleteJsonByUrlAndType(token,"/v1/secret/${VAULTTOOLSECRETSPATHNAME}/${key}", null, null)
     }
 
     List<String> getSecretTree(String token, String path = "") {
