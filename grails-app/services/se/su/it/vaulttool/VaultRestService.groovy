@@ -160,6 +160,8 @@ class VaultRestService {
                 policies << [policy: response2?.data?.name?:"", rules: response2?.data?.rules?:""]
             }
         }
+        policies.removeAll {it.policy == "default" || it.policy == "root" || !it.rules.contains("secret/${VAULTTOOLSECRETSPATHNAME}")}
+
         return policies
     }
 
@@ -199,5 +201,9 @@ class VaultRestService {
 
     Map deleteUserSecret(String token, String key) {
         return deleteJsonByUrlAndType(token,"/v1/secret/${VAULTTOOLUSERSPATHNAME}/${key}", null, null)
+    }
+
+    Map putPolicy(String token, Policy policy) {
+        return putJsonByUrlAndType(token,"/v1/sys/policy/${policy.name}", policy.asMap(), null)
     }
 }

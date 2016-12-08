@@ -9,11 +9,11 @@ class AdminController {
 
     def user() {
         List<Map<String, User>> secretUsers = []
-        def secrets = vaultRestService.listUserSecrets(grailsApplication.config.vault.nekottoor)
+        def secrets = vaultRestService.listUserSecrets(session.token)
         secrets.removeAll {it.endsWith("/")}
         if(secrets) {
             secrets.each {String secret ->
-                secretUsers << [secret: secret, userdata: vaultRestService.getUserSecret(grailsApplication.config.vault.nekottoor, secret)]
+                secretUsers << [secret: secret, userdata: vaultRestService.getUserSecret(session.token, secret)]
             }
         }
         [secrets: secretUsers]
@@ -40,7 +40,7 @@ class AdminController {
         User entry = new User()
         entry.key       = key
         entry.smsNumber = sms
-        Map response = vaultRestService.putUserSecret(grailsApplication.config.vault.nekottoor, key, entry)
+        Map response = vaultRestService.putUserSecret(session.token, key, entry)
         if(response) {
             String errorMsg = "Failed when trying to create/update user ${key}. Error was: ${response.status?:'Unknown Error'}"
             log.error(errorMsg)
@@ -77,6 +77,59 @@ class AdminController {
         userData.delete()
         flash.message = "Successfully deleted user ${key}"
         redirect(action: "user")
+    }
+
+    def policies() {
+        List<Map<String,String>> policies = vaultRestService.getPolicies(session.token)
+
+        [policies: policies]
+    }
+
+    def createPolicy() {
+        String      policyName  = params?.name?:""
+        String      policyPath  = params?.path?:""
+        boolean     create      = params?.create?true:false
+        boolean     read        = params?.read?true:false
+        boolean     update      = params?.update?true:false
+        boolean     delete      = params?.delete?true:false
+        boolean     list        = params?.list?true:false
+
+        if(policyName.empty) {
+            String errorMsg = "Failed when trying to create/update policy. Error was: No name supplied."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "policies")
+            return
+        }
+        if(!create && !read && !update && !delete && !list) {
+            String errorMsg = "Failed when trying to create/update policy. Error was: No capabilities selected."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "policies")
+            return
+        }
+
+        if(policyPath && policyPath.toLowerCase().startsWith("secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}".toLowerCase())) {
+            if(policyPath.toLowerCase().startsWith("secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}/".toLowerCase())) {
+                policyPath = policyPath.substring("secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}/".length())
+            } else {
+                policyPath = policyPath.substring("secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}".length())
+            }
+        }
+
+        Policy policy = new Policy(create: create, read: read, update: update, delete: delete, list: list)
+        policy.setName(policyName)
+        policy.setPath(policyPath)
+
+        Map response = vaultRestService.putPolicy(session.token, policy)
+        if(response) {
+            String errorMsg = "Failed when trying to create/update policy ${policyName}. Error was: ${response.status?:'Unknown Error'}"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            return redirect(action: "policies")
+        }
+
+        redirect(action: "policies")
     }
 
     def policiesAndAppRoles() {
