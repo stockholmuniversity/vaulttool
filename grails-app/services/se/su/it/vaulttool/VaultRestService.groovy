@@ -165,6 +165,14 @@ class VaultRestService {
         return policies
     }
 
+    Map putPolicy(String token, Policy policy) {
+        return putJsonByUrlAndType(token,"/v1/sys/policy/${policy.name}", policy.asMap(), null)
+    }
+
+    Map deletePolicy(String token, String policy) {
+        return deleteJsonByUrlAndType(token,"/v1/sys/policy/${policy}", null, null)
+    }
+
     List<Map<String,List<String>>> getAppRoles(String token) {
         List<Map<String,List<String>>> appRoles = []
         Map query = ["list":true]
@@ -201,13 +209,5 @@ class VaultRestService {
 
     Map deleteUserSecret(String token, String key) {
         return deleteJsonByUrlAndType(token,"/v1/secret/${VAULTTOOLUSERSPATHNAME}/${key}", null, null)
-    }
-
-    Map putPolicy(String token, Policy policy) {
-        return putJsonByUrlAndType(token,"/v1/sys/policy/${policy.name}", policy.asMap(), null)
-    }
-
-    Map deletePolicy(String token, String policy) {
-        return deleteJsonByUrlAndType(token,"/v1/sys/policy/${policy}", null, null)
     }
 }
