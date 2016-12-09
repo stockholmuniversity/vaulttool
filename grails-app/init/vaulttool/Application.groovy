@@ -8,16 +8,11 @@ import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
 import org.springframework.context.EnvironmentAware
 import org.springframework.context.annotation.Bean
-import org.springframework.context.annotation.Profile
 import org.springframework.core.env.Environment
 import org.springframework.core.env.PropertiesPropertySource
 import org.springframework.core.io.FileSystemResource
 import org.springframework.core.io.Resource
 import se.su.it.tomcat.valves.HeaderEncodingValve
-
-import javax.naming.Context
-import javax.naming.InitialContext
-import javax.naming.NamingException
 
 class Application extends GrailsAutoConfiguration implements EnvironmentAware{
     static void main(String[] args) {
