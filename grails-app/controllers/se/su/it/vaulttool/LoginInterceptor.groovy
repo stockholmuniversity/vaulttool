@@ -83,6 +83,7 @@ class LoginInterceptor {
             return false
         }
         if(!session.token) {
+            vaultRestService.enableApproleAuth(grailsApplication.config.vault.nekottoor)
             if(session.group == "sysadmin") {
                 session.token = grailsApplication.config.vault.nekottoor
             } else {

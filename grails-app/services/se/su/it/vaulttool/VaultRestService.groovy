@@ -45,11 +45,14 @@ class VaultRestService {
                     body = theBody
                 }
                 response.success = { resp, reader ->
-                    result = reader
+                        result = reader
                 }
                 response.'404' = { resp, reader ->
-                    //log.warn("Entry not found 404 while doing REST REQUEST: ${resp.statusLine}, ${reader.getText()}")
-                    result = null
+                    if(internalMethod == groovyx.net.http.Method.GET) {
+                        result = null
+                    } else {
+                        result = ["status": resp?.status?:0, "msg": resp?.statusLine?:"", "returnbody": reader?:""]
+                    }
                 }
                 response.failure = { resp, reader ->
                     log.warn("Failure while doing REST REQUEST: ${resp?.statusLine}, ${reader}")
@@ -79,6 +82,14 @@ class VaultRestService {
     private Map deleteJsonByUrlAndType(String token, String url, Map body = [:], Map query = [:]) {
         String jsonUtf8Type = "application/json; charset=UTF-8"
         return doRest(token, "DELETE", url, jsonUtf8Type, body, query)
+    }
+
+    void enableApproleAuth(String rootToken) {
+        try {
+            postJsonByUrlAndType(rootToken, "/v1/sys/auth/approle", ["type": "approle"], null)
+        } catch (Exception ex) {
+
+        }
     }
 
     String getEntitlementToken(String rootToken, String entitlement) {
