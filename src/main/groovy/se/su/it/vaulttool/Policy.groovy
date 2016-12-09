@@ -21,6 +21,10 @@ class Policy {
         }
     }
 
+    public void setSpecialPath(String policyPath) {
+        path = policyPath
+    }
+
     public Map asMap() {
         List<String> capabilities = []
         if(create){capabilities << '"create"'}
