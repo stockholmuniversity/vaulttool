@@ -109,11 +109,12 @@ class AdminController {
             return
         }
 
-        if(policyPath && policyPath.toLowerCase().startsWith("secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}".toLowerCase())) {
-            if(policyPath.toLowerCase().startsWith("secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}/".toLowerCase())) {
-                policyPath = policyPath.substring("secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}/".length())
-            } else {
-                policyPath = policyPath.substring("secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}".length())
+        if(policyPath != null) {
+            if(policyPath.startsWith("/")) {
+                policyPath = policyPath.substring(1)
+            }
+            if(!policyPath.endsWith("*")) {
+                policyPath += "*"
             }
         }
 

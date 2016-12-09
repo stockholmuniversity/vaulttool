@@ -155,7 +155,7 @@ class VaultRestService {
     }
 
     List<String> getCapabilities(String token, String path) {
-        Map body = ["token": token, "path": "secret/" + path]
+        Map body = ["token": token, "path": "secret/vaulttoolsecrets/" + path + "*"]
         Map response = postJsonByUrlAndType(token, "/v1/sys/capabilities-self", body, null)
 
         return response?.data?.capabilities?:[]
@@ -174,6 +174,14 @@ class VaultRestService {
         policies.removeAll {it.policy == "default" || it.policy == "root" || !it.rules.contains("secret/${VAULTTOOLSECRETSPATHNAME}")}
 
         return policies
+    }
+
+    Map putDefaultVaultToolPolicy(String token) {
+        Policy policy = new Policy()
+        policy.setName("defaultvaulttool")
+        policy.setSpecialPath("secret/*")
+        policy.list = true
+        return putJsonByUrlAndType(token,"/v1/sys/policy/${policy.name}", policy.asMap(), null)
     }
 
     Map putPolicy(String token, Policy policy) {
@@ -199,6 +207,7 @@ class VaultRestService {
     }
 
     Map postApprole(String token, String appRole, List<String> policies) {
+        policies << "defaultvaulttool"
         Map body = ["policies": policies.join(",")]
         return putJsonByUrlAndType(token,"/v1/auth/approle/role/${appRole}", body, null)
     }
