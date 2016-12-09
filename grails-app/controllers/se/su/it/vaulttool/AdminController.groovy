@@ -109,7 +109,7 @@ class AdminController {
             return
         }
 
-        if(policyPath) {
+        if(policyPath != null) {
             if(policyPath.startsWith("/")) {
                 policyPath = policyPath.substring(1)
             }
