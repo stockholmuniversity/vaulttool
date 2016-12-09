@@ -1,4 +1,4 @@
-package vaulttool
+package se.su.it.vaulttool
 
 class UrlMappings {
 
