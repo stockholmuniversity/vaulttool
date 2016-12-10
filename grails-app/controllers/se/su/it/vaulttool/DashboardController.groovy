@@ -6,11 +6,6 @@ class DashboardController {
     def vaultRestService
     def utilityService
 
-    def test() {
-        utilityService.sendSms()
-        render "hej"
-    }
-
     def index() {
         String selectedPath = params?.selectedPath?:""
 

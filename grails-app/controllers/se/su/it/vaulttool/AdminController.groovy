@@ -80,9 +80,10 @@ class AdminController {
     }
 
     def policies() {
+        List<String> paths = vaultRestService.getPaths(session.token)
         List<Map<String,String>> policies = vaultRestService.getPolicies(session.token)
 
-        [policies: policies]
+        [policies: policies, paths: paths]
     }
 
     def createPolicy() {
@@ -109,14 +110,7 @@ class AdminController {
             return
         }
 
-        if(policyPath != null) {
-            if(policyPath.startsWith("/")) {
-                policyPath = policyPath.substring(1)
-            }
-            if(!policyPath.endsWith("*")) {
-                policyPath += "*"
-            }
-        }
+        policyPath += "*"
 
         Policy policy = new Policy(create: create, read: read, update: update, delete: delete, list: list)
         policy.setName(policyName)
