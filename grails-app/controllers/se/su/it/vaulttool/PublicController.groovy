@@ -16,4 +16,15 @@ class PublicController {
         }
         [dummy: "dummy"]
     }
+
+    def logout() {
+        session.uid = null
+        session.displayname     = null
+        session.group           = null
+        session.eppn            = null
+        session.email           = null
+        session.secondauth      = null
+        session.secondauthkey   = null
+        session.token           = null
+    }
 }
