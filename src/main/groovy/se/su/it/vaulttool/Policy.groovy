@@ -14,10 +14,10 @@ class Policy {
     }
 
     public void setPath(String policyPath) {
-        if(!policyPath.empty) {
-            path = "secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}/${policyPath}"
+        if(policyPath.empty) {
+            path = "secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}/*"
         } else {
-            path = "secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}"
+            path = "secret/${VaultRestService.VAULTTOOLSECRETSPATHNAME}/${policyPath}"
         }
     }
 

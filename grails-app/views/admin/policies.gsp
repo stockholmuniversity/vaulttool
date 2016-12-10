@@ -15,7 +15,7 @@
                 <label for="name">Create/Update policy - Policy name</label>
                 <input type="text" id="name" name="name" value=""/>
                 <label for="path">Path</label>
-                <input type="text" id="path" name="path" value=""/>
+                <g:select id="path" name="path" from="${paths}" value="" noSelection="${['':'Root']}"/>
                 <label for="create">Create</label>
                 <g:checkBox name="create" id="read"/>
                 <label for="read">Read</label>
