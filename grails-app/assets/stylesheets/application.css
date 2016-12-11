@@ -8,17 +8,29 @@
 * compiled file, but it's generally better to create a new file per style scope.
 *
 *= require bootstrap
-*= require grails
-*= require main
-*= require mobile
 *= require_self
 */
-div.clear-float {
-    display: block;
-    clear: both;
-    line-height: 0;
-    font-size: 0;
-    width: 1px;
-    height: 0px;
-    visibility: hidden;
+
+.su-jumbotron {
+    position: relative;
+    font-size: 14px;
+    height: 150px;
+    background-color: #002e5f;
+    color : white;
+    padding: 20px;
+    margin-bottom: 10px;
+    /*the negative margin is to counter bootstraps
+    container class to strech the jumbotron
+    out over the whole container object.*/
+    margin-right: -15px;
+    margin-left: -15px;
+}
+
+.footer {
+    background-color: #002f5f;
+    color: white;
+    font-size: 100%;
+    position: relative;
+    padding-top: -180px; /* negative value of footer height */
+    clear:both;
 }

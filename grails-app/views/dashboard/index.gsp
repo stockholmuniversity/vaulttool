@@ -8,7 +8,7 @@
 </head>
 
 <body>
-    <table style="border: none;">
+    <table class="table" style="border: none;">
         <tr>
             <td><g:form action="index"><g:select onchange="submit();" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/></g:form></td>
             <td><i>(${capabilities.join(", ")})</i></td>
