@@ -13,7 +13,7 @@
     <h1>Secret - ${secret.key}</h1>
     <g:form action="updateSecret">
         <g:hiddenField name="key" value="${secret.key}"/>
-        <table style="border: none;">
+        <table class="table" style="border: none;">
             <tr>
                 <td>Title</td>
                 <td><input type="text" name="title" value="${metadata.title}"/></td>
@@ -38,7 +38,7 @@
     <div class="clear-float"></div>
     <br/>
     <hr>
-    <table style="border: none;">
+    <table class="table" style="border: none;">
         <tr>
             <g:if test="${metadata.fileName && secret.binaryData}">
                 <td>
@@ -51,7 +51,7 @@
             <td>
                 <g:form action="upload" method="post" enctype="multipart/form-data" useToken="false">
                     <g:hiddenField name="key" value="${secret.key}"/>
-                    <table style="border: none;width: 30%;">
+                    <table class="table" style="border: none;width: 30%;">
                         <tr>
                             <td><input type="file" id="attachment" name="attachment" /></td>
                             <td><g:submitButton class="btn btn-primary" name="submit" value="Upload file"/></td>
