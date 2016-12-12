@@ -131,6 +131,7 @@ vault:
     url: "http://127.0.0.1:8200"
     rooteppn: "????"
     rootsms: "??????"
+    sysadmdevgroup: "??????"
 
 suservicemix:
     restUrl: "https://esb-test.it.su.se"

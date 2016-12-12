@@ -4,7 +4,22 @@ class AdminController {
     def vaultRestService
 
     def index() {
+        List<Map<String,List<String>>> appRoles = vaultRestService.getAppRoles(session.token)
+        [approles: appRoles]
+    }
 
+    def sudo() {
+        String sudo = params.sudo?:""
+        if(sudo.empty) {
+            String errorMsg = "Failed when trying to sudo. Error was: No group supplied."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "index")
+            return
+        }
+        session.sudo = sudo
+        session.token = null
+        redirect(controller: "dashboard", action: "index")
     }
 
     def user() {

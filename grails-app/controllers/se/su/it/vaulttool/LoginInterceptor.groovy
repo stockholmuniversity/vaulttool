@@ -16,7 +16,11 @@ class LoginInterceptor {
         if (Environment.current == Environment.DEVELOPMENT && !request.getAttribute("REMOTE_USER")) {
             session.uid = "testl"
             session.displayname = "Testlisa Testsson"
-            session.group = "sysadmin"
+            if(session.sudo) {
+                session.group = session.sudo
+            } else {
+                session.group = "sysadmin"
+            }
         } else {
             if (request.eppn) {
                 session.eppn = request.eppn
@@ -31,6 +35,9 @@ class LoginInterceptor {
             }
             if (request.getAttribute("mail")) {
                 session.email = request.getAttribute("mail")
+            }
+            if(session.sudo) {
+                session.group = session.sudo
             }
             if (session.group) {
 
@@ -84,7 +91,7 @@ class LoginInterceptor {
         }
         if(!session.token) {
             //vaultRestService.enableApproleAuth(grailsApplication.config.vault.nekottoor)
-            if(session.group == "sysadmin") {
+            if(session.group == "sysadmin" || session.group == grailsApplication.config.vault.sysadmdevgroup) {
                 session.token = grailsApplication.config.vault.nekottoor
             } else {
                 String entitlementToken = vaultRestService.getEntitlementToken(grailsApplication.config.vault.nekottoor, session.group)

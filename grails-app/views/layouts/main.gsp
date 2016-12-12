@@ -27,6 +27,9 @@
             <g:if test="${session.group == 'sysadmin'}">
                 <g:link class="pull-right disable-link-colors margin-right-1-char" controller="admin" action="index">Administration</g:link>
             </g:if>
+            <g:if test="${session.sudo != null}">
+                <g:link class="pull-right disable-link-colors margin-right-1-char" controller="public" action="disableSudo">Disable Sudo-Mode</g:link>
+            </g:if>
             <a class="disable-link-colors" href="http://su.se">
                 <asset:image class="pull-left" alt="Stockholms universitet" src="logo_su_se_big_dark_blue.gif"/>
             </a>

@@ -26,5 +26,13 @@ class PublicController {
         session.secondauth      = null
         session.secondauthkey   = null
         session.token           = null
+        session.sudo            = null
+    }
+
+    def disableSudo() {
+        session.sudo = null
+        session.token = null
+
+        redirect(controller: "dashboard", action: "index")
     }
 }
