@@ -21,9 +21,16 @@
     <div class="container">
         <div class="jumbotron su-jumbotron">
             <span>Welcome ${session?.displayname?:"Unknown User"} - Your current group is ${session?.group?:"Unknown Group"}</span>
-            <g:link class="pull-right" controller="public" action="logout">Logout</g:link>
-            <asset:image class="pull-left" alt="Stockholms universitet" src="logo_su_se_big_dark_blue.gif"/>
-            <h1 class="pull-right">Vaulttool</h1>
+            <g:if test="${session.token != null}">
+                <g:link class="pull-right disable-link-colors" controller="public" action="logout">Logout</g:link>
+            </g:if>
+            <g:if test="${session.group == 'sysadmin'}">
+                <g:link class="pull-right disable-link-colors margin-right-1-char" controller="admin" action="index">Administration</g:link>
+            </g:if>
+            <a class="disable-link-colors" href="http://su.se">
+                <asset:image class="pull-left" alt="Stockholms universitet" src="logo_su_se_big_dark_blue.gif"/>
+            </a>
+            <g:link class="disable-link-colors" controller="dashboard" action="index"><h1 class="jumbo-appname">Vaulttool</h1></g:link>
         </div>
         <g:if test="${flash.error}">
             <div class="row btn-danger">

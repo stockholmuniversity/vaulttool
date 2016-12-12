@@ -3,7 +3,7 @@
 <head>
     <meta name="layout" content="main"/>
     <title>VAULTTOOL - AppRole(Entitlement) Administration</title>
-    <asset:javascript src="index.js"/>
+    <asset:javascript src="inputrules.js"/>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 
@@ -13,7 +13,7 @@
         <div class="col-sm-12">
             <g:form action="createApprole">
                 <label for="name">Create/Update approle - AppRole(Entitlement) name</label>
-                <input type="text" id="name" name="name" value=""/>
+                <input class="allowonly7bit" type="text" id="name" name="name" value=""/>
                 <label for="policies">Policies</label>
                 <g:select from="${policies*.policy}"  multiple="multiple" id="policies" name="policies"/>
                 <g:submitButton class="btn btn-primary" name="submit" value="Create/Update Approle"/>
