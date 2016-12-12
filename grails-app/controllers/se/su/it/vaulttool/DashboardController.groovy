@@ -45,21 +45,23 @@ class DashboardController {
             return
         }
 
-        Entry response = vaultRestService.getSecret(session.token, key)
-        if(response && !response.key) {
-            String errorMsg = "Failed when trying to read secret ${key}. Error was: 'Unknown Error'"
+        Expando response = vaultRestService.getSecret(session.token, key)
+        if(response.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
             log.error(errorMsg)
             flash.error = errorMsg
             redirect(action: "index")
-        } else if(!response) {
+            return
+        } else if(!response.entry) {
             String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
             log.error(errorMsg)
             flash.error = errorMsg
             redirect(action: "index")
+            return
         }
 
         MetaData metaData = MetaData.findBySecretKey(key)
-        [secret: response, metadata: metaData]
+        [secret: response.entry, metadata: metaData]
     }
 
     def updateSecret() {
@@ -71,12 +73,18 @@ class DashboardController {
             redirect(actionName: "index")
             return
         }
-        Entry entry = vaultRestService.getSecret(session.token, key)
-        if(!entry) {
-            String errorMsg = "Failed when trying to update secret ${key}. Error was: Secret not found."
+        Expando response = vaultRestService.getSecret(session.token, key)
+        if(response.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
             log.error(errorMsg)
             flash.error = errorMsg
-            redirect(actionName: "index")
+            redirect(action: "index")
+            return
+        } else if(!response.entry) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "index")
             return
         }
         MetaData metaData = MetaData.findOrCreateBySecretKey(key)
@@ -84,13 +92,14 @@ class DashboardController {
         metaData.title          = params?.title?:""
         metaData.description    = params?.description?:""
 
+        Entry entry = response.entry
         entry.key           = key
         entry.userName      = params?.userName?:""
         entry.pwd           = params?.password?:""
 
-        Map response = vaultRestService.putSecret(session.token, key, entry)
-        if(response) {
-            String errorMsg = "Failed when trying to update secret ${key}. Error was: ${response.status?:'Unknown Error'}"
+        Map response2 = vaultRestService.putSecret(session.token, key, entry)
+        if(response2) {
+            String errorMsg = "Failed when trying to update secret ${key}. Error was: ${response2.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
         } else {
@@ -176,27 +185,26 @@ class DashboardController {
             return
         }
 
-        Entry entry = vaultRestService.getSecret(session.token, key)
-        if(!entry) {
-            String errorMsg = "Failed when trying to upload file for secret ${key}. Error was: Secret not found."
+        Expando response = vaultRestService.getSecret(session.token, key)
+        if(response.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
             log.error(errorMsg)
             flash.error = errorMsg
-            redirect(actionName: "index")
+            redirect(action: "index")
             return
-        }
-        MultipartFile f = request.getFile('attachment')
-        if (f.empty) {
-            String errorMsg = "Failed when trying to upload file for secret ${key}. Error was: File not found in request."
+        } else if(!response.entry) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
             log.error(errorMsg)
             flash.error = errorMsg
-            redirect(actionName: "index")
+            redirect(action: "index")
             return
         }
 
+        Entry entry = response.entry
         entry.binaryData = f.bytes
-        Map response = vaultRestService.putSecret(session.token, key, entry)
-        if(response) {
-            String errorMsg = "Failed when trying to upload file for secret ${key}. Error was: ${response.status?:'Unknown Error'}"
+        Map response2 = vaultRestService.putSecret(session.token, key, entry)
+        if(response2) {
+            String errorMsg = "Failed when trying to upload file for secret ${key}. Error was: ${response2.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
         } else {
@@ -217,14 +225,21 @@ class DashboardController {
             return
         }
 
-        Entry entry = vaultRestService.getSecret(session.token, key)
-        if(!entry) {
-            String errorMsg = "Failed when trying to download file for secret ${key}. Error was: Secret not found."
+        Expando response = vaultRestService.getSecret(session.token, key)
+        if(response.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
             log.error(errorMsg)
             flash.error = errorMsg
-            redirect(actionName: "index")
+            redirect(action: "index")
+            return
+        } else if(!response.entry) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "index")
             return
         }
+        Entry entry = response.entry
         MetaData metaData = MetaData.findBySecretKey(key)
         response.setContentType("application/octet-stream")
         response.setHeader("Content-disposition", "filename=\"${metaData.fileName}\"")
