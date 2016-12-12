@@ -104,14 +104,19 @@ class VaultRestService {
         return response?.auth?.client_token?:null
     }
 
-    Entry getSecret(String token, String key) {
+    Expando getSecret(String token, String key) {
         Map response = getJsonByUrlAndType(token, "/v1/secret/${VAULTTOOLSECRETSPATHNAME}/$key", null)
+        if(response == null) {
+            return new Expando(status: null, entry: null)
+        } else if(response.status) {
+            return new Expando(status: response.status, entry: null)
+        }
         Entry entry = new Entry()
         entry.key           = response?.data?.key?:null
         entry.userName      = response?.data?.userName?:null
         entry.pwd           = response?.data?.pwd?:null
         entry.binaryData    = response?.data?.binaryData?:null
-        return entry
+        return new Expando(status: null, entry: entry)
     }
 
     List<String> listSecrets(String token, String path = "") {
