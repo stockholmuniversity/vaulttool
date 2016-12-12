@@ -3,7 +3,7 @@
 <head>
     <meta name="layout" content="main"/>
     <title>VAULTTOOL - Policy Administration</title>
-    <asset:javascript src="index.js"/>
+    <asset:javascript src="inputrules.js"/>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 
@@ -13,7 +13,7 @@
         <div class="col-sm-12">
             <g:form action="createPolicy">
                 <label for="name">Create/Update policy - Policy name</label>
-                <input type="text" id="name" name="name" value=""/>
+                <input class="allowonly7bit" type="text" id="name" name="name" value=""/>
                 <label for="path">Path</label>
                 <g:select id="path" name="path" from="${paths}" value="" noSelection="${['':'Root']}"/>
                 <label for="create">Create</label>

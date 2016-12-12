@@ -3,7 +3,7 @@
 <head>
     <meta name="layout" content="main"/>
     <title>VAULTTOOL - User Administration</title>
-    <asset:javascript src="index.js"/>
+    <asset:javascript src="inputrules.js"/>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 
@@ -13,9 +13,9 @@
         <div class="col-sm-12">
             <g:form action="createUser">
                 <label for="eppn">Create/Update user - EPPN</label>
-                <input type="text" id="eppn" name="eppn" value=""/>
+                <input class="eppnformat" type="text" id="eppn" name="eppn" value=""/>
                 <label for="sms">Cellphone number</label>
-                <input type="text" id="sms" name="sms" value=""/>
+                <input class="cellphone" type="text" id="sms" name="sms" value=""/>
                 <g:submitButton class="btn btn-primary" name="submit" value="Create User"/>
             </g:form>
         </div>
