@@ -11,6 +11,15 @@
     <h1>Administration</h1>
     <div class="row">
         <div class="col-sm-12">
+            <g:form action="sudo">
+                <label for="sudo">Sudo</label>
+                <g:select from="${approles*.appRole}" id="sudo" name="sudo" noSelection="${['':'Select group']}"/>
+                <g:submitButton class="btn btn-primary" name="submit" value="Sudo now"/>
+            </g:form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
             <g:link action="user">Administrate users</g:link>
         </div>
     </div>
