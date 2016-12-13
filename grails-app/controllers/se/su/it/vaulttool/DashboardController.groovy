@@ -200,6 +200,15 @@ class DashboardController {
             return
         }
 
+        MultipartFile f = request.getFile('attachment')
+        if (f.empty) {
+            String errorMsg = "Failed when trying to upload file for secret ${key}. Error was: File not found in request."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(actionName: "index")
+            return
+        }
+
         Entry entry = response.entry
         entry.binaryData = f.bytes
         Map response2 = vaultRestService.putSecret(session.token, key, entry)
@@ -225,21 +234,21 @@ class DashboardController {
             return
         }
 
-        Expando response = vaultRestService.getSecret(session.token, key)
-        if(response.status) {
-            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
+        Expando response2 = vaultRestService.getSecret(session.token, key)
+        if(response2.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response2.status}"
             log.error(errorMsg)
             flash.error = errorMsg
             redirect(action: "index")
             return
-        } else if(!response.entry) {
+        } else if(!response2.entry) {
             String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
             log.error(errorMsg)
             flash.error = errorMsg
             redirect(action: "index")
             return
         }
-        Entry entry = response.entry
+        Entry entry = response2.entry
         MetaData metaData = MetaData.findBySecretKey(key)
         response.setContentType("application/octet-stream")
         response.setHeader("Content-disposition", "filename=\"${metaData.fileName}\"")
