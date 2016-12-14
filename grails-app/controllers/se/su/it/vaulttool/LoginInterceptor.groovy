@@ -39,24 +39,31 @@ class LoginInterceptor {
             if(session.sudo) {
                 session.group = session.sudo
             }
-            if (session.group) {
-
-            } else if (request.getAttribute("entitlement")) {
+            if(!session.groups) {
                 def entitlements = request.getAttribute("entitlement").split(";")
-                def entitlement = entitlements.find { String ent -> ent.toLowerCase().startsWith("urn:mace:swami.se:gmai:su-vaulttool:") }
-                if (!entitlement) {
+                def entitlementList = entitlements.findAll { String ent -> ent.toLowerCase().startsWith("urn:mace:swami.se:gmai:su-vaulttool:") }
+                if (!entitlementList || entitlementList.size() <= 0) {
                     log.error("User (${session.uid?:"Unknown User"}) does not have the right entitlement!")
                     redirect(controller: "public", action: "index")
                     return false
                 }
-                def entParts = entitlement.split(":")
-                if (entParts.size() == 6) {
-                    session.group = entParts[5]
-                } else {
+                entitlementList.each {String entitlement ->
+                    def entParts = entitlementList.split(":")
+                    if (entParts.size() == 6) {
+                        if(!session.groups) {
+                            session.groups = []
+                        }
+                        session.groups << entParts[5]
+                    }
+                }
+                if(!session.groups) {
                     log.error("User (${session.uid?:"Unknown User"}) does not have the right entitlement!")
                     redirect(controller: "public", action: "index")
                     return false
                 }
+            }
+            if (!session.group && session.groups && session.groups.size() > 0) {
+                session.group = session.groups[0]
             } else {
                 log.error("User (${session.uid?:"Unknown User"}) does not have the right entitlement!")
                 redirect(controller: "public", action: "index")

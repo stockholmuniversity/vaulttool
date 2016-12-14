@@ -27,6 +27,7 @@ class PublicController {
         session.secondauthkey   = null
         session.token           = null
         session.sudo            = null
+        session.groups          = null
     }
 
     def disableSudo() {
