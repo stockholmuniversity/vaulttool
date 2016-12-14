@@ -48,7 +48,7 @@ class LoginInterceptor {
                     return false
                 }
                 entitlementList.each {String entitlement ->
-                    def entParts = entitlementList.split(":")
+                    def entParts = entitlement.split(":")
                     if (entParts.size() == 6) {
                         if(!session.groups) {
                             session.groups = []
@@ -64,7 +64,7 @@ class LoginInterceptor {
             }
             if (!session.group && session.groups && session.groups.size() > 0) {
                 session.group = session.groups[0]
-            } else {
+            } else if(!session.group) {
                 log.error("User (${session.uid?:"Unknown User"}) does not have the right entitlement!")
                 redirect(controller: "public", action: "index")
                 return false
@@ -107,7 +107,7 @@ class LoginInterceptor {
                 }
             }
         }
-        if(controllerName == "admin" && session.group != "sysadmin") {
+        if(controllerName == "admin" && (session.group != "sysadmin" || session.group != grailsApplication.config.vault.sysadmdevgroup)) {
             redirect(controller: "public", action: "index")
             return false
         }
