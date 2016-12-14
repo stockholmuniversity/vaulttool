@@ -30,6 +30,11 @@
             <g:if test="${session.sudo != null}">
                 <g:link class="pull-right disable-link-colors margin-right-1-char" controller="public" action="disableSudo">Disable Sudo-Mode</g:link>
             </g:if>
+            <g:if test="${session.groups != null && session.groups.size() > 1 && !session.sudo}">
+                <g:form style="float: right;" controller="dashboard" action="setGroup" method="post">
+                    <g:select onchange="submit();" class="pull-right margin-right-1-char" name="group" from="${session.groups}" value="${session?.group?:""}" noSelection="${['':'Select group']}"/>
+                </g:form>
+            </g:if>
             <a class="disable-link-colors" href="http://su.se">
                 <asset:image class="pull-left" alt="Stockholms universitet" src="logo_su_se_big_dark_blue.gif"/>
             </a>
