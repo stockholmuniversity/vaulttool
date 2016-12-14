@@ -36,4 +36,23 @@ class PublicController {
 
         redirect(controller: "dashboard", action: "index")
     }
+
+    def setGroup() {
+        String group = params?.group?:null
+        if(!group) {
+            String errorMsg = "Failed when trying to change group. Error was: No group supplied"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            return redirect(action: "index")
+        }
+        if(!session.groups?.contains(group)) {
+            String errorMsg = "Failed when trying to change group. Error was: Group does not exist"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            return redirect(action: "index")
+        }
+        session.group = group
+        session.token = null
+        return redirect(controller: "dashboard", action: "index")
+    }
 }
