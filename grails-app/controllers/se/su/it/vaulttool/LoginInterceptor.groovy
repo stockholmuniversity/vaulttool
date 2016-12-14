@@ -107,7 +107,7 @@ class LoginInterceptor {
                 }
             }
         }
-        if(controllerName == "admin" && (session.group != "sysadmin" || session.group != grailsApplication.config.vault.sysadmdevgroup)) {
+        if(controllerName == "admin" && (session.group != "sysadmin" && session.group != grailsApplication.config.vault.sysadmdevgroup)) {
             redirect(controller: "public", action: "index")
             return false
         }
