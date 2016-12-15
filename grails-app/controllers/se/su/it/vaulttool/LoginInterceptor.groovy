@@ -40,20 +40,22 @@ class LoginInterceptor {
                 session.group = session.sudo
             }
             if(!session.groups) {
-                def entitlements = request.getAttribute("entitlement").split(";")
-                def entitlementList = entitlements.findAll { String ent -> ent.toLowerCase().startsWith("urn:mace:swami.se:gmai:su-vaulttool:") }
-                if (!entitlementList || entitlementList.size() <= 0) {
-                    log.error("User (${session.uid?:"Unknown User"}) does not have the right entitlement!")
-                    redirect(controller: "public", action: "index")
-                    return false
-                }
-                entitlementList.each {String entitlement ->
-                    def entParts = entitlement.split(":")
-                    if (entParts.size() == 6) {
-                        if(!session.groups) {
-                            session.groups = []
+                def entitlements = request.getAttribute("entitlement")?request.getAttribute("entitlement").split(";"):null
+                if(entitlements) {
+                    def entitlementList = entitlements.findAll { String ent -> ent.toLowerCase().startsWith("urn:mace:swami.se:gmai:su-vaulttool:") }
+                    if (!entitlementList || entitlementList.size() <= 0) {
+                        log.error("User (${session.uid ?: "Unknown User"}) does not have the right entitlement!")
+                        redirect(controller: "public", action: "index")
+                        return false
+                    }
+                    entitlementList.each { String entitlement ->
+                        def entParts = entitlement.split(":")
+                        if (entParts.size() == 6) {
+                            if (!session.groups) {
+                                session.groups = []
+                            }
+                            session.groups << entParts[5]
                         }
-                        session.groups << entParts[5]
                     }
                 }
                 if(!session.groups) {

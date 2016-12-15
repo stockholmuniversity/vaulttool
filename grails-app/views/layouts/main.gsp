@@ -32,7 +32,7 @@
             </g:if>
             <g:if test="${session.groups != null && session.groups.size() > 1 && !session.sudo}">
                 <g:form style="float: right;" controller="public" action="setGroup" method="post">
-                    <g:select onchange="submit();" class="pull-right margin-right-1-char" name="group" from="${session.groups}" value="${session?.group?:""}" noSelection="${['':'Select group']}"/>
+                    <g:select onchange="submit();" class="select-in-jumbo pull-right margin-right-1-char" name="group" from="${session.groups}" value="${session?.group?:""}"/>
                 </g:form>
             </g:if>
             <a class="disable-link-colors" href="http://su.se">
