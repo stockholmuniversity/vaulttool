@@ -125,6 +125,19 @@ environments:
             driverClassName: "com.mysql.jdbc.Driver"
             username: "yourUser"
             password: "yourPassword"
+            properties:
+                maxActive: 2000
+                maxIdle: 20
+                minIdle: 1
+                initialSize: 1
+                validationQuery: "SELECT 1"
+                numTestsPerEvictionRun: 3
+                maxWait: 10000
+                testOnBorrow: true
+                testWhileIdle: true
+                testOnReturn: true
+                minEvictableIdleTimeMillis: 300000
+                timeBetweenEvictionRunsMillis: 300000
 
 vault:
     nekottoor: "?????"
