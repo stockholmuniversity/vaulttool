@@ -126,18 +126,23 @@ environments:
             username: "yourUser"
             password: "yourPassword"
             properties:
-                maxActive: 2000
-                maxIdle: 20
-                minIdle: 1
-                initialSize: 1
-                validationQuery: "SELECT 1"
-                numTestsPerEvictionRun: 3
+                jmxEnabled: true
+                initialSize: 5
+                maxActive: 50
+                minIdle: 5
+                maxIdle: 25
                 maxWait: 10000
+                maxAge: 600000
+                timeBetweenEvictionRunsMillis: 5000
+                minEvictableIdleTimeMillis: 60000
+                validationQuery: "SELECT 1"
+                validationQueryTimeout: 3
+                validationInterval: 15000
                 testOnBorrow: true
                 testWhileIdle: true
-                testOnReturn: true
-                minEvictableIdleTimeMillis: 300000
-                timeBetweenEvictionRunsMillis: 300000
+                testOnReturn: false
+                jdbcInterceptors: "ConnectionState;StatementCache(max=200)"
+                defaultTransactionIsolation: 2
 
 vault:
     nekottoor: "?????"
