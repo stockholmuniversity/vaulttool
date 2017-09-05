@@ -1,5 +1,8 @@
 package se.su.it.vaulttool
 
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
+
 class AdminController {
     def vaultRestService
 
@@ -234,5 +237,71 @@ class AdminController {
         List<Map<String,List<String>>> appRoles = vaultRestService.getAppRoles(session.token)
 
         [policies: policies, approles: appRoles]
+    }
+
+    def export() {
+        try {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream()
+            ZipOutputStream zos = new ZipOutputStream(baos)
+
+            vaultRestService.getSecretTree(session.token, "").each { String secret ->
+                def obj = vaultRestService.getSecret(session.token, secret)
+                MetaData metaData = MetaData.findBySecretKey(obj.entry.key)
+                if(obj?.entry?.key && !obj.entry.key.empty && metaData?.secretKey && !metaData.secretKey.empty && obj.entry.key == metaData.secretKey){
+                    ZipEntry entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/key.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(obj.entry.key.getBytes())
+                    zos.closeEntry()
+                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/username.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(obj.entry.userName?obj.entry.userName.getBytes():"".getBytes())
+                    zos.closeEntry()
+                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/password.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(obj.entry.pwd?obj.entry.pwd.getBytes():"".getBytes())
+                    zos.closeEntry()
+                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/binarydata")
+                    zos.putNextEntry(entry)
+                    zos.write(obj.entry.binaryData?:"".getBytes())
+                    zos.closeEntry()
+                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/title.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(metaData.title?metaData.title.getBytes():"".getBytes())
+                    zos.closeEntry()
+                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/description.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(metaData.description?metaData.description.getBytes():"".getBytes())
+                    zos.closeEntry()
+                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/filename.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(metaData.fileName?metaData.fileName.getBytes():"".getBytes())
+                    zos.closeEntry()
+                }
+            }
+            vaultRestService.listUserSecrets(session.token).each{String secret ->
+                User user = vaultRestService.getUserSecret(session.token, secret)
+                if(user && user.key && !user.key.empty) {
+                    ZipEntry entry = new ZipEntry(VaultRestService.VAULTTOOLUSERSPATHNAME+"/"+user.key + "/key.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(user.key.getBytes())
+                    zos.closeEntry()
+                    entry = new ZipEntry(VaultRestService.VAULTTOOLUSERSPATHNAME+"/"+user.key + "/smsnumber.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(user.smsNumber?user.smsNumber.getBytes():"".getBytes())
+                    zos.closeEntry()
+                }
+            }
+
+            zos.close()
+            response.setContentType("application/zip")
+            response.setHeader("Content-disposition", "filename=vaulttool-export.zip")
+            response.setContentLength(baos.toByteArray().size())
+            response.outputStream << baos.toByteArray()
+            baos.close()
+            return
+        } catch (Exception ex) {
+            ex.printStackTrace()
+        }
+        response.setStatus(500)
     }
 }
