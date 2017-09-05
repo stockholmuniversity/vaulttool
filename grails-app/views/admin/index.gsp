@@ -33,5 +33,10 @@
             <g:link action="approles">Administrate approles (using sukat entitlements)</g:link>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <g:link action="export">Export secrets and users</g:link>
+        </div>
+    </div>
 </body>
 </html>
