@@ -280,6 +280,7 @@ class AdminController {
             }
             vaultRestService.listUserSecrets(session.token).each{String secret ->
                 User user = vaultRestService.getUserSecret(session.token, secret)
+                UserData userData = UserData.findBySecretKey(secret)
                 if(user && user.key && !user.key.empty) {
                     ZipEntry entry = new ZipEntry(VaultRestService.VAULTTOOLUSERSPATHNAME+"/"+user.key + "/key.txt")
                     zos.putNextEntry(entry)
@@ -288,6 +289,10 @@ class AdminController {
                     entry = new ZipEntry(VaultRestService.VAULTTOOLUSERSPATHNAME+"/"+user.key + "/smsnumber.txt")
                     zos.putNextEntry(entry)
                     zos.write(user.smsNumber?user.smsNumber.getBytes():"".getBytes())
+                    zos.closeEntry()
+                    entry = new ZipEntry(VaultRestService.VAULTTOOLUSERSPATHNAME+"/"+user.key + "/eppn.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(userData.eppn?userData.eppn.getBytes():"".getBytes())
                     zos.closeEntry()
                 }
             }
