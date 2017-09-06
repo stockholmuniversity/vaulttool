@@ -10,7 +10,7 @@
 <h1>Authentication Confirmation</h1>
 <div class="row">
     <div class="col-sm-12">
-        <span>Please enter the code sent to your registered e-mail address.</span>
+        <span>Please enter the code sent to your registered sms-number.</span>
     </div>
 </div>
 <div class="row">

@@ -24,11 +24,11 @@
             </tr>
             <tr>
                 <td>Username</td>
-                <td><input type="text" name="userName" value="${secret.userName}"/></td>
+                <td><input id="username" type="text" name="userName" value="${secret.userName}"/>&nbsp;<button id="copyUsername" class="btn btn-primary" value="Copy">Copy</button></td>
             </tr>
             <tr>
                 <td>Password</td>
-                <td><input id="password" type="password" name="password" value="${secret.pwd}"/>&nbsp;<input id="pwdCheckbox" type="checkbox" />&nbsp;<span id="toggleText">show</span></td>
+                <td><input id="password" type="password" name="password" value="${secret.pwd}"/>&nbsp;<input id="pwdCheckbox" type="checkbox" />&nbsp;<span id="toggleText">show</span>&nbsp;<button id="copyPwd" class="btn btn-primary" value="Copy">Copy</button></td>
             </tr>
         </table>
         <g:submitButton style="float:left;" class="btn btn-primary" name="submit" value="Save ${secret.key}"/>
@@ -45,6 +45,10 @@
                     <g:form action="download">
                         <g:hiddenField name="key" value="${secret.key}"/>
                         <g:submitButton class="btn btn-primary" name="submit" value="Download ${metadata.fileName}"/>
+                    </g:form>
+                    <g:form action="deleteFile">
+                        <g:hiddenField name="key" value="${secret.key}"/>
+                        <g:submitButton class="btn btn-danger" name="submit" value="Delete ${metadata.fileName}"/>
                     </g:form>
                 </td>
             </g:if>
