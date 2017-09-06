@@ -1,6 +1,9 @@
 package se.su.it.vaulttool
 
+import org.springframework.web.multipart.MultipartFile
+
 import java.util.zip.ZipEntry
+import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
 class AdminController {
@@ -308,5 +311,106 @@ class AdminController {
             ex.printStackTrace()
         }
         response.setStatus(500)
+    }
+
+    def importZip() {
+        MultipartFile f = request.getFile('importZipInputFileId')
+        if (f.empty) {
+            String errorMsg = "Failed when trying to import zip-file. Error was: File not found in request."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(actionName: "index")
+            return
+        }
+        String secretsPath = VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"
+        String usersPath = VaultRestService.VAULTTOOLUSERSPATHNAME+"/"
+        List<ImportSecretHelper> secretList = []
+        List<ImportUserHelper> userList = []
+        ZipInputStream zipStream = new ZipInputStream(f.inputStream)
+        if(zipStream) {
+            ZipEntry zipEntry
+            while (zipEntry = zipStream.nextEntry) {
+                if(zipEntry.isDirectory()) {
+                    //create secret path
+                } else {
+                    if(zipEntry.getName().contains(secretsPath)) { //secrets
+                        String keyWithFile = zipEntry.getName().replace(secretsPath, "")
+                        String secretKey = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
+                        String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
+                        ByteArrayOutputStream out = new ByteArrayOutputStream()
+                        byte[] buffer = new byte[1024]
+                        int n
+                        while ((n = zipStream.read(buffer, 0, 1024)) > -1) {
+                            out.write(buffer, 0, n);
+                        }
+                        ImportSecretHelper importSecretHelper = secretList.find{it.entry.key == secretKey}
+                        if(!importSecretHelper) {
+                            importSecretHelper = new ImportSecretHelper(entry   : new Entry(key: secretKey),
+                                                                        metaData: new MetaData(secretKey: secretKey))
+                            secretList << importSecretHelper
+                        }
+                        switch(file) {
+                            case "username.txt"     : importSecretHelper.entry.userName = out.toString()
+                                break
+                            case "password.txt"     : importSecretHelper.entry.pwd = out.toString()
+                                break
+                            case "binarydata"       : importSecretHelper.entry.binaryData = out.toByteArray()
+                                break
+                            case "title.txt"        : importSecretHelper.metaData.title = out.toString()
+                                break
+                            case "description.txt"  : importSecretHelper.metaData.description = out.toString()
+                                break
+                            case "filename.txt"     : importSecretHelper.metaData.fileName = out.toString()
+                                break
+                        }
+
+                        out.close()
+                    } else if(zipEntry.getName().contains(usersPath)) {// Users
+                        String keyWithFile = zipEntry.getName().replace(usersPath, "")
+                        String secretKey = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
+                        String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
+                        ByteArrayOutputStream out = new ByteArrayOutputStream()
+                        byte[] buffer = new byte[1024]
+                        int n
+                        while ((n = zipStream.read(buffer, 0, 1024)) > -1) {
+                            out.write(buffer, 0, n);
+                        }
+                        ImportUserHelper importUserHelper = userList.find{it.userData.secretKey == secretKey}
+                        if(!importUserHelper) {
+                            importUserHelper = new ImportUserHelper(user: new User(key: secretKey),
+                                    userData: new UserData(secretKey: secretKey))
+                            userList << importUserHelper
+                        }
+                        switch(file) {
+                            case "smsnumber.txt"     : importUserHelper.user.smsNumber = out.toString()
+                                break
+                            case "eppn.txt"     : importUserHelper.userData.eppn = out.toString()
+                                break
+                        }
+                        out.close()
+                    }
+
+                }
+                zipStream.closeEntry()
+            }
+            zipStream.close()
+        }
+        secretList.each{ImportSecretHelper ish ->
+            vaultRestService.putSecret(session.token, ish.entry.key, ish.entry)
+            MetaData metaData = MetaData.findOrCreateBySecretKey(ish.entry.key)
+            metaData.secretKey      = ish.entry.key
+            metaData.title          = ish.metaData.title
+            metaData.description    = ish.metaData.description
+            metaData.fileName       = ish.metaData.fileName
+            metaData.save(flush: true)
+        }
+        userList.each{ImportUserHelper iuh ->
+            vaultRestService.putUserSecret(session.token, iuh.user.key, iuh.user)
+            UserData userData = UserData.findOrCreateBySecretKey(iuh.user.key)
+            userData.secretKey  = iuh.user.key
+            userData.eppn       = iuh.userData.eppn
+            userData.save(flush: true)
+        }
+        redirect(action: "index")
     }
 }
