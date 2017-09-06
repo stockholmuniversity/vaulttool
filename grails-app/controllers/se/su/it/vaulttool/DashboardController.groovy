@@ -255,4 +255,55 @@ class DashboardController {
         response.setContentLength(entry.binaryData.size())
         response.outputStream << entry.binaryData
     }
+
+    def deleteFile() {
+        String key = params?.key?:null
+        if(!key) {
+            String errorMsg = "Failed when trying to delete file. Error was: No secret supplied"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(actionName: "index")
+            return
+        }
+
+        Expando response = vaultRestService.getSecret(session.token, key)
+        if(response.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "index")
+            return
+        } else if(!response.entry) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "index")
+            return
+        }
+        MetaData metaData = MetaData.findBySecretKey(key)
+        if(!metaData) {
+            String errorMsg = "Failed when trying to read metadata for secret ${key}. Error was: metadata not found."
+            log.error(errorMsg)
+            flash.error = errorMsg
+            redirect(action: "index")
+            return
+        }
+        metaData.secretKey      = key
+        metaData.fileName       = ""
+
+        Entry entry = response.entry
+        entry.key           = key
+        entry.binaryData    = "".getBytes()
+
+        Map response2 = vaultRestService.putSecret(session.token, key, entry)
+        if(response2) {
+            String errorMsg = "Failed when trying to update secret ${key}. Error was: ${response2.status?:'Unknown Error'}"
+            log.error(errorMsg)
+            flash.error = errorMsg
+        } else {
+            flash.message = "Successfully updated secret ${key}"
+            metaData.save()
+        }
+        return redirect(action: "secret", params: [key: key])
+    }
 }
