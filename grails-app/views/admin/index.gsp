@@ -38,5 +38,16 @@
             <g:link action="export">Export secrets and users</g:link>
         </div>
     </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <g:form action="importZip" method="post" enctype="multipart/form-data" useToken="false">
+                <span style="display: inline;">
+                    <span><strong>Import secrets and users from zip-file -> &nbsp;</strong></span>
+                    <input style="display: inline;" type="file" id="importZipInputFileId" name="importZipInputFileId" />
+                    <g:submitButton style="display: inline;" class="btn btn-primary" name="submit" value="Import zip-file"/>
+                </span>
+            </g:form>
+        </div>
+    </div>
 </body>
 </html>
