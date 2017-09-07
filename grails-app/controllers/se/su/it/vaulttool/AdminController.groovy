@@ -246,36 +246,44 @@ class AdminController {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream()
             ZipOutputStream zos = new ZipOutputStream(baos)
+            String creationDateTime = new Date().format("yyyyMMdd_hhmmss")
+            String zipFileName = "vaulttool-export_" + creationDateTime + ".zip"
+            String secretsPath = "vaulttool-export_" + creationDateTime + "/" + VaultRestService.VAULTTOOLSECRETSPATHNAME + "/"
+            String usersPath = "vaulttool-export_" + creationDateTime + "/" + VaultRestService.VAULTTOOLUSERSPATHNAME + "/"
 
             vaultRestService.getSecretTree(session.token, "").each { String secret ->
                 def obj = vaultRestService.getSecret(session.token, secret)
                 MetaData metaData = MetaData.findBySecretKey(obj.entry.key)
                 if(obj?.entry?.key && !obj.entry.key.empty && metaData?.secretKey && !metaData.secretKey.empty && obj.entry.key == metaData.secretKey){
-                    ZipEntry entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/key.txt")
+                    ZipEntry entry = new ZipEntry(secretsPath+obj.entry.key + "/key.txt")
                     zos.putNextEntry(entry)
                     zos.write(obj.entry.key.getBytes())
                     zos.closeEntry()
-                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/username.txt")
+                    entry = new ZipEntry(secretsPath+obj.entry.key + "/username.txt")
                     zos.putNextEntry(entry)
                     zos.write(obj.entry.userName?obj.entry.userName.getBytes():"".getBytes())
                     zos.closeEntry()
-                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/password.txt")
+                    entry = new ZipEntry(secretsPath+obj.entry.key + "/password.txt")
                     zos.putNextEntry(entry)
                     zos.write(obj.entry.pwd?obj.entry.pwd.getBytes():"".getBytes())
                     zos.closeEntry()
-                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/binarydata")
+                    entry = new ZipEntry(secretsPath+obj.entry.key + "/binarydata")
                     zos.putNextEntry(entry)
                     zos.write(obj.entry.binaryData?:"".getBytes())
                     zos.closeEntry()
-                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/title.txt")
+                    entry = new ZipEntry(secretsPath+obj.entry.key + "/${metaData.fileName}")
+                    zos.putNextEntry(entry)
+                    zos.write(obj.entry.binaryData?:"".getBytes())
+                    zos.closeEntry()
+                    entry = new ZipEntry(secretsPath+obj.entry.key + "/title.txt")
                     zos.putNextEntry(entry)
                     zos.write(metaData.title?metaData.title.getBytes():"".getBytes())
                     zos.closeEntry()
-                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/description.txt")
+                    entry = new ZipEntry(secretsPath+obj.entry.key + "/description.txt")
                     zos.putNextEntry(entry)
                     zos.write(metaData.description?metaData.description.getBytes():"".getBytes())
                     zos.closeEntry()
-                    entry = new ZipEntry(VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"+obj.entry.key + "/filename.txt")
+                    entry = new ZipEntry(secretsPath+obj.entry.key + "/filename.txt")
                     zos.putNextEntry(entry)
                     zos.write(metaData.fileName?metaData.fileName.getBytes():"".getBytes())
                     zos.closeEntry()
@@ -285,15 +293,15 @@ class AdminController {
                 User user = vaultRestService.getUserSecret(session.token, secret)
                 UserData userData = UserData.findBySecretKey(secret)
                 if(user && user.key && !user.key.empty) {
-                    ZipEntry entry = new ZipEntry(VaultRestService.VAULTTOOLUSERSPATHNAME+"/"+user.key + "/key.txt")
+                    ZipEntry entry = new ZipEntry(usersPath+user.key + "/key.txt")
                     zos.putNextEntry(entry)
                     zos.write(user.key.getBytes())
                     zos.closeEntry()
-                    entry = new ZipEntry(VaultRestService.VAULTTOOLUSERSPATHNAME+"/"+user.key + "/smsnumber.txt")
+                    entry = new ZipEntry(usersPath+user.key + "/smsnumber.txt")
                     zos.putNextEntry(entry)
                     zos.write(user.smsNumber?user.smsNumber.getBytes():"".getBytes())
                     zos.closeEntry()
-                    entry = new ZipEntry(VaultRestService.VAULTTOOLUSERSPATHNAME+"/"+user.key + "/eppn.txt")
+                    entry = new ZipEntry(usersPath+user.key + "/eppn.txt")
                     zos.putNextEntry(entry)
                     zos.write(userData.eppn?userData.eppn.getBytes():"".getBytes())
                     zos.closeEntry()
@@ -302,7 +310,7 @@ class AdminController {
 
             zos.close()
             response.setContentType("application/zip")
-            response.setHeader("Content-disposition", "filename=vaulttool-export.zip")
+            response.setHeader("Content-disposition", "filename=${zipFileName}")
             response.setContentLength(baos.toByteArray().size())
             response.outputStream << baos.toByteArray()
             baos.close()
@@ -334,60 +342,67 @@ class AdminController {
                     //create secret path
                 } else {
                     if(zipEntry.getName().contains(secretsPath)) { //secrets
-                        String keyWithFile = zipEntry.getName().replace(secretsPath, "")
-                        String secretKey = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
-                        String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
-                        ByteArrayOutputStream out = new ByteArrayOutputStream()
-                        byte[] buffer = new byte[1024]
-                        int n
-                        while ((n = zipStream.read(buffer, 0, 1024)) > -1) {
-                            out.write(buffer, 0, n);
+                        String keyWithFile = zipEntry.getName().substring(zipEntry.getName().indexOf(VaultRestService.VAULTTOOLSECRETSPATHNAME)).replace(secretsPath, "")
+                        if(keyWithFile.lastIndexOf("/") > -1) {
+                            String secretKey = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
+                            String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
+                            if(["key.txt", "username.txt", "password.txt", "binarydata", "description.txt", "filename.txt"].any{keyWithFile.contains(it)}) {
+                                ByteArrayOutputStream out = new ByteArrayOutputStream()
+                                byte[] buffer = new byte[1024]
+                                int n
+                                while ((n = zipStream.read(buffer, 0, 1024)) > -1) {
+                                    out.write(buffer, 0, n);
+                                }
+                                ImportSecretHelper importSecretHelper = secretList.find { it.entry.key == secretKey }
+                                if (!importSecretHelper) {
+                                    importSecretHelper = new ImportSecretHelper(entry: new Entry(key: secretKey),
+                                            metaData: new MetaData(secretKey: secretKey))
+                                    secretList << importSecretHelper
+                                }
+                                switch (file) {
+                                    case "username.txt": importSecretHelper.entry.userName = out.toString()
+                                        break
+                                    case "password.txt": importSecretHelper.entry.pwd = out.toString()
+                                        break
+                                    case "binarydata": importSecretHelper.entry.binaryData = out.toByteArray()
+                                        break
+                                    case "title.txt": importSecretHelper.metaData.title = out.toString()
+                                        break
+                                    case "description.txt": importSecretHelper.metaData.description = out.toString()
+                                        break
+                                    case "filename.txt": importSecretHelper.metaData.fileName = out.toString()
+                                        break
+                                }
+                                out.close()
+                            }
                         }
-                        ImportSecretHelper importSecretHelper = secretList.find{it.entry.key == secretKey}
-                        if(!importSecretHelper) {
-                            importSecretHelper = new ImportSecretHelper(entry   : new Entry(key: secretKey),
-                                                                        metaData: new MetaData(secretKey: secretKey))
-                            secretList << importSecretHelper
-                        }
-                        switch(file) {
-                            case "username.txt"     : importSecretHelper.entry.userName = out.toString()
-                                break
-                            case "password.txt"     : importSecretHelper.entry.pwd = out.toString()
-                                break
-                            case "binarydata"       : importSecretHelper.entry.binaryData = out.toByteArray()
-                                break
-                            case "title.txt"        : importSecretHelper.metaData.title = out.toString()
-                                break
-                            case "description.txt"  : importSecretHelper.metaData.description = out.toString()
-                                break
-                            case "filename.txt"     : importSecretHelper.metaData.fileName = out.toString()
-                                break
-                        }
-
-                        out.close()
                     } else if(zipEntry.getName().contains(usersPath)) {// Users
-                        String keyWithFile = zipEntry.getName().replace(usersPath, "")
-                        String secretKey = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
-                        String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
-                        ByteArrayOutputStream out = new ByteArrayOutputStream()
-                        byte[] buffer = new byte[1024]
-                        int n
-                        while ((n = zipStream.read(buffer, 0, 1024)) > -1) {
-                            out.write(buffer, 0, n);
+                        String keyWithFile = zipEntry.getName().substring(zipEntry.getName().indexOf(VaultRestService.VAULTTOOLUSERSPATHNAME)).replace(usersPath, "")
+                        if(keyWithFile.lastIndexOf("/") > -1) {
+                            String secretKey = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
+                            String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
+                            if(["key.txt", "smsnumber.txt", "eppn.txt"].any{keyWithFile.contains(it)}) {
+                                ByteArrayOutputStream out = new ByteArrayOutputStream()
+                                byte[] buffer = new byte[1024]
+                                int n
+                                while ((n = zipStream.read(buffer, 0, 1024)) > -1) {
+                                    out.write(buffer, 0, n);
+                                }
+                                ImportUserHelper importUserHelper = userList.find { it.userData.secretKey == secretKey }
+                                if (!importUserHelper) {
+                                    importUserHelper = new ImportUserHelper(user: new User(key: secretKey),
+                                            userData: new UserData(secretKey: secretKey))
+                                    userList << importUserHelper
+                                }
+                                switch (file) {
+                                    case "smsnumber.txt": importUserHelper.user.smsNumber = out.toString()
+                                        break
+                                    case "eppn.txt": importUserHelper.userData.eppn = out.toString()
+                                        break
+                                }
+                                out.close()
+                            }
                         }
-                        ImportUserHelper importUserHelper = userList.find{it.userData.secretKey == secretKey}
-                        if(!importUserHelper) {
-                            importUserHelper = new ImportUserHelper(user: new User(key: secretKey),
-                                    userData: new UserData(secretKey: secretKey))
-                            userList << importUserHelper
-                        }
-                        switch(file) {
-                            case "smsnumber.txt"     : importUserHelper.user.smsNumber = out.toString()
-                                break
-                            case "eppn.txt"     : importUserHelper.userData.eppn = out.toString()
-                                break
-                        }
-                        out.close()
                     }
 
                 }
