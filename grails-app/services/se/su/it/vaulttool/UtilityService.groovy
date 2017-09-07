@@ -9,7 +9,7 @@ class UtilityService {
 
     private synchronized HTTPBuilder getRestClient() {
         if (!http) {
-            http = new HTTPBuilder(grailsApplication.config.suservicemix.restUrl)
+            http = new HTTPBuilder(grailsApplication.config.smsservice.endPoint)
         }
         return http
     }
@@ -79,7 +79,8 @@ class UtilityService {
     }
 
     def sendSms(Sms sms) {
-        Map response = postJsonByUrlAndType("/cxf/sms", sms.asMap(), null)
+        String resource = grailsApplication.config.smsservice.resource
+        Map response = postJsonByUrlAndType(resource, sms.asMap(), null)
     }
 
     def sendEmail(String subject, String msg, String to) {

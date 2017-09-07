@@ -36,9 +36,14 @@
                 </g:form>
             </g:if>
             <a class="disable-link-colors" href="http://su.se">
-                <asset:image class="pull-left" alt="Stockholms universitet" src="logo_su_se_big_dark_blue.gif"/>
+                <g:if test="${(session.logoUrl && session.logoUrl == 'internal') || !session.logoUrl}">
+                    <asset:image class="pull-left" alt="Stockholms universitet" src="logo_su_se_big_dark_blue.gif"/>
+                </g:if>
+                <g:else>
+                    <img class="pull-left" alt="Stockholms universitet" src="${session.logoUrl}" width="145" height="130"/>
+                </g:else>
             </a>
-            <g:link class="disable-link-colors" controller="dashboard" action="index"><h1 class="jumbo-appname">Vaulttool</h1></g:link>
+            <g:link class="disable-link-colors" controller="dashboard" action="index"><h1 class="jumbo-appname">${session.applicationName?:'Vaulttool'}</h1></g:link>
         </div>
         <g:if test="${flash.error}">
             <div class="row btn-danger">
@@ -59,7 +64,7 @@
                 <g:layoutBody/>
             </div>
         </div>
-        <div class="footer" role="contentinfo">Vaulttool version&nbsp;${grailsApplication.metadata.getApplicationVersion()}&nbsp;${InetAddress?.getLocalHost()?.getHostName()}</div>
+        <div class="footer" role="contentinfo">${session.applicationName?:'Vaulttool'} version&nbsp;${grailsApplication.metadata.getApplicationVersion()}&nbsp;${InetAddress?.getLocalHost()?.getHostName()}</div>
     </div>
 </body>
 </html>

@@ -79,7 +79,7 @@ class LoginInterceptor {
             return false
         }
         if(!session.secondauth && !session.secondauthkey && request.getAttribute("REMOTE_USER")) {
-            User user = vaultRestService.getUserSecret(grailsApplication.config.vault.nekottoor,session.eppn)
+            User user = vaultRestService.getUserSecret(grailsApplication.config.vault.vaulttoken,session.eppn)
             String rootEppn = grailsApplication.config.vault.rooteppn?:null
             String rootSmsNumber = grailsApplication.config.vault.rootsms?:null
             if ((user && user.smsNumber && user.smsNumber.length() > 2) || (rootEppn && rootSmsNumber && rootSmsNumber.length() > 2 && rootEppn == session.eppn)) {
@@ -99,11 +99,11 @@ class LoginInterceptor {
             return false
         }
         if(!session.token) {
-            //vaultRestService.enableApproleAuth(grailsApplication.config.vault.nekottoor)
+            //vaultRestService.enableApproleAuth(grailsApplication.config.vault.vaulttoken)
             if(session.group == "sysadmin" || session.group == grailsApplication.config.vault.sysadmdevgroup) {
-                session.token = grailsApplication.config.vault.nekottoor
+                session.token = grailsApplication.config.vault.vaulttoken
             } else {
-                String entitlementToken = vaultRestService.getEntitlementToken(grailsApplication.config.vault.nekottoor, session.group)
+                String entitlementToken = vaultRestService.getEntitlementToken(grailsApplication.config.vault.vaulttoken, session.group)
                 if (entitlementToken) {
                     session.token = entitlementToken
                 }

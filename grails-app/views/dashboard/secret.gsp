@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>VAULTTOOL - Secret (${metadata.title})</title>
+    <title>${session.applicationName?:'Vaulttool'} - Secret (${metadata.title})</title>
 
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
     <asset:javascript src="secret.js"/>

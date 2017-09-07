@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>VAULTTOOL - Logged out</title>
+    <title>${session.applicationName?:'Vaulttool'} - Logged out</title>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 

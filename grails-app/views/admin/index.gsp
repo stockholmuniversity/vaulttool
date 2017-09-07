@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>VAULTTOOL - Administration</title>
+    <title>${session.applicationName?:'Vaulttool'} - Administration</title>
     <asset:javascript src="index.js"/>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>

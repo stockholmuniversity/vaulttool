@@ -13,7 +13,7 @@ class BootStrap {
     }
 
     def initializeVault() {
-        vaultRestService.enableApproleAuth(grailsApplication.config.vault.nekottoor)
-        vaultRestService.putDefaultVaultToolPolicy(grailsApplication.config.vault.nekottoor)
+        vaultRestService.enableApproleAuth(grailsApplication.config.vault.vaulttoken)
+        vaultRestService.putDefaultVaultToolPolicy(grailsApplication.config.vault.vaulttoken)
     }
 }
