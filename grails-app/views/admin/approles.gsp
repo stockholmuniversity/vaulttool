@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>VAULTTOOL - AppRole(Entitlement) Administration</title>
+    <title>${session.applicationName?:'Vaulttool'} - AppRole(Entitlement) Administration</title>
     <asset:javascript src="inputrules.js"/>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>

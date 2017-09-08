@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta name="layout" content="main"/>
-    <title>VAULTTOOL - Authentication Confirmation</title>
+    <title>${session.applicationName?:'Vaulttool'} - Authentication Confirmation</title>
     <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
 </head>
 
