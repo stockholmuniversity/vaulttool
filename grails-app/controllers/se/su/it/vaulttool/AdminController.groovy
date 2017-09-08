@@ -9,6 +9,11 @@ import java.util.zip.ZipOutputStream
 class AdminController {
     def vaultRestService
 
+    def test() {
+        vaultRestService.getTokenInfo(session.token)
+        render("hej")
+    }
+
     def index() {
         List<Map<String,List<String>>> appRoles = vaultRestService.getAppRoles(session.token)
         [approles: appRoles]
