@@ -351,7 +351,7 @@ class AdminController {
                         if(keyWithFile.lastIndexOf("/") > -1) {
                             String secretKey = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
                             String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
-                            if(["key.txt", "username.txt", "password.txt", "binarydata", "description.txt", "filename.txt"].any{keyWithFile.contains(it)}) {
+                            if(["key.txt", "username.txt", "password.txt", "binarydata", "title.txt", "description.txt", "filename.txt"].any{keyWithFile.contains(it)}) {
                                 ByteArrayOutputStream out = new ByteArrayOutputStream()
                                 byte[] buffer = new byte[1024]
                                 int n
