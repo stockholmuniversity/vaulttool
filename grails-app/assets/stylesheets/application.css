@@ -11,6 +11,187 @@
 *= require_self
 */
 
+
+
+/* Custom fonts, logo, header etc */
+@font-face {
+    font-family: caecilia;
+    src: url(../fonts/CaeciliaCom-55Roman.ttf);
+}
+header {
+    background-color: #002e5f;
+    color: #FFFFFF;
+    min-height: 160px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+header a h1{
+    font-family: caecilia, Verdana, Georgia, "Times New Roman", Times, serif;
+    padding-top: 80px;
+    text-align: right;
+    margin-bottom: 0;
+}
+
+
+footer {
+    background-color: #002f5f;
+    color: white;
+    position: relative;
+    /*padding-top: -180px;*/ /* negative value of footer height */
+    clear:both;
+}
+footer p{
+    min-height: 20px;
+    padding: 10px;
+    text-align: center;
+
+}
+
+
+/*Headings*/
+h2 {
+    font-size: 24px !important;
+}
+
+h3 {
+    font-size: 20px !important;
+    margin-top: 0;
+}
+
+h4 {
+    font-size: 18px !important;
+}
+
+/*Headings*/
+
+/*Override bootstrap theme*/
+input, textarea, .well, .btn.btn-default.box {
+-moz-border-radius: 0 !important;
+-webkit-border-radius: 0 !important;
+border-radius: 0 !important;
+}
+
+
+
+.pointer, label {
+    cursor: pointer;
+}
+
+
+
+/*Overrule bootstrap theme colour for button*/
+.btn-default, .btn-primary, .btn-danger, .btn-warning {
+    -moz-border-radius: 2px !important;
+    -webkit-border-radius: 2px !important;
+    border-radius: 2px !important;
+}
+
+.btn-primary {
+    background-color: #002e5f;
+    color: #FFFFFF;
+}
+.btn-default {
+    color: #3b3b3b;
+    border: 1px solid #3b3b3b;
+}
+/*Overrule bootstrap theme colour for button*/
+
+.box{
+    color: #002e5f;
+    background: #fafafa;
+    border: 1px solid #dcdcdc;
+    padding: 8px;
+}
+
+
+/*Search query*/
+.search-query{
+    -moz-border-radius: 0 !important;
+    -webkit-border-radius: 0 !important;
+    border-radius: 0 !important;
+    
+    color: #002e5f;
+
+    border: 0;
+    background: none;
+
+    padding: 1px 5px;
+    margin-top: 2px;
+    position: relative;
+    left: -18px;
+    z-index: 3 !important;
+}
+
+.input-group-btn:last-child > .btn.search-query{
+    margin-left: -12px;
+}
+/*Search query*/
+
+
+
+
+/*margins and padding*/
+.top-margin-small {
+    margin-top: 10px;
+}
+
+.bottom-margin-small {
+    margin-bottom: 10px;
+}
+.bottom-margin-medium {
+    margin-bottom: 15px;
+}
+.bottom-margin-large {
+    margin-bottom: 20px;
+}
+.bottom-margin-xlarge {
+    margin-bottom: 30px;
+}
+
+.bottom-margin-xsmall {
+    margin-bottom: 5px;
+}
+
+.left-padding-none {
+    padding-left: 0;
+}
+.right-padding-none {
+    padding-right: 0;
+}
+/*margins and padding*/
+
+/*************************/
+
+
+
+/*Hide the ugly input type=file browse file tree button*/
+[hidden] {
+    display: none !important;
+}
+
+/*User info menu*/
+.userInfoToggled {
+    color: #002e5f;
+}
+#userInfoToggle {
+    z-index: 99;
+    position: relative;
+    padding: 0;
+}
+
+#userInfoMenu {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    left: auto;
+    min-width: 200px;
+    max-width: 95%;
+    z-index: 89;
+}
+/*User info menu*/
+
+
+
 .su-jumbotron {
     position: relative;
     font-size: 14px;
@@ -26,15 +207,18 @@
     margin-left: -15px;
 }
 
+/*
 .footer {
     background-color: #002f5f;
     color: white;
     font-size: 100%;
     position: relative;
-    padding-top: -180px; /* negative value of footer height */
+    padding-top: -180px; !* negative value of footer height *!
     clear:both;
 }
+*/
 
+/*
 .select-in-jumbo {
     color: #555;
     background-color: #fff;
@@ -42,6 +226,7 @@
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+*/
 
 .jumbo-appname {
     position: absolute;
@@ -60,6 +245,8 @@
     text-decoration: none;
 }
 
+/*
 .margin-right-1-char {
     margin-right: 1em;
 }
+*/
