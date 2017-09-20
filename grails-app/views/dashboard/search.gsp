@@ -7,13 +7,19 @@
 </head>
 
 <body>
+<h3 class="bottom-margin-medium" style="color: #002e5f;">Search result</h3>
 <g:form action="index">
-    <ul>
+
         <g:each in="${metadatas}" var="metadata">
-            <li><g:link action="secret" params='[key: "${metadata.secretKey}"]'>${metadata.secretKey} (${metadata?.title?:""})</g:link></li>
+            <div class="row pointer">
+                <div class="col-sm-12">
+                    <strong><g:link action="secret" params='[key: "${metadata.secretKey}"]'>${metadata.secretKey} - ${metadata?.title?:""}</g:link></strong>
+                </div>
+            </div>
+            <hr class="top-margin-small bottom-margin-small">
         </g:each>
-    </ul>
-    <g:submitButton class="btn btn-warning pull-right" name="Cancel" value="Cancel"/>
+
+    <g:submitButton class="btn btn-default pull-right" name="Cancel" value="Cancel"/>
 </g:form>
 </body>
 </html>
