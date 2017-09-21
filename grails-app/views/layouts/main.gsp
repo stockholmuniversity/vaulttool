@@ -15,56 +15,103 @@
 
     <asset:stylesheet src="application.css"/>
     <asset:javascript src="application.js"/>
+    <asset:stylesheet src="font-awesome.min.css"/>
     <g:layoutHead/>
 </head>
 <body>
-    <div class="container">
-        <div class="jumbotron su-jumbotron">
-            <span>Welcome ${session?.displayname?:"Unknown User"} - Your current group is ${session?.group?:"Unknown Group"}</span>
-            <g:if test="${session.token != null}">
-                <g:link class="pull-right disable-link-colors" controller="public" action="logout">Logout</g:link>
-            </g:if>
-            <g:if test="${session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup}">
-                <g:link class="pull-right disable-link-colors margin-right-1-char" controller="admin" action="index">Administration</g:link>
-            </g:if>
-            <g:if test="${session.sudo != null}">
-                <g:link class="pull-right disable-link-colors margin-right-1-char" controller="public" action="disableSudo">Disable Sudo-Mode</g:link>
-            </g:if>
-            <g:if test="${session.groups != null && session.groups.size() > 1 && !session.sudo}">
-                <g:form style="float: right;" controller="public" action="setGroup" method="post">
-                    <g:select onchange="submit();" class="select-in-jumbo pull-right margin-right-1-char" name="group" from="${session.groups}" value="${session?.group?:""}"/>
-                </g:form>
-            </g:if>
-            <a class="disable-link-colors" href="http://su.se">
-                <g:if test="${(session.logoUrl && session.logoUrl == 'internal') || !session.logoUrl}">
-                    <asset:image class="pull-left" alt="Stockholms universitet" src="logo_su_se_big_dark_blue.gif"/>
-                </g:if>
-                <g:else>
-                    <img class="pull-left" alt="Stockholms universitet" src="${session.logoUrl}" width="145" height="130"/>
-                </g:else>
-            </a>
-            <g:link class="disable-link-colors" controller="dashboard" action="index"><h1 class="jumbo-appname">${session.applicationName?:'Vaulttool'}</h1></g:link>
-        </div>
-        <g:if test="${flash.error}">
-            <div class="row btn-danger">
-                <div class="col-sm-12">
-                    ${flash.error}
-                </div>
-            </div>
-        </g:if>
-        <g:if test="${flash.message}">
-            <div class="row btn-success">
-                <div class="col-sm-12">
-                    ${flash.message}
-                </div>
-            </div>
-        </g:if>
+    <header>
+        <g:render template="/layouts/userInfoMenu"/>
         <div class="row">
-            <div class="col-sm-12">
-                <g:layoutBody/>
+            <div class="col-sm-7">
+                <a class="disable-link-colors" href="http://su.se">
+                    <g:if test="${(session.logoUrl && session.logoUrl == 'internal') || !session.logoUrl}">
+                        <asset:image class="pull-left" alt="Stockholms universitet" src="su-logo.png" style="height: 130px; width: 156px;"/>
+                    </g:if>
+                    <g:else>
+                        <img class="pull-left" alt="Stockholms universitet" src="${session.logoUrl}" width="156" height="130"/>
+                    </g:else>
+                </a>
+            </div>
+            <div class="col-sm-5">
+                <div id="userInfoToggle" class="pull-right pointer">
+                    <span class="fa fa-user fa-2x"></span>
+                </div>
+                <div>
+                    <g:link class="disable-link-colors" controller="dashboard" action="index">
+                        <h1 class="">${session.applicationName?:'Vaulttool'}</h1>
+                    </g:link>
+                </div>
             </div>
         </div>
-        <div class="footer" role="contentinfo">${session.applicationName?:'Vaulttool'} version&nbsp;${grailsApplication.metadata.getApplicationVersion()}&nbsp;${InetAddress?.getLocalHost()?.getHostName()}</div>
+    </header>
+
+    <div class="container">
+        <g:if test="${controllerName == 'admin'}">
+            <div id="nav-column" class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
+                            <span class="fa fa-home"></span>
+                            Start
+                        </g:link>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <g:link action="user" class="menuNav ${(actionName == 'user') ? 'active':''}">
+                            <span class="fa fa-users"></span>
+                            Users
+                        </g:link>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <g:link action="policies" class="menuNav ${(actionName == 'policies') ? 'active':''}">
+                            <span class="fa fa-file-text-o"></span>
+                            Policies
+                        </g:link>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <g:link action="approles" class="menuNav ${(actionName == 'approles') ? 'active':''}">
+                            <span class="fa fa-key"></span>
+                            Application roles
+                        </g:link>
+                    </div>
+                </div>
+                <div class="row">
+
+                </div>
+            </div>
+        </g:if>
+        <div id="main-column" class="${(controllerName == 'admin') ? 'col-sm-9' : 'col-sm-12' }">
+            <g:if test="${flash.error}">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-danger">${flash.error}</div>
+                    </div>
+                </div>
+            </g:if>
+            <g:if test="${flash.message}">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-success">
+                            ${flash.message}
+                        </div>
+
+                    </div>
+                </div>
+            </g:if>
+            <div class="row">
+                <div class="col-sm-12">
+                    <g:layoutBody/>
+                </div>
+            </div>
+        </div>
     </div>
+    <footer>
+        <p class="footer" role="contentinfo">${session.applicationName?:'Vaulttool'} | version&nbsp;${grailsApplication.metadata.getApplicationVersion()} | ${InetAddress?.getLocalHost()?.getHostName()}</p>
+    </footer>
 </body>
 </html>
