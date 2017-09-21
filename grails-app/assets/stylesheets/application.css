@@ -56,6 +56,7 @@ h2 {
 h3 {
     font-size: 20px !important;
     margin-top: 0;
+    margin-bottom: 0;
 }
 
 h4 {
@@ -65,19 +66,43 @@ h4 {
 /*Headings*/
 
 /*Override bootstrap theme*/
-input, textarea, .well, .btn.btn-default.box {
+input,
+textarea,
+.panel-default,
+.well,
+.btn.btn-default.box {
 -moz-border-radius: 0 !important;
 -webkit-border-radius: 0 !important;
 border-radius: 0 !important;
 }
 
+a{
+    color:#002e5f;
+    text-decoration: none !important;
+}
+
+
+
+/*Override bootstrap theme*/
 
 
 .pointer, label {
     cursor: pointer;
 }
+/*Navigation*/
+.menuNav {
+    display: block;
+    padding: 5px 10px 5px 10px;
+}
+.menuNav:hover{
+    background-color: #002e5f;
+    color: #FFFFFF !important;
+}
 
-
+.menuNav.active{
+    background-color: #002e5f;
+    color: #FFFFFF !important;
+}
 
 /*Overrule bootstrap theme colour for button*/
 .btn-default, .btn-primary, .btn-danger, .btn-warning {
@@ -87,7 +112,7 @@ border-radius: 0 !important;
 }
 
 .btn-primary {
-    background-color: #002e5f;
+    background-color: #002e5f; 
     color: #FFFFFF;
 }
 .btn-default {
@@ -103,30 +128,34 @@ border-radius: 0 !important;
     padding: 8px;
 }
 
+.secretsListLinkBorder {
+    border: none;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.secretsListLink {
+    display: block;
+    padding: 4px 15px 4px 15px;
+}
+.secretsListLink:hover {
+   background-color: rgba(0,47,95,0.8);
+   color: #ffffff;
+}
 
 /*Search query*/
 .search-query{
     -moz-border-radius: 0 !important;
     -webkit-border-radius: 0 !important;
     border-radius: 0 !important;
-    
-    color: #002e5f;
-
-    border: 0;
-    background: none;
-
-    padding: 1px 5px;
-    margin-top: 2px;
-    position: relative;
-    left: -18px;
-    z-index: 3 !important;
+    border: 1px solid #e67b00;
+    background-color: #f88a00;
+    color: #ffffff;
 }
-
-.input-group-btn:last-child > .btn.search-query{
-    margin-left: -12px;
+.search-query:hover{
+    background-color: #f8a508;
+    color: #ffffff;
 }
 /*Search query*/
-
 
 
 
@@ -157,6 +186,12 @@ border-radius: 0 !important;
 }
 .right-padding-none {
     padding-right: 0;
+}
+.bottom-padding-none {
+    padding-bottom: 0;
+}
+.top-padding-none {
+    padding-top: 0;
 }
 /*margins and padding*/
 

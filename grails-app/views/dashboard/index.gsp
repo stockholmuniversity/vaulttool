@@ -10,79 +10,87 @@
 <body>
 <div class="bottom-margin-xlarge">
 
-
-    <h3 style="color: #002e5f">
-        New secret
-    </h3>
-    <div class="row bottom-margin-xsmall">
-        <div class="col-sm-1">
-            <strong>Path</strong>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 style="color: #002e5f">
+                New secret
+            </h3>
         </div>
-        <div class="col-sm-2">
-            <g:form action="index">
-                <g:select class="form-control" onchange="submit();" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>
+
+        <div class="panel-body">
+            <div class="row bottom-margin-xsmall">
+                <div class="col-sm-1">
+                    <strong>Path</strong>
+                </div>
+                <div class="col-sm-2">
+                    <g:form action="index">
+                        <g:select class="form-control" onchange="submit();" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>
+                    </g:form>
+                </div>
+                <div class="col-sm-2">
+                    Capabilities: <i>(${capabilities.join(", ")})</i>
+                </div>
+            </div>
+            <g:form action="createSecret">
+                <g:hiddenField name="selectedPath" value="${selectedPath}"/>
+                <div class="row bottom-margin-xsmall">
+                    <div class="col-sm-1"></div>
+                    <div class="col-sm-11">
+                        <input type="text" class="form-control allowonly7bit" maxlength="20" name="path" value="" placeholder="Enter path"/>
+                    </div>
+                </div>
+
+                <div class="row bottom-margin-xsmall">
+                    <div class="col-sm-1">
+                        <strong>Secret</strong>
+                    </div>
+                    <div class="col-sm-11">
+                        <input type="text" class="form-control allowonly7bit" maxlength="20" name="secret" value="" placeholder="Enter secret"/>
+                    </div>
+                </div>
+                <div class="pull-right">
+                    <g:submitButton class="btn btn-primary" name="submit" value="Create secret"/>
+                </div>
+                <div class="clearfix"></div>
             </g:form>
         </div>
-        <div class="col-sm-2">
-            Capabilities: <i>(${capabilities.join(", ")})</i>
-        </div>
-
-
-    </div>
-<g:form action="createSecret">
-    <g:hiddenField name="selectedPath" value="${selectedPath}"/>
-    <div class="row bottom-margin-xsmall">
-        <div class="col-sm-1"></div>
-        <div class="col-sm-11">
-            <input type="text" class="form-control allowonly7bit" maxlength="20" name="path" value="" placeholder="Enter path"/>
-        </div>
     </div>
 
-    <div class="row bottom-margin-xsmall">
-        <div class="col-sm-1">
-            <strong>Secret</strong>
-        </div>
-        <div class="col-sm-11">
-            <input type="text" class="form-control allowonly7bit" maxlength="20" name="secret" value="" placeholder="Enter secret"/>
-        </div>
-    </div>
-    <div class="pull-right">
-        <g:submitButton class="btn btn-primary" name="submit" value="Create secret"/>
-    </div>
-    <div class="clearfix"></div>
-</g:form>
-
-<hr>
-
-</div>
-
-<div class="row bottom-margin-medium">
-    <g:form action="search">
-        <div style="padding: 0; margin: 0">
-            <div class="col-sm-12 input-group" style="padding-left: 15px">
-                <input class="form-control search-query-input" type="text" maxlength="60" name="secret" value="" placeholder="Search secret by key, title or description"/>
-                <span class="input-group-btn">
-                    <button class="btn search-query" name="submit" value="Search secret">
-                        <span class="fa fa-search fa-lg"></span>
-                    </button>
-                </span>
-            </div>
-        </div>
-    </g:form>
-
-</div>
-<hr class="top-margin-small bottom-margin-small">
-    <g:form action="index">
-            <g:each in="${secrets}" var="secret">
-
-                <div class="row pointer">
-                   <div class="col-sm-12">
-                       %{--<span class="fa fa-key"></span>--}%
-                       <strong><g:link action="secret" params='[key: "${selectedPath}${secret.secret}"]'>${secret.secret} - ${secret.metadata?.title?:""}</g:link></strong>
-                   </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <g:form action="search">
+                <div class="input-group">
+                    <input class="form-control search-query-input" type="text" maxlength="60" name="secret" value="" placeholder="Search by key, title or description"/>
+                    <div class="input-group-btn">
+                        <button class="btn search-query" name="submit" value="Search secret">
+                            <span class="fa fa-search fa-lg"></span>
+                        </button>
+                    </div>
                 </div>
-                <hr class="top-margin-small bottom-margin-small">
-            </g:each>
-    </g:form>
+            </g:form>
+        </div>
+        <div class="panel-body top-padding-none bottom-padding-none">
+            <g:form action="index">
+                <g:each in="${secrets}" var="secret" status="i">
+
+                    <div class="row pointer">
+                        <div class="col-sm-12 ${(i < secrets.size() - 1) ? 'secretsListLinkBorder':''} right-padding-none left-padding-none bottom-padding-none top-padding-none">
+                            <g:link class="secretsListLink" action="secret" params='[key: "${selectedPath}${secret.secret}"]'>
+                                <span>
+                                    <strong>${secret.secret}</strong><br />
+                                    ${secret.metadata?.title?:""}
+                                </span>
+                                
+                            </g:link>
+                        </div>
+                    </div>
+                </g:each>
+            </g:form>
+        </div>
+    </div>
+</div>
+
+
+
 </body>
 </html>
