@@ -12,7 +12,7 @@
 
     <div class="panel panel-default">
         <div class="panel-heading">
-            <h3 style="color: #002e5f">
+            <h3>
                 New secret
             </h3>
         </div>
@@ -74,7 +74,7 @@
                 <g:each in="${secrets}" var="secret" status="i">
 
                     <div class="row pointer">
-                        <div class="col-sm-12 ${(i < secrets.size() - 1) ? 'secretsListLinkBorder':''} right-padding-none left-padding-none bottom-padding-none top-padding-none">
+                        <div class="col-sm-12 ${(i < secrets.size() - 1) ? 'itemListBorder':''} right-padding-none left-padding-none bottom-padding-none top-padding-none">
                             <g:link class="secretsListLink" action="secret" params='[key: "${selectedPath}${secret.secret}"]'>
                                 <span>
                                     <strong>${secret.secret}</strong><br />

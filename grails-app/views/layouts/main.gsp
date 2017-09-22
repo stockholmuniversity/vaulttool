@@ -76,7 +76,7 @@
                     <div class="col-sm-12">
                         <g:link action="approles" class="menuNav ${(actionName == 'approles') ? 'active':''}">
                             <span class="fa fa-key"></span>
-                            Application roles
+                            Application Roles
                         </g:link>
                     </div>
                 </div>
