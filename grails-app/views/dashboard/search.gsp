@@ -7,19 +7,31 @@
 </head>
 
 <body>
-<h3 class="bottom-margin-medium" style="color: #002e5f;">Search result</h3>
-<g:form action="index">
+        <g:form action="index">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3>Search Result</h3>
+                </div>
 
-        <g:each in="${metadatas}" var="metadata">
-            <div class="row pointer">
-                <div class="col-sm-12">
-                    <strong><g:link action="secret" params='[key: "${metadata.secretKey}"]'>${metadata.secretKey} - ${metadata?.title?:""}</g:link></strong>
+                <div class="panel-body top-padding-none bottom-padding-none">
+                    <g:each in="${metadatas}" var="metadata" status="i">
+                        <div class="row pointer">
+                            <div class="col-sm-12 ${(i < metadatas.size() - 1) ? 'itemListBorder':''} right-padding-none left-padding-none bottom-padding-none top-padding-none">
+                                <g:link class="secretsListLink" action="secret" params='[key: "${metadata.secretKey}"]'>
+                                    <strong>${metadata.secretKey}</strong> <br />
+                                     ${metadata?.title?:""}
+                                </g:link>
+
+                            </div>
+                        </div>
+                    </g:each>
                 </div>
             </div>
-            <hr class="top-margin-small bottom-margin-small">
-        </g:each>
-
-    <g:submitButton class="btn btn-default pull-right" name="Cancel" value="Cancel"/>
-</g:form>
+            <div class="bottom-margin-large bottom-margin-small">
+                <g:submitButton class="btn btn-default pull-right" name="Cancel" value="Cancel"/>
+            </div>
+            <div class="clearfix"></div>
+            <div>&nbsp;</div>
+        </g:form>
 </body>
 </html>

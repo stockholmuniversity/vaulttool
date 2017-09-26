@@ -19,7 +19,7 @@
     <g:layoutHead/>
 </head>
 <body>
-    <header>
+    <header class="bottom-margin-large">
         <g:render template="/layouts/userInfoMenu"/>
         <div class="row">
             <div class="col-sm-7">
@@ -47,7 +47,7 @@
 
     <div class="container">
         <g:if test="${controllerName == 'admin'}">
-            <div id="nav-column" class="col-sm-3">
+            <div id="nav-column" class="col-sm-3 bottom-margin-large">
                 <div class="row">
                     <div class="col-sm-12">
                         <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
