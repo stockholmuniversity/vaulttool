@@ -38,7 +38,7 @@
             <g:form action="importZip" method="post" enctype="multipart/form-data" useToken="false">
                 <div class="bottom-margin-small">
                     <h4>
-                        <span class="fa fa-file-text fa-"></span>
+                        <span class="fa fa-file-text"></span>
                         Import secrets and users from zip-file
                     </h4>
                 </div>
