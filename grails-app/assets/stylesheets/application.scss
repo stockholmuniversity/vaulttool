@@ -37,28 +37,60 @@ $dark-grey-2: #444444;
 header {
     background-color: $main-colour;
     color: $opposite-colour;
-    min-height: 160px;
+
     padding: 10px;
     margin-bottom: 10px;
-}
-header a h1{
-    font-family: caecilia, Verdana, Georgia, "Times New Roman", Times, serif;
-    padding-top: 80px;
-    text-align: right;
-    margin-bottom: 0;
-}
+  
+    h1{
+        font-family: caecilia, Verdana, Georgia, "Times New Roman", Times, serif;
+        text-align: center;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+  /*we want the userInfoToggle icon to display smaller on smaller screens*/
+  @media (max-width: 767px){
+      .fa-2x.fa2xSmaller {
+          font-size: 1.8em;
+      }
+  }
 
+  #logoBig {
+    height: 130px;
+    width: 156px;
+  }
+
+  #logoSmall {
+      img {
+          width: 100%;
+          max-width: 350px;
+      }
+      @media (max-width: 767px) and (orientation: landscape){
+          padding-left: 15%;
+          text-align: center;
+      }
+  }
+  
+  @media (min-width: 768px) {
+      min-height: 160px;
+          h1{
+              padding-top: 50px;
+              margin-top: 20px;
+              text-align: right;
+          }
+      }
+}
 
 footer {
     background-color: $main-colour;
     color: $opposite-colour;
     position: relative;
     clear:both;
-}
-footer p{
-    min-height: 20px;
-    padding: 10px;
-    text-align: center;
+
+    p {
+        min-height: 20px;
+        padding: 10px;
+        text-align: center;
+    }
 }
 
 
@@ -195,7 +227,6 @@ a{
     }
 }
 /*Search query*/
-
 
 
 /*margins and padding*/

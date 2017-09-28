@@ -22,20 +22,23 @@
     <header class="bottom-margin-large">
         <g:render template="/layouts/userInfoMenu"/>
         <div class="row">
-            <div class="col-sm-7">
+            <div class="col-xs-10 col-sm-7 right-padding-none">
                 <a class="disable-link-colors" href="http://su.se">
-                    <g:if test="${(session.logoUrl && session.logoUrl == 'internal') || !session.logoUrl}">
-                        <asset:image class="pull-left" alt="Stockholms universitet" src="su-logo.png" style="height: 130px; width: 156px;"/>
-                    </g:if>
-                    <g:else>
-                        <img class="pull-left" alt="Stockholms universitet" src="${session.logoUrl}" width="156" height="130"/>
-                    </g:else>
+                    <div class="hidden-xs">
+                        <g:if test="${(session.logoUrl && session.logoUrl == 'internal') || !session.logoUrl}">
+                            <asset:image id="logoBig" class="pull-left" alt="Stockholms universitet" src="su-logo.png"/>
+                        </g:if>
+                        <g:else>
+                            <img class="pull-left" alt="Stockholms universitet" src="${session.logoUrl}" width="156" height="130"/>
+                        </g:else>
+                    </div>
+                    <div id="logoSmall" class="visible-xs">
+                        <asset:image src="su-logo-small.png" alt="Stockholms universitet, startsida"/>
+                    </div>
+
                 </a>
             </div>
             <div class="col-sm-5">
-                <div id="userInfoToggle" class="pull-right pointer">
-                    <span class="fa fa-user fa-2x"></span>
-                </div>
                 <div>
                     <g:link class="disable-link-colors" controller="dashboard" action="index">
                         <h1 class="">${session.applicationName?:'Vaulttool'}</h1>
