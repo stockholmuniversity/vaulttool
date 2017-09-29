@@ -7,7 +7,13 @@
 </head>
 
 <body>
-<h1>Unauthorized</h1>
-<span>Please contact someone nice who can give you access to Vaulttool.</span>
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3>Unauthorized</h3>
+    </div>
+    <div class="panel-body">
+        <span>Please contact someone nice who can give you access to ${session.applicationName?:'Vaulttool'}.</span>
+    </div>
+</div>
 </body>
 </html>
