@@ -1,5 +1,8 @@
 ---
 grails:
+    assets:
+        sass:
+            resolveGems: true
     profile: web
     codegen:
         defaultPackage: vaulttool

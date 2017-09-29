@@ -8,6 +8,7 @@ buildscript {
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.11.6"
         classpath "org.grails.plugins:hibernate5:6.0.4"
         classpath "org.grails.plugins:database-migration:3.0.0"
+        classpath 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.3'
     }
 }
 
