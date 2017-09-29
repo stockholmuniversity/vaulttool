@@ -7,9 +7,20 @@
 </head>
 
 <body>
-<h1>VAULTTOOL - Logged out</h1>
-<span>You have been logged out.</span>
-<br/>
-<g:link controller="dashboard" action="index">Login again</g:link>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Logged out</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="col-xs-12 bottom-margin-small">
+                    <span>You have been logged out.</span>
+                </div>
+                <div class="col-xs-12">
+                    <g:link class="btn btn-primary" controller="dashboard" action="index">Login again</g:link>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
