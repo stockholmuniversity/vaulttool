@@ -226,6 +226,14 @@ a{
         color: $opposite-colour;
     }
 }
+@media (max-width: 767px){
+    /*#searchQueryInput::placeholder,
+    #searchQueryInput::-moz-placeholder,
+    #searchQueryInput::-webkit-input-placeholder{
+        font-size: smaller;
+    }*/
+}
+
 /*Search query*/
 
 

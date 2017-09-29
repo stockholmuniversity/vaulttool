@@ -59,8 +59,11 @@
                            </div>
                        </div>
                     </div>
-                    <div class="col-sm-1 col-xs-1">
-                        <g:link class="btn btn-danger button-danger-small" action="deleteUser" params='[key: "${secret.secret}"]'>Delete</g:link>
+                    <div class="col-sm-6 col-xs-6">
+                        <div class="pull-right">
+                            <g:link class="btn btn-danger button-danger-small" action="deleteUser" params='[key: "${secret.secret}"]'>Delete</g:link>
+                        </div>
+
                     </div>
 
                 </div>

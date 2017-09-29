@@ -32,7 +32,7 @@ class DashboardController {
 
         List<MetaData> metaDatas = MetaData.findAllBySecretKeyInList(keyTree).findAll{it.secretKey.contains(secret) || (it.title?it.title.contains(secret):false) || (it.description?it.description.contains(secret):false)}
         if(!metaDatas){
-            flash.message ='No secrets found'
+            flash.warning ='No secrets found'
             redirect(action: "index")
             return
         }
