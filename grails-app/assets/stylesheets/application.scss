@@ -1,0 +1,316 @@
+/*
+* This is a manifest file that'll be compiled into application.css, which will include all the files
+* listed below.
+*
+* Any CSS file within this directory can be referenced here using a relative path.
+*
+* You're free to add application-wide styles to this file and they'll appear at the top of the
+* compiled file, but it's generally better to create a new file per style scope.
+*
+*= require bootstrap
+*= require_self
+*/
+
+
+/*Colours*/
+$main-colour: #002f5f;
+$main-colour-2: rgba(0,47,95,0.8);
+$opposite-colour: #ffffff;
+$dark-grey: #333333;
+$dark-grey-2: #444444;
+/*Colours*/
+
+
+@mixin border-radius($radius){
+    -moz-border-radius: $radius !important;
+    -webkit-border-radius: $radius !important;
+    border-radius: $radius !important;
+}
+
+
+/* Custom fonts, logo, header etc */
+@font-face {
+    font-family: caecilia;
+    src: url(../fonts/CaeciliaCom-55Roman.ttf);
+}
+
+header {
+    background-color: $main-colour;
+    color: $opposite-colour;
+
+    padding: 10px;
+    margin-bottom: 10px;
+  
+    h1{
+        font-family: caecilia, Verdana, Georgia, "Times New Roman", Times, serif;
+        text-align: center;
+        margin-bottom: 0;
+        margin-top: 0;
+    }
+  /*we want the userInfoToggle icon to display smaller on smaller screens*/
+  @media (max-width: 767px){
+      .fa-2x.fa2xSmaller {
+          font-size: 1.8em;
+      }
+  }
+
+  #logoBig {
+    height: 130px;
+    width: 156px;
+  }
+
+  #logoSmall {
+      img {
+          width: 100%;
+          max-width: 350px;
+      }
+      @media (max-width: 767px) and (orientation: landscape){
+          padding-left: 15%;
+          text-align: center;
+      }
+  }
+  
+  @media (min-width: 768px) {
+      min-height: 160px;
+          h1{
+              padding-top: 50px;
+              margin-top: 20px;
+              text-align: right;
+          }
+      }
+}
+
+footer {
+    background-color: $main-colour;
+    color: $opposite-colour;
+    position: relative;
+    clear:both;
+
+    p {
+        min-height: 20px;
+        padding: 10px;
+        text-align: center;
+    }
+}
+
+
+/*Headings*/
+h2 {
+    font-size: 24px !important;
+}
+
+h3 {
+    font-size: 20px !important;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+h4 {
+    font-size: 18px !important;
+}
+/*Headings*/
+
+
+
+/*Override bootstrap theme*/
+input,
+textarea,
+.panel-default,
+.well,
+.btn.btn-default.box {
+    @include border-radius(0);
+}
+
+a{
+    color: $main-colour;
+    text-decoration: none !important;
+}
+
+/*Override bootstrap theme*/
+
+
+.pointer, label {
+    cursor: pointer;
+}
+
+/*Navigation*/
+.menuNav {
+    display: block;
+    padding: 5px 10px 5px 10px;
+
+    &.active{
+        background-color: $main-colour;
+        color: $opposite-colour !important;
+    }
+    &:hover{
+        background-color: $main-colour;
+        color: $opposite-colour !important;
+    }
+}
+
+/*Overrule bootstrap theme colour for button*/
+.btn-default,
+.btn-primary,
+.btn-danger,
+.btn-warning {
+    @include border-radius(2px);
+}
+.btn-danger {
+    background-color: #b92c28;
+
+    &.button-danger-small{
+        padding: 0 3px 0 2px;
+    }
+    &:hover {
+        background-color: rgba(185,44,40,0.9);
+    }
+}
+.btn-primary {
+    background-color: $main-colour;
+    color: $opposite-colour;
+}
+.btn-default {
+    color: #3b3b3b;
+    border: 1px solid #3b3b3b;
+}
+/*Overrule bootstrap theme colour for button*/
+
+
+.box{
+    color: $main-colour;
+    background: #fafafa;
+    border: 1px solid #dcdcdc;
+    padding: 8px;
+}
+
+.breakWithEllipsis{
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.buttonNoBackground {
+    border: none;
+    background: none;
+    color: $main-colour;
+    &:hover {
+        color: $main-colour-2;
+    }
+}
+
+.itemListBorder {
+    border: none;
+    border-bottom: 1px solid #eeeeee;
+}
+
+.secretsListLink {
+    display: block;
+    padding: 4px 15px 4px 15px;
+
+    &:hover{
+        background-color: $main-colour-2;
+        color: $opposite-colour;
+    }
+}
+
+/*Search query*/
+.search-query{
+    @include border-radius(0);
+    
+    border: 1px solid #e67b00;
+    background-color: #f88a00;
+    color: $opposite-colour;
+
+    &:hover{
+        background-color: #f8a508;
+        color: $opposite-colour;
+    }
+}
+/*Search query*/
+
+
+/*margins and padding*/
+.top-margin-small {
+    margin-top: 10px;
+}
+
+.bottom-margin-small {
+    margin-bottom: 10px;
+}
+.bottom-margin-medium {
+    margin-bottom: 15px;
+}
+.bottom-margin-large {
+    margin-bottom: 20px;
+}
+.bottom-margin-xlarge {
+    margin-bottom: 30px;
+}
+
+.bottom-margin-xsmall {
+    margin-bottom: 5px;
+}
+.right-margin-xsmall {
+    margin-right: 5px;
+}
+.right-margin-small {
+    margin-right: 10px;
+}
+
+.top-padding-xsmall {
+    padding-top: 5px;
+}
+.bottom-padding-xsmall {
+    padding-bottom: 5px;
+}
+
+.left-padding-none {
+    padding-left: 0;
+}
+.right-padding-none {
+    padding-right: 0;
+}
+.bottom-padding-none {
+    padding-bottom: 0;
+}
+.top-padding-none {
+    padding-top: 0;
+}
+/*margins and padding*/
+
+/*************************/
+
+
+
+/*Hide the ugly input type=file browse file tree button*/
+[hidden] {
+    display: none !important;
+}
+
+/*User info menu*/
+.userInfoToggled {
+    color: $main-colour;
+}
+#userInfoToggle {
+    z-index: 99;
+    position: relative;
+    padding: 0;
+}
+
+#userInfoMenu {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    left: auto;
+    min-width: 200px;
+    max-width: 95%;
+    z-index: 89;
+}
+/*User info menu*/
+
+
+
+.disable-link-colors, .disable-link-colors:hover{
+    color:inherit;
+    text-decoration: none;
+}

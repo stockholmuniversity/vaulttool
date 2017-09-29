@@ -8,46 +8,72 @@
 </head>
 
 <body>
-    <h1>Administration</h1>
-    <div class="row">
-        <div class="col-sm-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Administration</h3>
+        </div>
+        <div class="panel-body">
             <g:form action="sudo">
-                <label for="sudo">Sudo</label>
-                <g:select from="${approles*.appRole}" id="sudo" name="sudo" noSelection="${['':'Select group']}"/>
-                <g:submitButton class="btn btn-primary" name="submit" value="Sudo now"/>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <h4>
+                            <span class="fa fa-user"></span>
+                            Sudo
+                        </h4>
+                        <div class="bottom-margin-small">
+                            <g:select class="form-control" from="${approles*.appRole}" id="sudo" name="sudo" noSelection="${['':'Select group']}"/>
+                        </div>
+                        <div class="pull-right">
+                            <g:submitButton class="btn btn-primary" name="submit" value="Sudo now"/>
+                        </div>
+                    </div>
+
+                </div>
             </g:form>
         </div>
     </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <g:link action="user">Administrate users</g:link>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <g:link action="policies">Administrate policies</g:link>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <g:link action="approles">Administrate approles (using sukat entitlements)</g:link>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <g:link action="export">Export secrets and users</g:link>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
+<div class="row">
+    <div class="col-sm-12 col-lg-7">
+        <div class="well">
             <g:form action="importZip" method="post" enctype="multipart/form-data" useToken="false">
-                <span style="display: inline;">
-                    <span><strong>Import secrets and users from zip-file -> &nbsp;</strong></span>
-                    <input style="display: inline;" type="file" id="importZipInputFileId" name="importZipInputFileId" />
-                    <g:submitButton style="display: inline;" class="btn btn-primary" name="submit" value="Import zip-file"/>
-                </span>
+                <div class="bottom-margin-small">
+                    <h4>
+                        <span class="fa fa-file-text"></span>
+                        Import secrets and users from zip-file
+                    </h4>
+                </div>
+                <div class="bottom-margin-xsmall">
+                    <label class="btn btn-default">
+                        <input type="file" id="importZipInputFileId" name="importZipInputFileId" hidden/> <span class="fa fa-plus-square"></span>&nbsp;Browse
+                    </label>
+                    <span id="adminFileSelected"></span>
+                </div>
+                <div class="pull-right">
+                    <g:submitButton id="adminUploadFile" class="btn btn-primary hidden" name="submit" value="Import zip-file"/>
+                </div>
+                <div class="clearfix"></div>
             </g:form>
         </div>
     </div>
+    <div class="col-sm-12 col-lg-5">
+        <div class="well">
+            <div class="bottom-margin-small">
+                <h4>
+                    <span class="fa fa-download"></span>
+                    Export secrets and users
+                </h4>
+            </div>
+
+                <g:link action="export" class="btn btn-primary">
+                    Export secrets and users
+                </g:link>
+            
+
+        </div>
+    </div>
+</div>
+
+
+
 </body>
 </html>

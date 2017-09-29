@@ -8,53 +8,90 @@
 </head>
 
 <body>
-    <h1>AppRole(Entitlement) Administration</h1>
-    <div class="row">
-        <div class="col-sm-12">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>Application Roles Administration</h3>
+        </div>
+        <div class="panel-body">
             <g:form action="createApprole">
-                <label for="name">Create/Update approle - AppRole(Entitlement) name</label>
-                <input class="allowonly7bit" type="text" id="name" name="name" value=""/>
-                <label for="policies">Policies</label>
-                <g:select from="${policies*.policy}"  multiple="multiple" id="policies" name="policies"/>
-                <g:submitButton class="btn btn-primary" name="submit" value="Create/Update Approle"/>
+                <div class="row bottom-margin-small">
+                    <div class="col-sm-2">
+                        <label for="name">Role</label>
+                    </div>
+                    <div class="col-sm-10">
+                        <input class="allowonly7bit form-control" type="text" id="name" name="name" value="" placeholder="Application role name (entitlement)"/>
+                    </div>
+                </div>
+                <div class="row bottom-margin-small">
+                     <div class="col-sm-2">
+                         <label for="policies">Policies</label>
+
+                     </div>
+                    <div class="col-sm-10">
+                        <g:select class="form-control" from="${policies*.policy}"  multiple="multiple" id="policies" name="policies"/>
+                        <span class="text-muted small">Select one or more policies</span>
+                    </div>
+                </div>
+
+                <div class="pull-right">
+                    <g:submitButton class="btn btn-primary" name="submit" value="Create/Update Role"/>
+                </div>
+
+
             </g:form>
         </div>
     </div>
-    <br/>
-    <hr/>
-    <g:each in="${approles}" var="approle">
-        <div class="row">
-            <div class="col-sm-2">
-                ${approle.appRole}
-            </div>
-            <div class="col-sm-9">
-                ${approle.policies.join(", ")}
-            </div>
-            <div class="col-sm-1">
-                <g:link action="deleteApprole" params='[approle: "${approle.appRole}"]'>Delete</g:link></li>
-            </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>
+             Roles
+            </h3>
         </div>
-    </g:each>
-    <br/>
-    <br/>
-    <h1>Policy Information</h1>
-    <hr/>
-    <g:each in="${policies}" var="policy">
-        <div class="row">
-            <div class="col-sm-2">
-                ${policy.policy}
-            </div>
-            <div class="col-sm-10">
-                <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}")}">
-                    <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/")}">
-                        ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}
-                    </g:if>
-                    <g:else>
-                        ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}","")}
-                    </g:else>
-                </g:if>
-            </div>
+        <div class="panel-body top-padding-none bottom-padding-none">
+            <g:each in="${approles}" var="approle" status="i">
+                <div class="row ${(i < approles.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
+                    <div class="col-lg-11 col-sm-10 col-xs-9">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <strong>${approle.appRole}</strong>
+                            </div>
+                            <div class="col-sm-10">
+                                ${approle.policies.join(", ")}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-sm-2 col-xs-3">
+                        <g:link class="btn btn-danger button-danger-small" action="deleteApprole" params='[approle: "${approle.appRole}"]'>Delete</g:link>
+                    </div>
+                </div>
+            </g:each>
         </div>
-    </g:each>
+    </div>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3>
+                Policy Information
+            </h3>
+        </div>
+        <div class="panel-body top-padding-none bottom-padding-none">
+            <g:each in="${policies}" var="policy" status="i">
+                <div class="row ${(i < policies.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
+                    <div class="col-sm-2">
+                        <strong>${policy.policy}</strong>
+                    </div>
+                    <div class="col-sm-10">
+                        <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}")}">
+                            <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/")}">
+                                ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}
+                            </g:if>
+                            <g:else>
+                                ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}","")}
+                            </g:else>
+                        </g:if>
+                    </div>
+                </div>
+            </g:each>
+        </div>
+   </div>
 </body>
 </html>

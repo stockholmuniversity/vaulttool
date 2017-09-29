@@ -31,6 +31,11 @@ class DashboardController {
         def keyTree = vaultRestService.getSecretTree(session.token)
 
         List<MetaData> metaDatas = MetaData.findAllBySecretKeyInList(keyTree).findAll{it.secretKey.contains(secret) || (it.title?it.title.contains(secret):false) || (it.description?it.description.contains(secret):false)}
+        if(!metaDatas){
+            flash.message ='No secrets found'
+            redirect(action: "index")
+            return
+        }
         [metadatas: metaDatas]
 
     }

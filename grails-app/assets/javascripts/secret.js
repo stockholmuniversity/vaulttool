@@ -7,13 +7,13 @@ $(document).ready(function(){
             $("#password").attr("type","text");
 
             // Change the Text
-            $("#toggleText").text("Hide");
+            $("#toggleText").text("Hide password");
         }else{
             // Changing type attribute
             $("#password").attr("type","password");
 
             // Change the Text
-            $("#toggleText").text("Show");
+            $("#toggleText").text("Show password");
         }
 
     });
@@ -39,5 +39,22 @@ $(document).ready(function(){
         $("#hiddenusername").select();
         document.execCommand("copy");
         $("#hiddenusername").remove();
+    });
+
+
+    $('#attachment').on('change', function() {
+        var fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
+        if($("#uploadFile").hasClass('hidden')){
+            $("#uploadFile").removeClass('hidden');
+        }
+        $('#fileSelected').html(fileName);
+
+    });
+
+    $("[name='description']").height($("[name='description']").prop('scrollHeight'));
+    
+    $("[name='description']").on('keyup focus', function (event) {
+        $(this).css('height', 'auto');
+        $(this).height(this.scrollHeight);
     });
 });
