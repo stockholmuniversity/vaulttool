@@ -96,6 +96,16 @@
                     </div>
                 </div>
             </g:if>
+            <g:if test="${flash.warning}">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="alert alert-warning">
+                            ${flash.warning}
+                        </div>
+
+                    </div>
+                </div>
+            </g:if>
             <g:if test="${flash.message}">
                 <div class="row">
                     <div class="col-sm-12">
