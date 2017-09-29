@@ -21,8 +21,14 @@
       <div class="row">
           <div class="col-sm-12">
               <g:form action="secondauth">
-                  <input type="text" name="verificationcode" value=""/>
-                  <g:submitButton class="btn btn-primary" name="submit" value="Verify"/>
+                  <div class="row">
+                      <div class="col-xs-8 col-sm-4 right-padding-none">
+                          <input type="text" name="verificationcode" value="" class="form-control"/>
+                      </div>
+                      <div class="col-xs-2 col-sm-2">
+                          <g:submitButton class="btn btn-primary" name="submit" value="Verify"/>
+                      </div>
+                  </div>
               </g:form>
           </div>
       </div>

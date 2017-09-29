@@ -53,7 +53,7 @@
                         <input id="username" class="form-control" type="text" name="userName" value="${secret.userName}"/>
                     </div>
                     <div class="col-sm-1 col-xs-1 left-padding-none">
-                        <button id="copyUsername" class="btn buttonNoBackground" value="Copy">
+                        <button id="copyUsername" class="btn buttonNoBackground" value="Copy" title="Copy to clipboard">
                             <span class="fa fa-clipboard fa-lg"></span>
                         </button>
                     </div>
@@ -67,7 +67,7 @@
                         <span id="toggleText">Show password</span>&nbsp;
                     </div>
                     <div class="col-sm-1 col-xs-1 left-padding-none">
-                        <button id="copyPwd" class="btn buttonNoBackground" value="Copy">
+                        <button id="copyPwd" class="btn buttonNoBackground" value="Copy" title="Copy to clipboard">
                             <span class="fa fa-clipboard fa-lg"></span>
                         </button>
                     </div>
