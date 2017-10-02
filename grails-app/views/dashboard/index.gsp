@@ -36,7 +36,7 @@
                 <div class="row bottom-margin-xsmall">
                     <div class="col-sm-1"></div>
                     <div class="col-sm-11">
-                        <input type="text" class="form-control allowonly7bit" maxlength="20" name="path" value="" placeholder="Enter path"/>
+                        <input type="text" class="form-control allowonly7bit" maxlength="20" name="path" value="" placeholder="Enter path (optional)"/>
                     </div>
                 </div>
 
@@ -60,7 +60,7 @@
         <div class="panel-heading">
             <g:form action="search">
                 <div class="input-group">
-                    <input class="form-control search-query-input" type="text" maxlength="60" name="secret" value="" placeholder="Search by key, title or description"/>
+                    <input id="searchQueryInput" class="form-control search-query-input" type="text" maxlength="60" name="secret" value="" placeholder="Search by key, title or description"/>
                     <div class="input-group-btn">
                         <button class="btn search-query" name="submit" value="Search secret">
                             <span class="fa fa-search fa-lg"></span>

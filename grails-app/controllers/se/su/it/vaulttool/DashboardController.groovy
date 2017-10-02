@@ -52,7 +52,7 @@ class DashboardController {
 
         Expando response = vaultRestService.getSecret(session.token, key)
         if(response.status) {
-            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: Access denied."
             log.error(errorMsg)
             flash.error = errorMsg
             redirect(action: "index")
