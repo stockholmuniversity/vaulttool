@@ -26,7 +26,7 @@
         <g:if test="${session.sudo != null}">
             <g:link class="btn btn-default btn-sm btn-block" controller="public" action="disableSudo">
                 <span class="fa fa-user"></span>
-                Disable Sudo mode
+                Disable Sudo Mode
             </g:link>
         </g:if>
         

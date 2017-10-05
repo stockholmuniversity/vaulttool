@@ -118,6 +118,7 @@
             </g:if>
             <div class="row">
                 <div class="col-sm-12">
+                    <g:render template="/layouts/scrollTop"/>
                     <g:layoutBody/>
                 </div>
             </div>

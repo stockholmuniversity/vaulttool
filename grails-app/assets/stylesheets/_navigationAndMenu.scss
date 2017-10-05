@@ -1,0 +1,42 @@
+/* ----- Navigation ----- */
+
+.menuNav {
+    display: block;
+    padding: 5px 10px 5px 10px;
+
+    &.active{
+        background-color: $main-colour;
+        color: $opposite-colour !important;
+    }
+    &:hover{
+        background-color: $main-colour;
+        color: $opposite-colour !important;
+    }
+}
+
+/* ----- Navigation ----- */
+
+
+/* ----- User info menu ----- */
+
+.userInfoToggled {
+    color: $main-colour;
+}
+
+#userInfoToggle {
+    z-index: 99;
+    position: relative;
+    padding: 0;
+}
+
+#userInfoMenu {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    left: auto;
+    min-width: 200px;
+    max-width: 95%;
+    z-index: 89;
+}
+
+/* ----- User info menu ----- */
