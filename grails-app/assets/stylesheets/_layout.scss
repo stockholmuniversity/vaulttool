@@ -1,0 +1,94 @@
+@font-face {
+  font-family: caecilia;
+  src: url(../fonts/CaeciliaCom-55Roman.ttf);
+}
+
+.pointer, label {
+  cursor: pointer;
+}
+
+
+/* ----- Header And Footer ----- */
+
+header {
+  background-color: $main-colour;
+  color: $opposite-colour;
+
+  padding: 10px;
+  margin-bottom: 10px;
+
+  h1{
+    font-family: caecilia, Verdana, Georgia, "Times New Roman", Times, serif;
+    text-align: center;
+    margin-bottom: 0;
+    margin-top: 0;
+  }
+  
+  /*we want the userInfoToggle icon to display smaller on smaller screens*/
+  @media (max-width: 767px){
+    .fa-2x.fa2xSmaller {
+      font-size: 1.8em;
+    }
+  }
+
+  #logoBig {
+    height: 130px;
+    width: 156px;
+  }
+
+  #logoSmall {
+    img {
+      width: 100%;
+      max-width: 350px;
+    }
+    @media (max-width: 767px) and (orientation: landscape){
+      padding-left: 15%;
+      text-align: center;
+    }
+  }
+
+  @media (min-width: 768px) {
+    min-height: 160px;
+    h1{
+      padding-top: 50px;
+      margin-top: 20px;
+      text-align: right;
+    }
+  }
+}
+
+footer {
+  background-color: $main-colour;
+  color: $opposite-colour;
+  position: relative;
+  clear:both;
+
+  p {
+    min-height: 20px;
+    padding: 10px;
+    text-align: center;
+  }
+}
+
+/* ----- Header And Footer ----- */
+
+
+/* ----- Headings ----- */
+
+h2 {
+  font-size: 24px !important;
+}
+
+h3 {
+  font-size: 20px !important;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+h4 {
+  font-size: 18px !important;
+}
+
+/* ----- Headings ----- */
+
+
