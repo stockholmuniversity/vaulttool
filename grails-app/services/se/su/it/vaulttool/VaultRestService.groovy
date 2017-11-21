@@ -97,7 +97,7 @@ class VaultRestService {
         Map response = putJsonByUrlAndType(token, "/v1/auth/token/lookup", query)
 
         if(response?.data?.renewable && response?.data?.ttl < 3600) {
-            query = ["token": "11b4fd26-7230-0acb-e983-425daa4224f0", "increment": "24h"]
+            query = ["token": token, "increment": "24h"]
             response = putJsonByUrlAndType(token, "/v1/auth/token/renew", query)
         }
     }

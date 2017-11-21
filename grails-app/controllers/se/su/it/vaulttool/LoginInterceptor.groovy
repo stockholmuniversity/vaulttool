@@ -78,6 +78,11 @@ class LoginInterceptor {
             redirect(controller: "public", action: "index")
             return false
         }
+        if(!session.eppn && !request.getAttribute("REMOTE_USER")) {
+            log.error("User (${session.uid?:"Unknown User"}) missing eppn and REMOTE_USER, cant do second auth!")
+            redirect(controller: "public", action: "index")
+            return false
+        }
         if(!session.secondauth && !session.secondauthkey && request.getAttribute("REMOTE_USER")) {
             User user = vaultRestService.getUserSecret(grailsApplication.config.vault.vaulttoken,session.eppn)
             String rootEppn = grailsApplication.config.vault.rooteppn?:null
