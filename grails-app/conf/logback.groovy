@@ -17,7 +17,7 @@ if(Environment.isDevelopmentMode() || Environment.currentEnvironment == Environm
     }
     root(INFO, ['STDOUT'])
     logger("groovyx.net.http.ParserRegistry", ERROR, ['STDOUT'], false)
-    logger("grails.app.services.se.su.it.vaulttool", DEBUG, ['STDOUT'], false)
+    logger("se.su.it.vaulttool", DEBUG, ['STDOUT'], false)
     println("### Finished setting up logback for development/test mode ###")
 } else {
     println("### Setting up logback for production mode ###")
