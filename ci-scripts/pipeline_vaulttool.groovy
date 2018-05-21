@@ -1,5 +1,7 @@
 #!/usr/bin/env groovy
 
+suSetProperties(["github": "true"])
+
 def projectName = 'vaulttool'
 
 env.JAVA_HOME="/local/jdk"
@@ -18,21 +20,24 @@ suNodeWithNexusCredentials {
 
     docker.image(projectName).inside('-v /local/jenkins/conf:/local/jenkins/conf -v /local/jenkins/libexec:/local/jenkins/libexec') {
 
-        stage("Prepare build")
-        {
-            suCheckoutCode ([
-                projectName : projectName,
-            ])
-        }
+        suGitHubBuildStatus {
 
-        stage("Build")
-        {
-            sh "./gradlew bootRepackage -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
-        }
+            stage("Prepare build")
+            {
+                suCheckoutCode ([
+                    projectName : projectName,
+                ])
+            }
 
-        stage("Deploy to Nexus")
-        {
-            sh "./gradlew publish -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
+            stage("Build")
+            {
+                sh "./gradlew bootRepackage -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
+            }
+
+            stage("Deploy to Nexus")
+            {
+                sh "./gradlew publish -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
+            }
         }
     }
 }
