@@ -13,8 +13,8 @@ buildscript {
     }
 }
 
-version "1.0.1-rc01"
-group "vaulttool"
+version "1.0.1-rc02-SNAPSHOT"
+group "se.su.it"
 
 apply plugin:"eclipse"
 apply plugin:"idea"
@@ -22,11 +22,12 @@ apply plugin:"war"
 apply plugin:"org.grails.grails-web"
 apply plugin:"org.grails.grails-gsp"
 apply plugin:"asset-pipeline"
+apply plugin:"maven-publish"
 
 repositories {
     mavenLocal()
     maven { url "https://repo.grails.org/grails/core" }
-    maven { url "http://maven.it.su.se/it.su.se/maven2/" }
+    maven { url "https://maven.it.su.se/repository/private" }
 }
 
 dependencyManagement {
@@ -85,4 +86,28 @@ sourceSets {
             srcDir 'grails-app/migrations'
         }
     }
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      from components.web
+    }
+  }
+
+  repositories {
+    maven {
+      credentials {
+        username "${nexusUsername}"
+        password "${nexusPassword}"
+      }
+      if(project.version.endsWith('-SNAPSHOT')) {
+          name "it.su.se-jenkins-snapshot"
+          url "https://maven.it.su.se/repository/it.su.se-jenkins-snapshot"
+      } else {
+          name "it.su.se-jenkins-release"
+          url "https://maven.it.su.se/repository/it.su.se-jenkins-release"
+      }
+    }
+  }
 }
