@@ -26,8 +26,8 @@ apply plugin:"maven-publish"
 
 repositories {
     mavenLocal()
+    maven { url "https://maven.it.su.se/repository/it.su.se" }
     maven { url "https://repo.grails.org/grails/core" }
-    maven { url "https://maven.it.su.se/repository/private" }
 }
 
 dependencyManagement {
