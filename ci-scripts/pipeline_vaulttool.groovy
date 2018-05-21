@@ -18,7 +18,7 @@ suNodeWithNexusCredentials {
         suDockerBuildAndPull(projectName)
     }
 
-    docker.image(projectName).inside('-v /local/jenkins/conf:/local/jenkins/conf -v /local/jenkins/libexec:/local/jenkins/libexec') {
+    docker.image(projectName).inside('-v /local/jenkins/conf:/local/jenkins/conf -v /local/jenkins/libexec:/local/jenkins/libexec -v /local/jenkins/conf/settings.xml:/root/.m2/settings.xml') {
 
         suGitHubBuildStatus {
 
