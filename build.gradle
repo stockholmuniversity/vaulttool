@@ -98,8 +98,8 @@ publishing {
   repositories {
     maven {
       credentials {
-        username "${nexusUsername}"
-        password "${nexusPassword}"
+          username project.hasProperty('nexusUsername') ? project.property('nexusUsername') : ''
+          password project.hasProperty('nexusPassword') ? project.property('nexusPassword') : ''
       }
       if(project.version.endsWith('-SNAPSHOT')) {
           name "it.su.se-jenkins-snapshot"
