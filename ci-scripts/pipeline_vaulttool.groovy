@@ -31,7 +31,7 @@ suNodeWithNexusCredentials {
 
             stage("Build")
             {
-                sh "./gradlew assemble -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
+                sh "./gradlew bootRepackage -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
             }
 
             stage("Deploy to Nexus")
