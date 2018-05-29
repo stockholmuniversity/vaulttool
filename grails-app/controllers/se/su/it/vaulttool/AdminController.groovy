@@ -250,11 +250,14 @@ class AdminController {
     def export() {
         try {
             ByteArrayOutputStream baos = new ByteArrayOutputStream()
-            ZipOutputStream zos = new ZipOutputStream(baos)
+            ZipOutputStream zos     = new ZipOutputStream(baos)
             String creationDateTime = new Date().format("yyyyMMdd_hhmmss")
-            String zipFileName = "vaulttool-export_" + creationDateTime + ".zip"
-            String secretsPath = "vaulttool-export_" + creationDateTime + "/" + VaultRestService.VAULTTOOLSECRETSPATHNAME + "/"
-            String usersPath = "vaulttool-export_" + creationDateTime + "/" + VaultRestService.VAULTTOOLUSERSPATHNAME + "/"
+            String zipFileName      = "vaulttool-export_" + creationDateTime + ".zip"
+            String secretsPath      = "vaulttool-export_" + creationDateTime + "/" + VaultRestService.VAULTTOOLSECRETSPATHNAME + "/"
+            String usersPath        = "vaulttool-export_" + creationDateTime + "/" + VaultRestService.VAULTTOOLUSERSPATHNAME + "/"
+            String policiesPath     = "vaulttool-export_" + creationDateTime + "/" + VaultRestService.VAULTTOOLPOLICIESPATHNAME + "/"
+            String appRolesPath        = "vaulttool-export_" + creationDateTime + "/" + VaultRestService.VAULTTOOLAPPROLESPATHNAME + "/"
+
 
             vaultRestService.getSecretTree(session.token, "").each { String secret ->
                 def obj = vaultRestService.getSecret(session.token, secret)
@@ -312,6 +315,28 @@ class AdminController {
                     zos.closeEntry()
                 }
             }
+            vaultRestService.getPolicies(session.token).each{Map<String,String> policy ->
+                ZipEntry entry = new ZipEntry(policiesPath + policy.policy + "/policy.txt")
+                zos.putNextEntry(entry)
+                zos.write(policy.policy.getBytes())
+                zos.closeEntry()
+                entry = new ZipEntry(policiesPath + policy.policy + "/rules.txt")
+                zos.putNextEntry(entry)
+                zos.write(policy.rules.getBytes())
+                zos.closeEntry()
+            }
+            vaultRestService.getAppRoles(session.token).each{Map<String,List<String>> appRole ->
+                ZipEntry entry = new ZipEntry(appRolesPath + appRole.appRole + "/approle.txt")
+                zos.putNextEntry(entry)
+                zos.write(appRole.appRole.getBytes())
+                zos.closeEntry()
+                appRole.policies.eachWithIndex{ String policy, int i ->
+                    entry = new ZipEntry(appRolesPath + appRole.appRole + "/policy${i}.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(policy.getBytes())
+                    zos.closeEntry()
+                }
+            }
 
             zos.close()
             response.setContentType("application/zip")
@@ -335,10 +360,16 @@ class AdminController {
             redirect(actionName: "index")
             return
         }
-        String secretsPath = VaultRestService.VAULTTOOLSECRETSPATHNAME+"/"
-        String usersPath = VaultRestService.VAULTTOOLUSERSPATHNAME+"/"
-        List<ImportSecretHelper> secretList = []
-        List<ImportUserHelper> userList = []
+        String secretsPath  = VaultRestService.VAULTTOOLSECRETSPATHNAME + "/"
+        String usersPath    = VaultRestService.VAULTTOOLUSERSPATHNAME + "/"
+        String policiesPath = VaultRestService.VAULTTOOLPOLICIESPATHNAME + "/"
+        String appRolesPath = VaultRestService.VAULTTOOLAPPROLESPATHNAME + "/"
+
+        List<ImportSecretHelper> secretList     = []
+        List<ImportUserHelper> userList         = []
+        List<ImportPolicyHelper> policyList     = []
+        List<ImportAppRoleHelper> appRoleList   = []
+
         ZipInputStream zipStream = new ZipInputStream(f.inputStream)
         if(zipStream) {
             ZipEntry zipEntry
@@ -408,6 +439,58 @@ class AdminController {
                                 out.close()
                             }
                         }
+                    } else if(zipEntry.getName().contains(policiesPath)) {// Policies
+                        String keyWithFile = zipEntry.getName().substring(zipEntry.getName().indexOf(VaultRestService.VAULTTOOLPOLICIESPATHNAME)).replace(policiesPath, "")
+                        if(keyWithFile.lastIndexOf("/") > -1) {
+                            String policy = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
+                            String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
+                            if(["policy.txt", "rules.txt"].any{keyWithFile.contains(it)}) {
+                                ByteArrayOutputStream out = new ByteArrayOutputStream()
+                                byte[] buffer = new byte[1024]
+                                int n
+                                while ((n = zipStream.read(buffer, 0, 1024)) > -1) {
+                                    out.write(buffer, 0, n);
+                                }
+                                ImportPolicyHelper importPolicyHelper = policyList.find { it.policy == policy }
+                                if (!importPolicyHelper) {
+                                    importPolicyHelper = new ImportPolicyHelper(policy: policy)
+                                    policyList << importPolicyHelper
+                                }
+                                switch (file) {
+                                    case "policy.txt": importPolicyHelper.policy = out.toString()
+                                        break
+                                    case "rules.txt": importPolicyHelper.rules = out.toString()
+                                        break
+                                }
+                                out.close()
+                            }
+                        }
+                    } else if(zipEntry.getName().contains(appRolesPath)) {// AppRoles
+                        String keyWithFile = zipEntry.getName().substring(zipEntry.getName().indexOf(VaultRestService.VAULTTOOLAPPROLESPATHNAME)).replace(appRolesPath, "")
+                        if(keyWithFile.lastIndexOf("/") > -1) {
+                            String appRole = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
+                            String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
+                            if(["approle.txt", "policy"].any{keyWithFile.contains(it)}) {
+                                ByteArrayOutputStream out = new ByteArrayOutputStream()
+                                byte[] buffer = new byte[1024]
+                                int n
+                                while ((n = zipStream.read(buffer, 0, 1024)) > -1) {
+                                    out.write(buffer, 0, n);
+                                }
+                                ImportAppRoleHelper importAppRoleHelper = appRoleList.find { it.appRole == appRole }
+                                if (!importAppRoleHelper) {
+                                    importAppRoleHelper = new ImportAppRoleHelper(appRole: appRole)
+                                    appRoleList << importAppRoleHelper
+                                }
+                                switch (file) {
+                                    case "approle.txt": importAppRoleHelper.appRole = out.toString()
+                                        break
+                                    case {String fileName -> fileName.startsWith("policy")}: importAppRoleHelper.policies << out.toString()
+                                        break
+                                }
+                                out.close()
+                            }
+                        }
                     }
 
                 }
@@ -430,6 +513,13 @@ class AdminController {
             userData.secretKey  = iuh.user.key
             userData.eppn       = iuh.userData.eppn
             userData.save(flush: true)
+        }
+        policyList.each{ImportPolicyHelper iph ->
+            Map theMap = ["rules": iph.rules]
+            vaultRestService.putPolicy(session.token, iph.policy, theMap)
+        }
+        appRoleList.each{ImportAppRoleHelper iarh ->
+            vaultRestService.postApprole(session.token, iarh.appRole, iarh.policies)
         }
         redirect(action: "index")
     }

@@ -15,6 +15,7 @@ class LoginInterceptor {
     boolean before() {
         if (Environment.current == Environment.DEVELOPMENT && !request.getAttribute("REMOTE_USER")) {
             session.uid = "testl"
+            session.eppn = "testl@su.se"
             session.displayname = "Testlisa Testsson"
             if(session.sudo) {
                 session.group = session.sudo
