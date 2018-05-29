@@ -33,6 +33,8 @@ class PublicController {
     def disableSudo() {
         session.sudo = null
         session.token = null
+        session.group = null
+        session.groups = null
 
         redirect(controller: "dashboard", action: "index")
     }
