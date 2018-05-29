@@ -4,8 +4,10 @@ import groovy.json.JsonSlurper
 import groovyx.net.http.HTTPBuilder
 
 class VaultRestService {
-    static final public VAULTTOOLUSERSPATHNAME = "vaulttoolusers"
-    static final public VAULTTOOLSECRETSPATHNAME = "vaulttoolsecrets"
+    static final public VAULTTOOLUSERSPATHNAME      = "vaulttoolusers"
+    static final public VAULTTOOLSECRETSPATHNAME    = "vaulttoolsecrets"
+    static final public VAULTTOOLPOLICIESPATHNAME   = "vaulttoolpolicies"
+    static final public VAULTTOOLAPPROLESPATHNAME   = "vaulttoolapproles"
     def grailsApplication
     private HTTPBuilder http = null
 
@@ -201,6 +203,10 @@ class VaultRestService {
 
     Map putPolicy(String token, Policy policy) {
         return putJsonByUrlAndType(token,"/v1/sys/policy/${policy.name}", policy.asMap(), null)
+    }
+
+    Map putPolicy(String token, String policy, Map rules) {
+        return putJsonByUrlAndType(token,"/v1/sys/policy/${policy}", rules, null)
     }
 
     Map deletePolicy(String token, String policy) {
