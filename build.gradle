@@ -88,6 +88,10 @@ sourceSets {
     }
 }
 
+publish {
+    dependsOn assemble
+}
+
 publishing {
   publications {
     mavenJava(MavenPublication) {
