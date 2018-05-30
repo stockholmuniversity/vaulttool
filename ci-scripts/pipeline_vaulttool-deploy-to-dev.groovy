@@ -43,7 +43,7 @@ node('agent') {
 
         stage("Trigger build of SUA-packages")
         {
-                /*
+
                 println "Building SUA-package."
                 suTriggerSuaBuild ([
                         artifacts: artifacts[it],
@@ -53,7 +53,7 @@ node('agent') {
                         wait: true
                 ])
                 println "SUA-package built."
-                */
+
         }
 
         stage("Deploy to dev")
