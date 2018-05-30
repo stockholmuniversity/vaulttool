@@ -64,6 +64,7 @@ node('agent') {
             String sshCommand = 'ssh -o ConnectTimeout=5 -o GSSAPIAuthentication=yes -o GSSAPIKeyExchange=yes -lroot ' + host
 
             sh sshCommand + " echo 'deb [arch=amd64] http://linux-sua.it.su.se/stretch/sua-v2 dev main' > " + aptFile
+            sh sshCommand + " \"echo 'deb [arch=amd64] http://linux-sua.it.su.se/stretch/sua-v2 dev main' > ${aptFile}\""
             sh sshCommand + " apt-get update"
             sh sshCommand + " apt-get install --yes --force-yes -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' " + suaPackage
             sh sshCommand + " rm " + aptFile + " && apt-get update"
