@@ -46,9 +46,9 @@ node('agent') {
 
                 println "Building SUA-package."
                 suTriggerSuaBuild ([
-                        artifacts: artifacts[it],
+                        artifacts: artifacts,
                         groupId: groupId,
-                        suaPackage: suaPackages[it],
+                        suaPackage: suaPackage,
                         version: version,
                         wait: true
                 ])
@@ -67,9 +67,6 @@ node('agent') {
             sh sshCommand + " apt-get update"
             sh sshCommand + " apt-get install --yes --force-yes -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' " + suaPackage
             sh sshCommand + " rm " + aptFile + " && apt-get update"
-            sh sshCommand + " systemctl stop " + suaPackage
-            sh sshCommand + " /local/vaulttool/scripts/post-install.sh"
-            sh sshCommand + " systemctl start " + suaPackage
         }
     }
 }
