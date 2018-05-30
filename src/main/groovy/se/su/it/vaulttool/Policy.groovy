@@ -34,7 +34,7 @@ class Policy {
         if(list){capabilities << '"list"'}
         String capabilitiesString = capabilities.join(", ")
 
-        Map theStrangeMap = ['rules': 'path "'+ path +'" {capabilities = ['+ capabilitiesString +']}']
+        Map theStrangeMap = ['policy': 'path "'+ path +'" {capabilities = ['+ capabilitiesString +']}']
         return theStrangeMap
     }
 }
