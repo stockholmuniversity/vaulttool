@@ -66,6 +66,8 @@ node('agent') {
             sh sshCommand + " \"echo 'deb [arch=amd64] http://linux-sua.it.su.se/xenial/sua-v2 dev main' > ${aptFile}\""
             sh sshCommand + " apt-get update"
             sh sshCommand + " apt-get install --yes --force-yes -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' " + suaPackage
+            sh sshCommand + " pkill -9 java"
+            sh sshCommand + " systemctl restart " + suaPackage + ".service"
             sh sshCommand + " rm " + aptFile + " && apt-get update"
         }
     }
