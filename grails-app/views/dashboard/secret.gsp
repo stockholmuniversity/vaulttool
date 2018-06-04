@@ -87,6 +87,7 @@
             </div>
 
             <g:form action="index">
+                <g:hiddenField name="selectedPath" value="${session.selectedPath}"/>
                 <g:submitButton class="btn btn-default pull-right right-margin-small" name="submit" value="Close"/>
             </g:form>
 

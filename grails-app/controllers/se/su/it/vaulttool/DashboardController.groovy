@@ -8,7 +8,7 @@ class DashboardController {
 
     def index() {
         String selectedPath = params?.selectedPath?:""
-
+        session.selectedPath = selectedPath
         def paths = vaultRestService.getPaths(session.token)
         List<Map<String, MetaData>> secretMetaData = []
         def secrets = vaultRestService.listSecrets(session.token, selectedPath)
