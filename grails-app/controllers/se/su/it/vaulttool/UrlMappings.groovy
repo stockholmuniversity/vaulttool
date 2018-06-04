@@ -10,6 +10,7 @@ class UrlMappings {
         }
 
         "/"(controller: "dashboard", action: "index")
+        "/dashboard/secret/$key**" (controller:"dashboard", action:"secret")
         "500"(view:'/error')
         "404"(view:'/notFound')
     }
