@@ -42,7 +42,7 @@ class AdminController {
                 secretUsers << [secret: secret, userdata: vaultRestService.getUserSecret(session.token, secret)]
             }
         }
-        [secrets: secretUsers]
+        [secrets: secretUsers.sort{it.secret}]
     }
 
     def createUser() {
