@@ -77,7 +77,7 @@ class AdminController {
         userData.secretKey  = key
         userData.eppn       = eppn
 
-        userData.save()
+        userData.save(flush: true)
         flash.message = "Successfully created/updated user ${key}"
         redirect(action: "user")
     }

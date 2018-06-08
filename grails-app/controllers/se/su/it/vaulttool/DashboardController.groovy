@@ -109,7 +109,7 @@ class DashboardController {
             flash.error = errorMsg
         } else {
             flash.message = "Successfully updated secret ${key}"
-            metaData.save()
+            metaData.save(flush: true)
         }
         return redirect(action: "secret", params: [key: key])
     }
@@ -152,7 +152,7 @@ class DashboardController {
         metaData.title = ""
         metaData.description = ""
         metaData.fileName = ""
-        metaData.save()
+        metaData.save(flush: true)
         flash.message = "Successfully created secret ${key}"
         return redirect(action: "secret", params: [key: key])
     }
@@ -307,7 +307,7 @@ class DashboardController {
             flash.error = errorMsg
         } else {
             flash.message = "Successfully updated secret ${key}"
-            metaData.save()
+            metaData.save(flush: true)
         }
         return redirect(action: "secret", params: [key: key])
     }
