@@ -8,12 +8,12 @@
 
 <body>
         <g:form action="index">
-            <div class="panel panel-default">
-                <div class="panel-heading">
+            <div class="card bottom-margin-medium">
+                <div class="card-header">
                     <h3>Search Result</h3>
                 </div>
 
-                <div class="panel-body top-padding-none bottom-padding-none">
+                <div class="card-body top-padding-none bottom-padding-none">
                     <g:each in="${metadatas}" var="metadata" status="i">
                         <div class="row pointer">
                             <div class="col-sm-12 ${(i < metadatas.size() - 1) ? 'itemListBorder':''} right-padding-none left-padding-none bottom-padding-none top-padding-none">

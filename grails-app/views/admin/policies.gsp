@@ -9,11 +9,11 @@
 
 <body>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>Policy Administration</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <g:form action="createPolicy">
                 <div class="row bottom-margin-small">
                     <div class="col-sm-2">
@@ -60,11 +60,11 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>Policies</h3>
         </div>
-        <div class="panel-body top-padding-none bottom-padding-none">
+        <div class="card-body top-padding-none bottom-padding-none">
             <g:each in="${policies}" var="policy" status="i">
                 <div class="row ${(i < policies.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
                     <div class="col-lg-11 col-sm-10 col-xs-9">

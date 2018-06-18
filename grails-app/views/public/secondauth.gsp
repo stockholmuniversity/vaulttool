@@ -8,11 +8,11 @@
 
 <body>
 
-<div class="panel panel-default">
-  <div class="panel-heading">
+<div class="card bottom-margin-large">
+  <div class="card-header">
       <h3>Authentication Confirmation</h3>
   </div>
-  <div class="panel-body">
+  <div class="card-body">
       <div class="row">
           <div class="col-sm-12">
               <span>Please enter the code sent to your registered sms-number.</span>

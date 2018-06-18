@@ -10,11 +10,11 @@
 
 <body>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>Secret</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <g:form action="updateSecret">
                 <g:hiddenField name="key" value="${secret.key}"/>
 
@@ -95,53 +95,56 @@
 
         </div>
     </div>
-    <div class="well">
-        <div class="bottom-margin-small">
-            <h4>
-                <span class="fa fa-file-text"></span>
-                Upload file
-            </h4>
-        </div>
-        <g:form action="upload" method="post" enctype="multipart/form-data" useToken="false">
-            <g:hiddenField name="key" value="${secret.key}"/>
-            <div class="row bottom-margin-small">
-                <div class="col-sm-12">
-                    <span>
-                        <label class="btn btn-default">
-                            <input type="file" id="attachment" name="attachment" hidden/> <span class="fa fa-plus-square"></span>&nbsp;Choose file
-                        </label>
-                        <span id="fileSelected"></span>
-                    </span>
-                </div>
+    <div class="card bottom-margin-large">
+        <div class="card-body">
+            <div class="bottom-margin-small">
+                <h4>
+                    <span class="fa fa-file-text"></span>
+                    Upload file
+                </h4>
             </div>
-
-            <div class="row bottom-margin-medium">
-                <div class="col-sm-12">
-                    <g:submitButton id="uploadFile" class="btn btn-primary hidden" name="submit" value="Upload file"/>
-                </div>
-            </div>
-        </g:form>
-
-        <g:if test="${metadata.fileName && secret.binaryData}">
-            <div class="bottom-margin-small breakWithEllipsis">
-                <span class="fa fa-file"></span>&nbsp;${metadata.fileName}
-            </div>
-            <g:form action="download">
+            <g:form action="upload" method="post" enctype="multipart/form-data" useToken="false">
                 <g:hiddenField name="key" value="${secret.key}"/>
-                <div class="pull-right">
-                    <button class="btn btn-primary" name="submit" value="Download ${metadata.fileName}">
-                        <span class="fa fa-download"></span> Download file
-                    </button>
+                <div class="row bottom-margin-small">
+                    <div class="col-sm-12">
+                        <span>
+                            <label class="btn btn-default">
+                                <input type="file" id="attachment" name="attachment" hidden/> <span class="fa fa-plus-square"></span>&nbsp;Choose file
+                            </label>
+                            <span id="fileSelected"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row bottom-margin-medium">
+                    <div class="col-sm-12">
+                        <g:submitButton id="uploadFile" class="btn btn-primary hidden" name="submit" value="Upload file"/>
+                    </div>
                 </div>
             </g:form>
-            <div class="pull-left">
-                <g:form action="deleteFile">
+
+            <g:if test="${metadata.fileName && secret.binaryData}">
+                <div class="bottom-margin-small breakWithEllipsis">
+                    <span class="fa fa-file"></span>&nbsp;${metadata.fileName}
+                </div>
+                <g:form action="download">
                     <g:hiddenField name="key" value="${secret.key}"/>
-                    <g:submitButton class="btn btn-danger" name="submit" value="Delete file"/>
+                    <div class="pull-right">
+                        <button class="btn btn-primary" name="submit" value="Download ${metadata.fileName}">
+                            <span class="fa fa-download"></span> Download file
+                        </button>
+                    </div>
                 </g:form>
-            </div>
-            <div class="clearfix"></div>
-        </g:if>
+                <div class="pull-left">
+                    <g:form action="deleteFile">
+                        <g:hiddenField name="key" value="${secret.key}"/>
+                        <g:submitButton class="btn btn-danger" name="submit" value="Delete file"/>
+                    </g:form>
+                </div>
+                <div class="clearfix"></div>
+            </g:if>
+        </div>
     </div>
+
 </body>
 </html>

@@ -8,11 +8,11 @@
 </head>
 
 <body>
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>Administration</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <g:form action="sudo">
                 <div class="row">
                     <div class="col-sm-12">
@@ -32,44 +32,46 @@
             </g:form>
         </div>
     </div>
-<div class="row">
+<div class="row bottom-margin-large">
     <div class="col-sm-12 col-lg-7">
-        <div class="well">
-            <g:form action="importZip" method="post" enctype="multipart/form-data" useToken="false">
-                <div class="bottom-margin-small">
-                    <h4>
-                        <span class="fa fa-file-text"></span>
-                        Import secrets and users from zip-file
-                    </h4>
-                </div>
-                <div class="bottom-margin-xsmall">
-                    <label class="btn btn-default">
-                        <input type="file" id="importZipInputFileId" name="importZipInputFileId" hidden/> <span class="fa fa-plus-square"></span>&nbsp;Browse
-                    </label>
-                    <span id="adminFileSelected"></span>
-                </div>
-                <div class="pull-right">
-                    <g:submitButton id="adminUploadFile" class="btn btn-primary hidden" name="submit" value="Import zip-file"/>
-                </div>
-                <div class="clearfix"></div>
-            </g:form>
+        <div class="card">
+            <div class="card-body">
+                <g:form action="importZip" method="post" enctype="multipart/form-data" useToken="false">
+                    <div class="bottom-margin-small">
+                        <h4>
+                            <span class="fa fa-file-text"></span>
+                            Import secrets and users from zip-file
+                        </h4>
+                    </div>
+                    <div class="bottom-margin-xsmall">
+                        <label class="btn btn-default">
+                            <input type="file" id="importZipInputFileId" name="importZipInputFileId" hidden/> <span class="fa fa-plus-square"></span>&nbsp;Browse
+                        </label>
+                        <span id="adminFileSelected"></span>
+                    </div>
+                    <div class="pull-right">
+                        <g:submitButton id="adminUploadFile" class="btn btn-primary hidden" name="submit" value="Import zip-file"/>
+                    </div>
+                    <div class="clearfix"></div>
+                </g:form>
+            </div>
         </div>
     </div>
     <div class="col-sm-12 col-lg-5">
-        <div class="well">
-            <div class="bottom-margin-small">
-                <h4>
-                    <span class="fa fa-download"></span>
-                    Export secrets and users
-                </h4>
-            </div>
-
+        <div class="card">
+            <div class="card-body">
+                <div class="bottom-margin-small">
+                    <h4>
+                        <span class="fa fa-download"></span>
+                        Export secrets and users
+                    </h4>
+                </div>
                 <g:link action="export" class="btn btn-primary">
                     Export secrets and users
                 </g:link>
-            
-
+            </div>
         </div>
+
     </div>
 </div>
 

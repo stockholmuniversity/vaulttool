@@ -9,11 +9,11 @@
 
 <body>
     
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>User Administration</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <g:form action="createUser">
                 <div class="row bottom-margin-small">
                     <div class="col-sm-3">
@@ -42,11 +42,11 @@
         </div>
 
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>Users</h3>
         </div>
-        <div class="panel-body top-padding-none bottom-padding-none">
+        <div class="card-body top-padding-none bottom-padding-none">
             <g:each in="${secrets}" var="secret" status="i">
                 <div class="row ${(i < secrets.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
                     <div class="col-sm-6 col-xs-6">

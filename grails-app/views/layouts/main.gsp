@@ -49,77 +49,79 @@
     </header>
 
     <div class="container">
-        <g:if test="${controllerName == 'admin'}">
-            <div id="nav-column" class="col-sm-3 bottom-margin-large">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
-                            <span class="fa fa-home"></span>
-                            Start
-                        </g:link>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <g:link action="user" class="menuNav ${(actionName == 'user') ? 'active':''}">
-                            <span class="fa fa-users"></span>
-                            Users
-                        </g:link>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <g:link action="policies" class="menuNav ${(actionName == 'policies') ? 'active':''}">
-                            <span class="fa fa-file-text-o"></span>
-                            Policies
-                        </g:link>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <g:link action="approles" class="menuNav ${(actionName == 'approles') ? 'active':''}">
-                            <span class="fa fa-key"></span>
-                            Application Roles
-                        </g:link>
-                    </div>
-                </div>
-                <div class="row">
-
-                </div>
-            </div>
-        </g:if>
-        <div id="main-column" class="${(controllerName == 'admin') ? 'col-sm-9' : 'col-sm-12' }">
-            <g:if test="${flash.error}">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="alert alert-danger">${flash.error}</div>
-                    </div>
-                </div>
-            </g:if>
-            <g:if test="${flash.warning}">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="alert alert-warning">
-                            ${flash.warning}
+        <div class="row">
+            <g:if test="${controllerName == 'admin'}">
+                <div id="nav-column" class="col-sm-3 bottom-margin-large">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
+                                <span class="fa fa-home"></span>
+                                Start
+                            </g:link>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <g:link action="user" class="menuNav ${(actionName == 'user') ? 'active':''}">
+                                <span class="fa fa-users"></span>
+                                Users
+                            </g:link>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <g:link action="policies" class="menuNav ${(actionName == 'policies') ? 'active':''}">
+                                <span class="fa fa-file-text-o"></span>
+                                Policies
+                            </g:link>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <g:link action="approles" class="menuNav ${(actionName == 'approles') ? 'active':''}">
+                                <span class="fa fa-key"></span>
+                                Application Roles
+                            </g:link>
+                        </div>
+                    </div>
+                    <div class="row">
 
                     </div>
                 </div>
             </g:if>
-            <g:if test="${flash.message}">
+            <div id="main-column" class="${(controllerName == 'admin') ? 'col-sm-9' : 'col-sm-12' }">
+                <g:if test="${flash.error}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-danger">${flash.error}</div>
+                        </div>
+                    </div>
+                </g:if>
+                <g:if test="${flash.warning}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-warning">
+                                ${flash.warning}
+                            </div>
+
+                        </div>
+                    </div>
+                </g:if>
+                <g:if test="${flash.message}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-success">
+                                ${flash.message}
+                            </div>
+
+                        </div>
+                    </div>
+                </g:if>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="alert alert-success">
-                            ${flash.message}
-                        </div>
-
+                        <g:render template="/layouts/scrollTop"/>
+                        <g:layoutBody/>
                     </div>
-                </div>
-            </g:if>
-            <div class="row">
-                <div class="col-sm-12">
-                    <g:render template="/layouts/scrollTop"/>
-                    <g:layoutBody/>
                 </div>
             </div>
         </div>

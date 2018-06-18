@@ -10,14 +10,14 @@
 <body>
 <div class="bottom-margin-xlarge">
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>
                 New secret
             </h3>
         </div>
 
-        <div class="panel-body">
+        <div class="card-body">
             <div class="row bottom-margin-xsmall">
                 <div class="col-sm-1">
                     <strong>Path</strong>
@@ -56,8 +56,8 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card">
+        <div class="card-header">
             <g:form action="search">
                 <div class="input-group">
                     <input id="searchQueryInput" class="form-control search-query-input" type="text" maxlength="60" name="secret" value="" placeholder="Search by key, title or description"/>
@@ -69,7 +69,7 @@
                 </div>
             </g:form>
         </div>
-        <div class="panel-body top-padding-none bottom-padding-none">
+        <div class="card-body top-padding-none bottom-padding-none">
             <g:form action="index">
                 <g:each in="${secrets}" var="secret" status="i">
 

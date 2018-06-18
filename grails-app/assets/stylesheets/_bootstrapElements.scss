@@ -1,6 +1,6 @@
 /* ----- Inputs And Buttons ----- */
 
-input, textarea, .panel-default, .well, .btn.btn-default.box {
+input, textarea, .card, .btn.btn-default.box {
   @include border-radius(0);
 }
 
