@@ -20,31 +20,38 @@
 </head>
 <body>
     <header class="bottom-margin-large">
-        <g:render template="/layouts/userInfoMenu"/>
         <div class="row">
-            <div class="col-xs-10 col-sm-7 right-padding-none">
-                <a class="disable-link-colors" href="http://su.se">
-                    <div class="d-none d-sm-block">
+            <div class="col-10">
+                <div class="d-none d-md-block">
+                    <a class="disable-link-colors" href="http://su.se">
                         <g:if test="${(session.logoUrl && session.logoUrl == 'internal') || !session.logoUrl}">
                             <asset:image id="logoBig" class="pull-left" alt="Stockholms universitet" src="su-logo.png"/>
                         </g:if>
                         <g:else>
                             <img class="pull-left" alt="Stockholms universitet" src="${session.logoUrl}" width="156" height="130"/>
                         </g:else>
-                    </div>
-                    <div id="logoSmall" class="d-block d-sm-none">
-                        <asset:image src="su-logo-small.png" alt="Stockholms universitet, startsida"/>
-                    </div>
-
-                </a>
+                    </a>
+                </div>
+                <div id="logoSmall" class="d-block d-md-none">
+                    <asset:image src="su-logo-small.png" alt="Stockholms universitet, startsida"/>
+                </div>
             </div>
-            <div class="col-sm-5">
-                <div>
+            <div class="col-2">
+                <div class="pull-right">
+                    <g:render template="/layouts/userInfoMenu"/>
+                </div>
+                <div class="clearfix"></div>
+                <div class="pull-right d-none d-md-block">
                     <g:link class="disable-link-colors" controller="dashboard" action="index">
-                        <h1 class="">${session.applicationName?:'Vaulttool'}</h1>
+                        <h1>${session.applicationName?:'Vaulttool'}</h1>
                     </g:link>
                 </div>
             </div>
+        </div>
+        <div class="d-block d-md-none" style="text-align: center">
+            <g:link class="disable-link-colors" controller="dashboard" action="index">
+                <h1>${session.applicationName?:'Vaulttool'}</h1>
+            </g:link>
         </div>
     </header>
 
