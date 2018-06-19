@@ -24,7 +24,7 @@
         <div class="row">
             <div class="col-xs-10 col-sm-7 right-padding-none">
                 <a class="disable-link-colors" href="http://su.se">
-                    <div class="hidden-xs">
+                    <div class="d-none d-sm-block">
                         <g:if test="${(session.logoUrl && session.logoUrl == 'internal') || !session.logoUrl}">
                             <asset:image id="logoBig" class="pull-left" alt="Stockholms universitet" src="su-logo.png"/>
                         </g:if>
@@ -32,7 +32,7 @@
                             <img class="pull-left" alt="Stockholms universitet" src="${session.logoUrl}" width="156" height="130"/>
                         </g:else>
                     </div>
-                    <div id="logoSmall" class="visible-xs">
+                    <div id="logoSmall" class="d-block d-sm-none">
                         <asset:image src="su-logo-small.png" alt="Stockholms universitet, startsida"/>
                     </div>
 

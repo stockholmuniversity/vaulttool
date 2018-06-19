@@ -118,7 +118,7 @@
 
                 <div class="row bottom-margin-medium">
                     <div class="col-sm-12">
-                        <g:submitButton id="uploadFile" class="btn btn-primary hidden" name="submit" value="Upload file"/>
+                        <g:submitButton id="uploadFile" class="btn btn-primary d-none" name="submit" value="Upload file"/>
                     </div>
                 </div>
             </g:form>

@@ -50,7 +50,7 @@
                         <span id="adminFileSelected"></span>
                     </div>
                     <div class="pull-right">
-                        <g:submitButton id="adminUploadFile" class="btn btn-primary hidden" name="submit" value="Import zip-file"/>
+                        <g:submitButton id="adminUploadFile" class="btn btn-primary d-none" name="submit" value="Import zip-file"/>
                     </div>
                     <div class="clearfix"></div>
                 </g:form>
