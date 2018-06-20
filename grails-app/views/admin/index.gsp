@@ -33,7 +33,7 @@
         </div>
     </div>
 <div class="row bottom-margin-large">
-    <div class="col-sm-12 col-lg-7">
+    <div class="col-sm-12 col-lg-7 bottom-margin-medium">
         <div class="card">
             <div class="card-body">
                 <g:form action="importZip" method="post" enctype="multipart/form-data" useToken="false">

@@ -19,33 +19,33 @@
 
         <div class="card-body">
             <div class="row bottom-margin-xsmall">
-                <div class="col-sm-1">
-                    <strong>Path</strong>
-                </div>
                 <div class="col-sm-2">
+                    <label for="selectedPath"><strong>Path</strong></label>
+                </div>
+                <div class="col-sm-4">
                     <g:form action="index">
-                        <g:select class="form-control" onchange="submit();" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>
+                        <g:select class="form-control" onchange="submit();" id="selectedPath" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>
                     </g:form>
                 </div>
-                <div class="col-sm-2">
+                <div class="col-sm-6">
                     Capabilities: <i>(${capabilities.join(", ")})</i>
                 </div>
             </div>
             <g:form action="createSecret">
                 <g:hiddenField name="selectedPath" value="${selectedPath}"/>
                 <div class="row bottom-margin-xsmall">
-                    <div class="col-sm-1"></div>
-                    <div class="col-sm-11">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-10">
                         <input type="text" class="form-control allowonly7bit" maxlength="20" name="path" value="" placeholder="Enter path (optional)"/>
                     </div>
                 </div>
 
                 <div class="row bottom-margin-xsmall">
-                    <div class="col-sm-1">
-                        <strong>Secret</strong>
+                    <div class="col-sm-2">
+                        <label for="secret"><strong>Secret</strong></label>
                     </div>
-                    <div class="col-sm-11">
-                        <input type="text" class="form-control allowonly7bit" maxlength="20" name="secret" value="" placeholder="Enter secret"/>
+                    <div class="col-sm-10">
+                        <input type="text" class="form-control allowonly7bit" maxlength="20" name="secret" id="secret" value="" placeholder="Enter secret"/>
                     </div>
                 </div>
                 <div class="pull-right">

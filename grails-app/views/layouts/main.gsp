@@ -58,7 +58,7 @@
     <div class="container">
         <div class="row">
             <g:if test="${controllerName == 'admin'}">
-                <div id="nav-column" class="col-sm-3 bottom-margin-large">
+                <div id="nav-column" class="col-md-3 bottom-margin-large">
                     <div class="row">
                         <div class="col-sm-12">
                             <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
@@ -96,7 +96,7 @@
                     </div>
                 </div>
             </g:if>
-            <div id="main-column" class="${(controllerName == 'admin') ? 'col-sm-9' : 'col-sm-12' }">
+            <div id="main-column" class="${(controllerName == 'admin') ? 'col-md-9' : 'col-md-12' }">
                 <g:if test="${flash.error}">
                     <div class="row">
                         <div class="col-sm-12">

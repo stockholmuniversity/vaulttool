@@ -19,54 +19,54 @@
                 <g:hiddenField name="key" value="${secret.key}"/>
 
                 <div class="row bottom-margin-small">
-                    <div class="col-xs-1 col-sm-1">
+                    <div class="col-1 col-sm-1">
                         <span class="fa fa-key text-muted"></span>
                     </div>
-                    <div class="col-xs-10 col-sm-11">
+                    <div class="col-10 col-sm-11">
                         <span class="text-muted">
                             <strong>${secret.key}</strong>
                         </span>
                     </div>
                 </div>
                 <div class="row bottom-margin-small">
-                    <div class="col-sm-1">
-                        <strong>Title</strong>
+                    <div class="col-md-3">
+                        <label for="title"><strong>Title</strong></label>
                     </div>
-                    <div class="col-sm-11">
-                        <input class="form-control" type="text" name="title" value="${metadata.title}"/>
+                    <div class="col-md-9">
+                        <input class="form-control" type="text" name="title" id="title" value="${metadata.title}"/>
                     </div>
                 </div>
 
                 <div class="row bottom-margin-small">
-                    <div class="col-sm-1">
-                        <strong>Description</strong>
+                    <div class="col-md-3">
+                        <label for="description"><strong>Description</strong></label>
                     </div>
-                    <div class="col-sm-11">
-                        <textarea class="form-control dynamicTextarea" name="description">${metadata.description}</textarea>
+                    <div class="col-md-9">
+                        <textarea class="form-control dynamicTextarea" name="description" id="description">${metadata.description}</textarea>
                     </div>
                 </div>
                 <div class="row bottom-margin-small">
-                    <div class="col-sm-1 col-xs-12">
-                        <strong>Username</strong>
+                    <div class="col-md-3 col-12">
+                        <label for="username"><strong>Username</strong></label>
                     </div>
-                    <div class="col-sm-6 col-xs-10 right-padding-none">
+                    <div class="col-10 col-md-6 right-padding-none">
                         <input id="username" class="form-control" type="text" name="userName" value="${secret.userName}"/>
                     </div>
-                    <div class="col-sm-1 col-xs-1 left-padding-none">
+                    <div class="col-1 col-md-1 left-padding-none">
                         <button id="copyUsername" class="btn buttonNoBackground" value="Copy" title="Copy to clipboard">
                             <span class="fa fa-clipboard fa-lg"></span>
                         </button>
                     </div>
                 </div>
                 <div class="row bottom-margin-large">
-                    <div class="col-sm-1 col-xs-12">
-                        <strong>Password</strong>
+                    <div class="col-12 col-md-3">
+                        <label for="password"><strong>Password</strong></label>
                     </div>
-                    <div class="col-sm-6 col-xs-10 right-padding-none">
+                    <div class="col-10 col-md-6 right-padding-none">
                         <input id="password" class="form-control" type="password" name="password" value="${secret.pwd}" autocomplete="off"/>&nbsp;<input id="pwdCheckbox" type="checkbox" />&nbsp;
                         <span id="toggleText">Show password</span>&nbsp;
                     </div>
-                    <div class="col-sm-1 col-xs-1 left-padding-none">
+                    <div class="col-1 col-md-1 left-padding-none">
                         <button id="copyPwd" class="btn buttonNoBackground" value="Copy" title="Copy to clipboard">
                             <span class="fa fa-clipboard fa-lg"></span>
                         </button>
