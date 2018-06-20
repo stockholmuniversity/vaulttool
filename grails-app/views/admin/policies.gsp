@@ -64,7 +64,7 @@
         <div class="card-header">
             <h3>Policies</h3>
         </div>
-        <div class="card-body top-padding-none bottom-padding-none">
+        <div class="card-body top-padding-none bottom-padding-none cardBodyItemListPadding">
             <g:each in="${policies}" var="policy" status="i">
                 <div class="row ${(i < policies.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
                     <div class="col-lg-11 col-md-10 col-sm-9 col-9">

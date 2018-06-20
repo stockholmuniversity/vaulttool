@@ -46,7 +46,7 @@
         <div class="card-header">
             <h3>Users</h3>
         </div>
-        <div class="card-body top-padding-none bottom-padding-none">
+        <div class="card-body top-padding-none bottom-padding-none cardBodyItemListPadding">
             <g:each in="${secrets}" var="secret" status="i">
                 <div class="row ${(i < secrets.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
                     <div class="col-md-8 col-sm-6 col-6">

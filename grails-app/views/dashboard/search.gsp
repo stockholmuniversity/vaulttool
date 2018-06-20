@@ -13,7 +13,7 @@
                     <h3>Search Result</h3>
                 </div>
 
-                <div class="card-body top-padding-none bottom-padding-none">
+                <div class="card-body top-padding-none bottom-padding-none cardBodyItemListPadding">
                     <g:each in="${metadatas}" var="metadata" status="i">
                         <div class="row pointer">
                             <div class="col-sm-12 ${(i < metadatas.size() - 1) ? 'itemListBorder':''} right-padding-none left-padding-none bottom-padding-none top-padding-none">
