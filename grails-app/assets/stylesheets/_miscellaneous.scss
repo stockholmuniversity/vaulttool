@@ -82,7 +82,7 @@
 
 .secretsListLink {
   display: block;
-  padding: 4px 15px 4px 15px;
+  padding: 4px 15px 4px 20px;
 
   &:hover{
     background-color: $main-colour-2;
@@ -98,5 +98,15 @@
 //Hide the ugly input type=file browse file tree button*/
 [hidden] {
   display: none !important;
+}
+
+.cardBodyItemsListPadding {
+  padding-left: 0.9rem;
+  padding-right: 0.9rem;
+
+  //The equivalent of approximately 15px
+}
+.cardBodyListItem {
+  padding-left: 5px;
 }
 /* ----- Miscellaneous ----- */

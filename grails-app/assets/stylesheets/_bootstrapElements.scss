@@ -1,12 +1,16 @@
 /* ----- Inputs And Buttons ----- */
 
-input, textarea, .panel-default, .well, .btn.btn-default.box {
+input, textarea, .card, .btn.btn-default.box {
   @include border-radius(0);
 }
 
 a{
   color: $main-colour;
   text-decoration: none !important;
+
+  &:hover {
+    color: $main-colour-2;
+  }
 }
 
 .btn-default, .btn-primary, .btn-danger, .btn-warning {
@@ -27,6 +31,14 @@ a{
 .btn-primary {
   background-color: $main-colour;
   color: $opposite-colour;
+
+  &:hover {
+    background-color: $main-colour-2;
+  }
+  &:active {
+    background-color: $main-colour-2 !important;
+  }
+   
 }
 
 .btn-default {
