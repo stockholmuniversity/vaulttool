@@ -69,7 +69,7 @@
                 </div>
             </g:form>
         </div>
-        <div class="card-body top-padding-none bottom-padding-none cardBodyItemListPadding">
+        <div class="card-body top-padding-none bottom-padding-none cardBodyItemsListPadding">
             <g:form action="index">
                 <g:each in="${secrets}" var="secret" status="i">
 

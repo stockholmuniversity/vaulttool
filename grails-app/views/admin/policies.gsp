@@ -64,21 +64,21 @@
         <div class="card-header">
             <h3>Policies</h3>
         </div>
-        <div class="card-body top-padding-none bottom-padding-none cardBodyItemListPadding">
+        <div class="card-body top-padding-none bottom-padding-none cardBodyItemsListPadding">
             <g:each in="${policies}" var="policy" status="i">
                 <div class="row ${(i < policies.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
                     <div class="col-lg-11 col-md-10 col-sm-9 col-9">
                         <div class="row">
                             <div class="col-md-2">
-                                <strong>${policy.policy}</strong>
+                                <strong class="cardBodyListItem">${policy.policy}</strong>
                             </div>
                             <div class="col-md-10">
                                 <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}")}">
                                     <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/")}">
-                                        ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}
+                                        <span class="cardBodyListItem">${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}</span>
                                     </g:if>
                                     <g:else>
-                                        ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}","")}
+                                        <span class="cardBodyListItem">${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}","")}</span>
                                     </g:else>
                                 </g:if>
                             </div>

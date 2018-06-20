@@ -100,10 +100,13 @@
   display: none !important;
 }
 
-.cardBodyItemListPadding {
+.cardBodyItemsListPadding {
   padding-left: 0.9rem;
   padding-right: 0.9rem;
 
   //The equivalent of approximately 15px
+}
+.cardBodyListItem {
+  padding-left: 5px;
 }
 /* ----- Miscellaneous ----- */

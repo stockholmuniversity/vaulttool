@@ -46,16 +46,16 @@
         <div class="card-header">
             <h3>Users</h3>
         </div>
-        <div class="card-body top-padding-none bottom-padding-none cardBodyItemListPadding">
+        <div class="card-body top-padding-none bottom-padding-none cardBodyItemsListPadding">
             <g:each in="${secrets}" var="secret" status="i">
                 <div class="row ${(i < secrets.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
                     <div class="col-md-8 col-sm-6 col-6">
                        <div class="row">
                            <div class="col-md-7 col-lg-8">
-                               <strong>${secret.secret}</strong>
+                               <strong class="cardBodyListItem">${secret.secret}</strong>
                            </div>
                            <div class="col-md-5 col-lg-4">
-                               <span>${secret.userdata?.smsNumber?:""}</span>
+                               <span class="cardBodyListItem">${secret.userdata?.smsNumber?:""}</span>
                            </div>
                        </div>
                     </div>
