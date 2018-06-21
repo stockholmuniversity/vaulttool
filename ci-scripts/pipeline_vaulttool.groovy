@@ -31,12 +31,14 @@ suNodeWithNexusCredentials {
 
             stage("Build")
             {
-                sh "./gradlew bootRepackage -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
+                sh "./gradlew bootRepackage"
             }
 
             stage("Deploy to Nexus")
             {
-                sh "./gradlew publish -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
+                if (suGradlewBuildIsDeployable()) { 
+                    sh "./gradlew publish -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
+                }
             }
         }
     }
