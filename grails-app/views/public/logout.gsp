@@ -13,10 +13,10 @@
         </div>
         <div class="card-body">
             <div class="row">
-                <div class="col-xs-12 bottom-margin-small">
+                <div class="col-12 bottom-margin-small">
                     <span>You have been logged out.</span>
                 </div>
-                <div class="col-xs-12">
+                <div class="col-12">
                     <g:link class="btn btn-primary" controller="dashboard" action="index">Login again</g:link>
                 </div>
             </div>
