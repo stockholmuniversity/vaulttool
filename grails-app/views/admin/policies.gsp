@@ -69,10 +69,10 @@
                 <div class="row ${(i < policies.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
                     <div class="col-lg-11 col-md-10 col-sm-9 col-9">
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <strong class="cardBodyListItem">${policy.policy}</strong>
                             </div>
-                            <div class="col-md-10">
+                            <div class="col-md-9">
                                 <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}")}">
                                     <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/")}">
                                         <span class="cardBodyListItem">${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}</span>

@@ -76,10 +76,10 @@
         <div class="card-body top-padding-none bottom-padding-none cardBodyItemsListPadding">
             <g:each in="${policies}" var="policy" status="i">
                 <div class="row ${(i < policies.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
-                    <div class="col-sm-2 col-md-2">
+                    <div class="col-sm-2 col-md-3">
                         <strong class="cardBodyListItem">${policy.policy}</strong>
                     </div>
-                    <div class="col-sm-10 col-md-10">
+                    <div class="col-sm-10 col-md-9">
                         <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}")}">
                             <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/")}">
                                 <span class="cardBodyListItem">${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}</span>
