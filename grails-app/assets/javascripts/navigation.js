@@ -1,6 +1,6 @@
 $(document).ready(function(){
     $("#userInfoToggle").on('click', function(e){
-        $("#userInfoMenu").toggleClass('hidden');
+        $("#userInfoMenu").toggleClass('d-none');
         $("#userInfoToggle").toggleClass('userInfoToggled');
     });
 

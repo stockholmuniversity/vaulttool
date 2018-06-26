@@ -9,28 +9,28 @@
 
 <body>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>Policy Administration</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <g:form action="createPolicy">
                 <div class="row bottom-margin-small">
-                    <div class="col-sm-2">
-                        <label for="name">Policy name</label>
+                    <div class="col-md-2">
+                        <label for="name"><strong>Policy name</strong></label>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-md-10">
                         <input class="allowonly7bit form-control" type="text" id="name" name="name" value=""/>
                     </div>
                 </div>
                 <div class="row bottom-margin-small">
-                    <div class="col-sm-2">
-                        <label for="path">Path</label>
+                    <div class="col-md-2">
+                        <label for="path"><strong>Path</strong></label>
                     </div>
-                    <div class="col-sm-3">
+                    <div class="col-md-3">
                         <g:select class="form-control" id="path" name="path" from="${paths}" value="" noSelection="${['':'Root']}"/>
                     </div>
-                    <div class="col-sm-7">
+                    <div class="col-md-7">
                         <span>
                             <g:checkBox name="create" id="read"/>
                             <label for="create">Create</label>
@@ -60,32 +60,32 @@
         </div>
     </div>
 
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>Policies</h3>
         </div>
-        <div class="panel-body top-padding-none bottom-padding-none">
+        <div class="card-body top-padding-none bottom-padding-none cardBodyItemsListPadding">
             <g:each in="${policies}" var="policy" status="i">
                 <div class="row ${(i < policies.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
-                    <div class="col-lg-11 col-sm-10 col-xs-9">
+                    <div class="col-lg-11 col-md-10 col-sm-9 col-9">
                         <div class="row">
-                            <div class="col-sm-2">
-                                <strong>${policy.policy}</strong>
+                            <div class="col-md-3">
+                                <strong class="cardBodyListItem">${policy.policy}</strong>
                             </div>
-                            <div class="col-sm-10">
+                            <div class="col-md-9">
                                 <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}")}">
                                     <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/")}">
-                                        ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}
+                                        <span class="cardBodyListItem">${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}</span>
                                     </g:if>
                                     <g:else>
-                                        ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}","")}
+                                        <span class="cardBodyListItem">${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}","")}</span>
                                     </g:else>
                                 </g:if>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-1 col-sm-2 col-xs-3">
-                        <g:link class="btn btn-danger button-danger-small" action="deletePolicy" params='[policy: "${policy.policy}"]'>Delete</g:link>
+                    <div class="col-lg-1 col-md-2 col-sm-3 col-3">
+                        <g:link class="btn btn-danger button-danger-small pull-right" action="deletePolicy" params='[policy: "${policy.policy}"]'>Delete</g:link>
                     </div>
                 </div>
             </g:each>

@@ -20,106 +20,115 @@
 </head>
 <body>
     <header class="bottom-margin-large">
-        <g:render template="/layouts/userInfoMenu"/>
         <div class="row">
-            <div class="col-xs-10 col-sm-7 right-padding-none">
-                <a class="disable-link-colors" href="http://su.se">
-                    <div class="hidden-xs">
+            <div class="col-10">
+                <div class="d-none d-md-block">
+                    <a class="disable-link-colors" href="http://su.se">
                         <g:if test="${(session.logoUrl && session.logoUrl == 'internal') || !session.logoUrl}">
                             <asset:image id="logoBig" class="pull-left" alt="Stockholms universitet" src="su-logo.png"/>
                         </g:if>
                         <g:else>
                             <img class="pull-left" alt="Stockholms universitet" src="${session.logoUrl}" width="156" height="130"/>
                         </g:else>
-                    </div>
-                    <div id="logoSmall" class="visible-xs">
-                        <asset:image src="su-logo-small.png" alt="Stockholms universitet, startsida"/>
-                    </div>
-
-                </a>
+                    </a>
+                </div>
+                <div id="logoSmall" class="d-block d-md-none">
+                    <asset:image src="su-logo-small.png" alt="Stockholms universitet, startsida"/>
+                </div>
             </div>
-            <div class="col-sm-5">
-                <div>
+            <div class="col-2">
+                <div class="pull-right">
+                    <g:render template="/layouts/userInfoMenu"/>
+                </div>
+                <div class="clearfix"></div>
+                <div class="pull-right d-none d-md-block">
                     <g:link class="disable-link-colors" controller="dashboard" action="index">
-                        <h1 class="">${session.applicationName?:'Vaulttool'}</h1>
+                        <h1>${session.applicationName?:'Vaulttool'}</h1>
                     </g:link>
                 </div>
             </div>
         </div>
+        <div class="d-block d-md-none" style="text-align: center">
+            <g:link class="disable-link-colors" controller="dashboard" action="index">
+                <h1>${session.applicationName?:'Vaulttool'}</h1>
+            </g:link>
+        </div>
     </header>
 
     <div class="container">
-        <g:if test="${controllerName == 'admin'}">
-            <div id="nav-column" class="col-sm-3 bottom-margin-large">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
-                            <span class="fa fa-home"></span>
-                            Start
-                        </g:link>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <g:link action="user" class="menuNav ${(actionName == 'user') ? 'active':''}">
-                            <span class="fa fa-users"></span>
-                            Users
-                        </g:link>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <g:link action="policies" class="menuNav ${(actionName == 'policies') ? 'active':''}">
-                            <span class="fa fa-file-text-o"></span>
-                            Policies
-                        </g:link>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-12">
-                        <g:link action="approles" class="menuNav ${(actionName == 'approles') ? 'active':''}">
-                            <span class="fa fa-key"></span>
-                            Application Roles
-                        </g:link>
-                    </div>
-                </div>
-                <div class="row">
-
-                </div>
-            </div>
-        </g:if>
-        <div id="main-column" class="${(controllerName == 'admin') ? 'col-sm-9' : 'col-sm-12' }">
-            <g:if test="${flash.error}">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="alert alert-danger">${flash.error}</div>
-                    </div>
-                </div>
-            </g:if>
-            <g:if test="${flash.warning}">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <div class="alert alert-warning">
-                            ${flash.warning}
+        <div class="row">
+            <g:if test="${controllerName == 'admin'}">
+                <div id="nav-column" class="col-md-3 bottom-margin-large">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
+                                <span class="fa fa-home"></span>
+                                Start
+                            </g:link>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <g:link action="user" class="menuNav ${(actionName == 'user') ? 'active':''}">
+                                <span class="fa fa-users"></span>
+                                Users
+                            </g:link>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <g:link action="policies" class="menuNav ${(actionName == 'policies') ? 'active':''}">
+                                <span class="fa fa-file-text-o"></span>
+                                Policies
+                            </g:link>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <g:link action="approles" class="menuNav ${(actionName == 'approles') ? 'active':''}">
+                                <span class="fa fa-key"></span>
+                                Application Roles
+                            </g:link>
+                        </div>
+                    </div>
+                    <div class="row">
 
                     </div>
                 </div>
             </g:if>
-            <g:if test="${flash.message}">
+            <div id="main-column" class="${(controllerName == 'admin') ? 'col-md-9' : 'col-md-12' }">
+                <g:if test="${flash.error}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-danger">${flash.error}</div>
+                        </div>
+                    </div>
+                </g:if>
+                <g:if test="${flash.warning}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-warning">
+                                ${flash.warning}
+                            </div>
+
+                        </div>
+                    </div>
+                </g:if>
+                <g:if test="${flash.message}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="alert alert-success">
+                                ${flash.message}
+                            </div>
+
+                        </div>
+                    </div>
+                </g:if>
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="alert alert-success">
-                            ${flash.message}
-                        </div>
-
+                        <g:render template="/layouts/scrollTop"/>
+                        <g:layoutBody/>
                     </div>
-                </div>
-            </g:if>
-            <div class="row">
-                <div class="col-sm-12">
-                    <g:render template="/layouts/scrollTop"/>
-                    <g:layoutBody/>
                 </div>
             </div>
         </div>

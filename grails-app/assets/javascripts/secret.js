@@ -44,8 +44,8 @@ $(document).ready(function(){
 
     $('#attachment').on('change', function() {
         var fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
-        if($("#uploadFile").hasClass('hidden')){
-            $("#uploadFile").removeClass('hidden');
+        if($("#uploadFile").hasClass('d-none')){
+            $("#uploadFile").removeClass('d-none');
         }
         $('#fileSelected').html(fileName);
 

@@ -8,26 +8,26 @@
 </head>
 
 <body>
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>Application Roles Administration</h3>
         </div>
-        <div class="panel-body">
+        <div class="card-body">
             <g:form action="createApprole">
                 <div class="row bottom-margin-small">
-                    <div class="col-sm-2">
-                        <label for="name">Role</label>
+                    <div class="col-md-2">
+                        <label for="name"><strong>Role</strong></label>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-md-10">
                         <input class="allowonly7bit form-control" type="text" id="name" name="name" value="" placeholder="Application role name (entitlement)"/>
                     </div>
                 </div>
                 <div class="row bottom-margin-small">
-                     <div class="col-sm-2">
-                         <label for="policies">Policies</label>
+                     <div class="col-md-2">
+                         <label for="policies"><strong>Policies</strong></label>
 
                      </div>
-                    <div class="col-sm-10">
+                    <div class="col-md-10">
                         <g:select class="form-control" from="${policies*.policy}"  multiple="multiple" id="policies" name="policies"/>
                         <span class="text-muted small">Select one or more policies</span>
                     </div>
@@ -41,51 +41,51 @@
             </g:form>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>
              Roles
             </h3>
         </div>
-        <div class="panel-body top-padding-none bottom-padding-none">
+        <div class="card-body top-padding-none bottom-padding-none cardBodyItemsListPadding">
             <g:each in="${approles}" var="approle" status="i">
                 <div class="row ${(i < approles.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
-                    <div class="col-lg-11 col-sm-10 col-xs-9">
+                    <div class="col-lg-11 col-md-10 col-sm-9 col-9">
                         <div class="row">
-                            <div class="col-sm-2">
-                                <strong>${approle.appRole}</strong>
+                            <div class="col-md-3">
+                                <strong class="cardBodyListItem">${approle.appRole}</strong>
                             </div>
-                            <div class="col-sm-10">
-                                ${approle.policies.join(", ")}
+                            <div class="col-md-9">
+                                <span class="cardBodyListItem">${approle.policies.join(", ")}</span>
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-1 col-sm-2 col-xs-3">
-                        <g:link class="btn btn-danger button-danger-small" action="deleteApprole" params='[approle: "${approle.appRole}"]'>Delete</g:link>
+                    <div class="col-lg-1 col-md-2 col-sm-3 col-3">
+                        <g:link class="btn btn-danger button-danger-small pull-right" action="deleteApprole" params='[approle: "${approle.appRole}"]'>Delete</g:link>
                     </div>
                 </div>
             </g:each>
         </div>
     </div>
-    <div class="panel panel-default">
-        <div class="panel-heading">
+    <div class="card bottom-margin-large">
+        <div class="card-header">
             <h3>
                 Policy Information
             </h3>
         </div>
-        <div class="panel-body top-padding-none bottom-padding-none">
+        <div class="card-body top-padding-none bottom-padding-none cardBodyItemsListPadding">
             <g:each in="${policies}" var="policy" status="i">
                 <div class="row ${(i < policies.size() - 1) ? 'itemListBorder':''} top-padding-xsmall bottom-padding-xsmall">
-                    <div class="col-sm-2">
-                        <strong>${policy.policy}</strong>
+                    <div class="col-sm-2 col-md-3">
+                        <strong class="cardBodyListItem">${policy.policy}</strong>
                     </div>
-                    <div class="col-sm-10">
+                    <div class="col-sm-10 col-md-9">
                         <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}")}">
                             <g:if test="${policy.rules.contains("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/")}">
-                                ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}
+                                <span class="cardBodyListItem">${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}/","")}</span>
                             </g:if>
                             <g:else>
-                                ${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}","")}
+                                <span class="cardBodyListItem">${policy.rules.replace("secret/${se.su.it.vaulttool.VaultRestService.VAULTTOOLSECRETSPATHNAME}","")}</span>
                             </g:else>
                         </g:if>
                     </div>
