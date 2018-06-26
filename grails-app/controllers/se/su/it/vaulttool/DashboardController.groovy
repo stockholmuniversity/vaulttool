@@ -4,6 +4,7 @@ import org.springframework.web.multipart.MultipartFile
 
 class DashboardController {
     def vaultRestService
+    def vaultService
     def utilityService
 
     def index() {

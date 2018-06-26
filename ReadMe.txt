@@ -35,7 +35,7 @@ listener "tcp" {
 
 5. Första gången du startar vault så måste du göra ”vault init” vilket producerar nycklar och token ovan. Dessa kommer bara visas en enda gång så spara undan dom på något bra och hemligt ställe.
 
-6. Efter att ha startat Vault server så behöver man låsa upp den med minst 3 av ovan ”unseal”-keys. Detta sker genom att man skriver: ”vault unseal” och anger första nyckeln, sedan gör man om förfarandet och anger nästa nyckel, 2ggr till. Detta kan ju bli en kul grej att sätta upp i ett /etc/init.d script. (går oxå att göra detta via rest-api.
+6. Efter att ha startat Vault server så behöver man låsa upp den med minst 3 av ovan ”unseal”-keys. Detta sker genom att man skriver: ”vault operator unseal” och anger första nyckeln, sedan gör man om förfarandet och anger nästa nyckel, 2ggr till. Detta kan ju bli en kul grej att sätta upp i ett /etc/init.d script. (går oxå att göra detta via rest-api.
 
 7. För att skicka en hemlighet till vault: ”vault write secret/hello value=world”
 
