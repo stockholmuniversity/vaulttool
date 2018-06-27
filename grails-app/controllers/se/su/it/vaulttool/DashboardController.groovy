@@ -176,7 +176,9 @@ class DashboardController {
             return redirect(action: "secret", params: [key: key])
         }
         MetaData metaData = MetaData.findBySecretKey(key)
-        metaData.delete()
+        if(metaData) {
+            metaData.delete()
+        }
         flash.message = "Successfully deleted secret ${key}"
         redirect(actionName: "index")
     }

@@ -19,8 +19,14 @@ class VaultService {
                 if(result) {
                     returnResult.error = "Failed creating path ${newPath}"
                     returnResult.success = null
+                } else {
+                    MetaData metaData = new MetaData()
+                    metaData.secretKey = pathSoFar + "/dummykeydontuse"
+                    metaData.title = ""
+                    metaData.description = ""
+                    metaData.fileName = ""
+                    metaData.save(flush: true)
                 }
-
             } else {
                 returnResult.error = "No capabilities for creating path ${newPath}!"
                 returnResult.success = null
@@ -47,6 +53,11 @@ class VaultService {
                 if (result) {
                     returnResult.error = "Failed deleting path ${path}"
                     returnResult.success = null
+                } else {
+                    MetaData metaData = MetaData.findBySecretKey(pathKey)
+                    if(metaData) {
+                        metaData.delete()
+                    }
                 }
             } else {
                 returnResult.error = "No capabilities for deleting path ${path}!"
