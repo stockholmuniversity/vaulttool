@@ -72,6 +72,7 @@ class VaultService {
     }
 
     Byte[] copyPath(String token, String path) {
+        String lastPathElement = path.split("/").last()
         Map returnResult = [success: "Successfully copied path.", error: null]
         ByteArrayOutputStream baos = new ByteArrayOutputStream()
         ZipOutputStream zos     = new ZipOutputStream(baos)
@@ -82,38 +83,44 @@ class VaultService {
         }
 
         secretTree.each {String pathKey ->
+            String newPathKey = pathKey.substring(pathKey.indexOf(lastPathElement))
             def obj = vaultRestService.getSecret(token, pathKey)
-            MetaData metaData = MetaData.findBySecretKey(obj.entry.key)
+            MetaData metaDataOrg = MetaData.findBySecretKey(obj.entry.key)
+            MetaData metaData = new MetaData(metaDataOrg.properties)
+
             if(obj?.entry?.key && !obj.entry.key.empty && metaData?.secretKey && !metaData.secretKey.empty && obj.entry.key == metaData.secretKey){
-                ZipEntry entry = new ZipEntry(pathKey + "/key.txt")
+                obj.entry.key = newPathKey
+                metaData.secretKey = newPathKey
+
+                ZipEntry entry = new ZipEntry(newPathKey + "/key.txt")
                 zos.putNextEntry(entry)
                 zos.write(obj.entry.key.getBytes())
                 zos.closeEntry()
-                entry = new ZipEntry(pathKey + "/username.txt")
+                entry = new ZipEntry(newPathKey + "/username.txt")
                 zos.putNextEntry(entry)
                 zos.write(obj.entry.userName?obj.entry.userName.getBytes():"".getBytes())
                 zos.closeEntry()
-                entry = new ZipEntry(pathKey + "/password.txt")
+                entry = new ZipEntry(newPathKey + "/password.txt")
                 zos.putNextEntry(entry)
                 zos.write(obj.entry.pwd?obj.entry.pwd.getBytes():"".getBytes())
                 zos.closeEntry()
-                entry = new ZipEntry(pathKey + "/binarydata")
+                entry = new ZipEntry(newPathKey + "/binarydata")
                 zos.putNextEntry(entry)
                 zos.write(obj.entry.binaryData?:"".getBytes())
                 zos.closeEntry()
-                entry = new ZipEntry(pathKey + "/${metaData.fileName}")
+                entry = new ZipEntry(newPathKey + "/${metaData.fileName}")
                 zos.putNextEntry(entry)
                 zos.write(obj.entry.binaryData?:"".getBytes())
                 zos.closeEntry()
-                entry = new ZipEntry(pathKey + "/title.txt")
+                entry = new ZipEntry(newPathKey + "/title.txt")
                 zos.putNextEntry(entry)
                 zos.write(metaData.title?metaData.title.getBytes():"".getBytes())
                 zos.closeEntry()
-                entry = new ZipEntry(pathKey + "/description.txt")
+                entry = new ZipEntry(newPathKey + "/description.txt")
                 zos.putNextEntry(entry)
                 zos.write(metaData.description?metaData.description.getBytes():"".getBytes())
                 zos.closeEntry()
-                entry = new ZipEntry(pathKey + "/filename.txt")
+                entry = new ZipEntry(newPathKey + "/filename.txt")
                 zos.putNextEntry(entry)
                 zos.write(metaData.fileName?metaData.fileName.getBytes():"".getBytes())
                 zos.closeEntry()
@@ -150,12 +157,14 @@ class VaultService {
                             while ((n = zipStream.read(buffer, 0, 1024)) > -1) {
                                 out.write(buffer, 0, n);
                             }
+
                             ImportSecretHelper importSecretHelper = secretList.find { it.entry.key == secretKey }
                             if (!importSecretHelper) {
                                 importSecretHelper = new ImportSecretHelper(entry: new Entry(key: secretKey),
                                     metaData: new MetaData(secretKey: secretKey))
                                 secretList << importSecretHelper
                             }
+
                             switch (file) {
                                 case "username.txt": importSecretHelper.entry.userName = out.toString()
                                     break
