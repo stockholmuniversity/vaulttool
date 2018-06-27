@@ -224,6 +224,7 @@ class DashboardController {
         } else {
             MetaData metaData = MetaData.findBySecretKey(key)
             metaData.fileName = f.originalFilename
+            metaData.save(flush: true)
             flash.message = "Successfully uploaded file to secret ${key}"
         }
         return redirect(action: "secret", params: [key: key])
