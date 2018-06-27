@@ -30,4 +30,30 @@ class VaultService {
         return returnResult
     }
 
+    Map<String, String> deletePath(String token, String path) {
+        Map returnResult = [success: "Successfully deleted path.", error: null]
+        List<String> secretTree = vaultRestService.getSecretTree(token)
+        secretTree.removeAll {String pathKey ->
+            !pathKey.toLowerCase().startsWith(path.toLowerCase())
+        }
+        secretTree = secretTree.sort{String pathKeyA, String pathKeyB ->
+            pathKeyB.count("/") <=> pathKeyA.count("/")
+        }
+
+        secretTree.each{String pathKey ->
+            List<String> capabilities = vaultRestService.getCapabilities(token, pathKey)
+            if(capabilities.contains("root") || capabilities.contains("delete")) {
+                def result = vaultRestService.deleteSecret(token, pathKey)
+                if (result) {
+                    returnResult.error = "Failed deleting path ${path}"
+                    returnResult.success = null
+                }
+            } else {
+                returnResult.error = "No capabilities for deleting path ${path}!"
+                returnResult.success = null
+            }
+        }
+        return returnResult
+    }
+
 }
