@@ -56,7 +56,7 @@ class VaultService {
                 } else {
                     MetaData metaData = MetaData.findBySecretKey(pathKey)
                     if(metaData) {
-                        metaData.delete()
+                        metaData.delete(flush: true)
                     }
                 }
             } else {
