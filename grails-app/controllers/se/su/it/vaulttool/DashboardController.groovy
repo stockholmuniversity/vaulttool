@@ -7,11 +7,11 @@ class DashboardController {
     def vaultService
     def utilityService
 
-    def test(){
+    /*def test(){
         def byteArray = vaultService.copyPath(session.token, "systemutveckling/scrum3/")
         def result = vaultService.pastePath(session.token, "testgroup", byteArray)
         redirect(action: "index")
-    }
+    }*/
 
     def index() {
         String selectedPath = params?.selectedPath?:""
