@@ -100,7 +100,7 @@ class AdminController {
             return redirect(action: "user")
         }
         UserData userData = UserData.findBySecretKey(key)
-        userData.delete()
+        userData.delete(flush: true)
         flash.message = "Successfully deleted user ${key}"
         redirect(action: "user")
     }

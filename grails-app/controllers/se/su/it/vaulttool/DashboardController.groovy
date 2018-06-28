@@ -5,7 +5,15 @@ import org.springframework.web.multipart.MultipartFile
 
 class DashboardController {
     def vaultRestService
+    def vaultService
     def utilityService
+
+    /*def test(){
+        def nisse = vaultService.deletePath(session.token, "testgroup/scrum3/")
+        def byteArray = vaultService.copyPath(session.token, "systemutveckling/scrum3/")
+        def result = vaultService.pastePath(session.token, "testgroup", byteArray)
+        redirect(action: "index")
+    }*/
 
     def index() {
         String selectedPath = params?.selectedPath?:""
@@ -223,7 +231,9 @@ class DashboardController {
             return redirect(action: "secret", params: [key: key])
         }
         MetaData metaData = MetaData.findBySecretKey(key)
-        metaData.delete()
+        if(metaData) {
+            metaData.delete(flush: true)
+        }
         flash.message = "Successfully deleted secret ${key}"
         redirect(actionName: "index")
     }
@@ -272,6 +282,7 @@ class DashboardController {
         } else {
             MetaData metaData = MetaData.findBySecretKey(key)
             metaData.fileName = f.originalFilename
+            metaData.save(flush: true)
             flash.message = "Successfully uploaded file to secret ${key}"
         }
         return redirect(action: "secret", params: [key: key])
