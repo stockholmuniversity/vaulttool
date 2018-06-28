@@ -1,5 +1,6 @@
 package se.su.it.vaulttool
 
+import grails.converters.JSON
 import org.springframework.web.multipart.MultipartFile
 
 class DashboardController {
@@ -21,6 +22,53 @@ class DashboardController {
         }
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
         [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
+    }
+
+    def loadRootPaths(){
+        def paths =  vaultRestService.getPaths(session.token)
+
+        def secrets = vaultRestService.listSecrets(session.token, "")
+
+        def rootNodes = []
+
+        def leafs = []
+        def nodes = []
+        def node = null
+
+
+        secrets.each {secret ->
+
+            if(secret.endsWith("/")){
+                node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), 'children': true]
+                nodes.add(node)
+            }  else {
+                node =  ['id': 'leaf_' + secret, 'text': secret, 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': secret]]
+                leafs.add(node)
+            }
+            rootNodes = nodes + leafs
+         }
+
+        def rootNode = [['id': 'root', 'text': 'Root','children': rootNodes, 'icon':'fa fa-home','state':['opened': true]]]
+
+        return render(rootNode as JSON)
+    }
+
+
+    def loadChildren(){
+        def secrets = vaultRestService.listSecrets(session.token, params['id'].toString().replaceAll("_","/"))
+        def childNodes = []
+
+        secrets.each {secret ->
+            def node = null
+            if(secret.endsWith("/")){
+                node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), 'children': true]
+             }  else {
+                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
+            }
+
+            childNodes.add(node)
+        }
+        return render (childNodes as JSON)
     }
     def search() {
         String secret = params?.secret?:""

@@ -14,8 +14,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <asset:stylesheet src="application.css"/>
-    <asset:javascript src="application.js"/>
     <asset:stylesheet src="font-awesome.min.css"/>
+    <asset:stylesheet src="default/style.min.css"/>
+    <asset:javascript src="application.js"/>
+    <asset:javascript src="jstree.min.js"/>
+    <asset:javascript src="treeview.js"/>
+
     <g:layoutHead/>
 </head>
 <body>
@@ -56,9 +60,14 @@
     </header>
 
     <div class="container">
+
+
         <div class="row">
+
+
+
             <g:if test="${controllerName == 'admin'}">
-                <div id="nav-column" class="col-md-3 bottom-margin-large">
+                <div id="nav-column" class="col-md-auto bottom-margin-large">
                     <div class="row">
                         <div class="col-sm-12">
                             <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
@@ -96,7 +105,20 @@
                     </div>
                 </div>
             </g:if>
-            <div id="main-column" class="${(controllerName == 'admin') ? 'col-md-9' : 'col-md-12' }">
+            <g:else>
+                <div id="nav-column" class="col-md-auto bottom-margin-large" style="background-color: #99ACBF">
+                    <div class="bottom-margin-medium top-margin-small" style="margin-bottom: 10px;">
+                        %{--<input id="quickSearch" type="text" style="width: 100%"/>--}%
+                    </div>
+                    %{--<div><span class="fa fa-home"></span>&nbsp;Root</div>--}%
+                    <div id="navTree">
+                    </div>
+                </div>
+            </g:else>
+
+
+            <div id="main-column" class="col">
+                %{--<div id="main-column" class="${(controllerName == 'admin') ? 'col-md-9' : 'col-md-12' }">--}%
                 <g:if test="${flash.error}">
                     <div class="row">
                         <div class="col-sm-12">
