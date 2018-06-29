@@ -36,7 +36,7 @@ suNodeWithNexusCredentials {
 
             stage("Deploy to Nexus")
             {
-                if (suGradlewBuildIsDeployable()) { 
+                if (suGradlewBuildIsDeployable()) {
                     sh "./gradlew publish -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
                 }
             }
