@@ -17,57 +17,48 @@ $(document).ready(function(){
             'themes': {
                 'theme': 'default'
             },
-            'plugins': ['search', 'conditionalselect', 'themes']
-        }
-    });
-
-
-    //Click secret
-    $('body').off('click');
-    $('body').on('click', '.jstree-anchor',function(event){
-        var leaf = this;
-
-        if($(leaf).closest('li').hasClass('jstree-leaf')){
-            window.location.href = '/dashboard/secret?key='+$(leaf).data('secretkey');
-        }
-
-        /*if($(leaf).closest("li").hasClass("jstree-leaf")){
-            window.location.href = '/dashboard/secret?key'+$(leaf).data('secretkey');
-            $.ajax({
-                type: "POST",
-                url: "/dashboard/secret",
-                data: {key: $(leaf).data('secretkey')},
-                success: function (data) {
-                   $("").html(data);
-                },
-                error: function(data) {
-                    console.log(data.message);
+            'search': {
+                'ajax' : {
+                    'url' : '/dashboard/treeSearch',
+                    'data' : function(str){
+                    return {'mystring': str}
+                    }
                 }
-            });
-        }
-*/
 
-
-
+                }
+            },
+            'plugins': ['search', 'themes']
+        
     });
+
 
     //Search plugin
-    var timeOut = 0;
     $('#quickSearch').keyup(function () {
-        if(timeOut) {
-            clearTimeout(timeOut);
-        }
-        timeOut = setTimeout(function () {
-            var value = $('#quickSearch').val();
-            $('#testTree').jstree(true).search(value);
-        }, 250);
+        var value = $('#quickSearch').val();
+        console.log(value);
+        //$('#navTree').jstree('search', value);
+        $('#navTree').jstree(true).search(value, true);
+        console.log("after");
+        return false;
+
     });
+
+    //Expand path with left click on node
+    $('#navTree').on('select_node.jstree', function(e, data){
+       data.instance.toggle_node(data.node);
+    });
+
+    //Click on secret to navigate to it's view
+    $('#navTree').on('select_node.jstree', function(e, data){
+        if(data.instance.is_leaf(data.node)){
+            var key = $("#" + data.node.a_attr.id).data('secretkey');
+            window.location.href = '/dashboard/secret?key='+ key;
+        } else{
+            var path = (data.node.id !== 'root') ? data.node.id.replace(/_/g,'/'):'';
+            window.location.href = '/dashboard/index?selectedPath='+ path;
+
+        }
+    });
+
 });
 
-/*'conditionalselect' : function(node, event){
-
-            console.log(node);
-
-            return (node.text.trim() !== 'Child node 1');
-
-        },*/
