@@ -81,6 +81,9 @@ $(document).ready(function(){
             items.item2._disabled = true;
             items.item3._disabled = true;
         }
+
+        items.item4._disabled = (!node.original.admin);
+
         return items;
     }
 

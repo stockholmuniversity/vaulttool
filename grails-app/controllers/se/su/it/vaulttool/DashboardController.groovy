@@ -43,20 +43,21 @@ class DashboardController {
         def nodes = []
         def node = null
 
-
+        def isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+        
         secrets.each {secret ->
 
             if(secret.endsWith("/")){
-                node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), type: 'pathNode', 'children': true, 'icon': 'fa fa-folder']
+                node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), admin: isAdmin, type: 'pathNode', 'children': true, 'icon': 'fa fa-folder']
                 nodes.add(node)
             }  else {
-                node =  ['id': 'leaf_' + secret, 'text': secret, type: 'leafNode', 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': secret]]
+                node =  ['id': 'leaf_' + secret, 'text': secret, admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': secret]]
                 leafs.add(node)
             }
             rootNodes = nodes + leafs
          }
 
-        def rootNode = [['id': 'root', 'text': 'Root', type: 'rootNode','children': rootNodes, 'icon':'fa fa-home fa-lg','state':['opened': true]]]
+        def rootNode = [['id': 'root', 'text': 'Root', admin: isAdmin, type: 'rootNode','children': rootNodes, 'icon':'fa fa-home fa-lg','state':['opened': true]]]
 
         return render(rootNode as JSON)
     }
@@ -66,12 +67,14 @@ class DashboardController {
         def secrets = vaultRestService.listSecrets(session.token, params['id'].toString().replaceAll("_","/"))
         def childNodes = []
 
+        def isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+
         secrets.each {secret ->
             def node = null
             if(secret.endsWith("/")){
-                node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), 'type':'pathNode', 'children': true, 'icon' : 'fa fa-folder']
+                node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, 'type':'pathNode', 'children': true, 'icon' : 'fa fa-folder']
              }  else {
-                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), type: 'leafNode', 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
+                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
             }
 
             childNodes.add(node)
