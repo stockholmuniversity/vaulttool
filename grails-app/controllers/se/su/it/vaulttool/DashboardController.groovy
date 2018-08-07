@@ -47,16 +47,16 @@ class DashboardController {
         secrets.each {secret ->
 
             if(secret.endsWith("/")){
-                node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), 'children': true]
+                node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), type: 'pathNode', 'children': true, 'icon': 'fa fa-folder']
                 nodes.add(node)
             }  else {
-                node =  ['id': 'leaf_' + secret, 'text': secret, 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': secret]]
+                node =  ['id': 'leaf_' + secret, 'text': secret, type: 'leafNode', 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': secret]]
                 leafs.add(node)
             }
             rootNodes = nodes + leafs
          }
 
-        def rootNode = [['id': 'root', 'text': 'Root','children': rootNodes, 'icon':'fa fa-home','state':['opened': true]]]
+        def rootNode = [['id': 'root', 'text': 'Root', type: 'rootNode','children': rootNodes, 'icon':'fa fa-home fa-lg','state':['opened': true]]]
 
         return render(rootNode as JSON)
     }
@@ -69,15 +69,16 @@ class DashboardController {
         secrets.each {secret ->
             def node = null
             if(secret.endsWith("/")){
-                node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), 'children': true]
+                node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), 'type':'pathNode', 'children': true, 'icon' : 'fa fa-folder']
              }  else {
-                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
+                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), type: 'leafNode', 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
             }
 
             childNodes.add(node)
         }
         return render (childNodes as JSON)
     }
+    
     def search() {
         String secret = params?.secret?:""
         if(secret.empty) {
