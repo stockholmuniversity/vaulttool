@@ -106,13 +106,12 @@ $(document).ready(function(){
         var fromPath = sessionStorage.path;
         var toPath = node.id.replace(/_/g,'/');
 
-
         $.ajax({
             type    : "POST",
             url     : "/dashboard/copyPastePath",
             data    : {path: fromPath, destination: toPath},
             success: function (data) {
-                
+                $('#navTree').jstree(true).open_node(toPath);
             },
             error: function(data) {
                 console.log(data.message);
