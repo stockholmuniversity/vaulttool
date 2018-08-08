@@ -54,7 +54,7 @@ $(document).ready(function(){
             'item3' : {
                     'label' : 'Delete Path',
                     'separator_after' : true,
-                    'action' : {}
+                    'action' : function(){ return deletePath(node)}
             },
             'item4' : {
                 'label' : 'Administration',
@@ -89,8 +89,26 @@ $(document).ready(function(){
 
 
     //Delete path
-    function deletePath(path){
-        
+    function deletePath(node){
+        var path        = node.id.replace(/_/g,'/');
+        var $navTree    =  $("#navTree");
+
+        $.ajax({
+            type    : "POST",
+            url     : "/dashboard/deletePath",
+            data    : {path: path},
+            success: function (data) {
+                var children = $navTree.jstree(true).get_node(node.id).children;
+                if(children.length > 0){
+                    $navTree.jstree(true).delete_node(children);
+                }
+                $navTree.jstree(true).delete_node(node);
+            },
+            error: function(data) {
+                console.log(data.message);
+            }
+        });
+
     }
 
     //Search plugin

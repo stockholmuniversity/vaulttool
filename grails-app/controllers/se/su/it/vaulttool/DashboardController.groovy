@@ -81,7 +81,19 @@ class DashboardController {
         }
         return render (childNodes as JSON)
     }
-    
+
+    def deletePath(String path){
+        String pathToDelete = params['path'] as String
+        
+        if(pathToDelete.empty){
+            redirect(actionName: "index")
+            return
+        }
+
+        Map<String, String> result = vaultService.deletePath(session.token, pathToDelete)
+        return render (result as JSON)
+    }
+
     def search() {
         String secret = params?.secret?:""
         if(secret.empty) {
