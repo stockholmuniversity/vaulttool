@@ -94,6 +94,22 @@ class DashboardController {
         return render (result as JSON)
     }
 
+    def copyPastePath() {
+        String path = params['path'] as String
+        String destination = params['destination'] as String
+
+        if(path.empty){
+            redirect(actionName: "index")
+            return
+        }
+
+        Byte[] zipByteArray = vaultService.copyPath(session.token, path)
+        Map<String, String> result = vaultService.pastePath(session.token, destination, zipByteArray)
+
+        return render (result as JSON)
+
+    }
+
     def search() {
         String secret = params?.secret?:""
         if(secret.empty) {

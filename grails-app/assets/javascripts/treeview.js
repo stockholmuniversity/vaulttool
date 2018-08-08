@@ -46,10 +46,12 @@ $(document).ready(function(){
 
         var items = {
             'item1' : {
-                'label' : 'Copy Path'
+                'label' : 'Copy Path',
+                'action': function(){ return copyPath(node)}
             },
             'item2' : {
-                'label' : 'Paste Path'
+                'label' : 'Paste Path',
+                'action': function(){return pastePath(node)}
             },
             'item3' : {
                     'label' : 'Delete Path',
@@ -87,8 +89,31 @@ $(document).ready(function(){
         return items;
     }
 
+    function copyPath(node){
+        var path  = node.id.replace(/_/g,'/');
+        sessionStorage.setItem('path', path);
+        console.log(sessionStorage.path);
+    }
 
-    //Delete path
+    function pastePath(node){
+        var fromPath = sessionStorage.path;
+        var toPath = node.id.replace(/_/g,'/');
+
+
+        $.ajax({
+            type    : "POST",
+            url     : "/dashboard/copyPastePath",
+            data    : {path: fromPath, destination: toPath},
+            success: function (data) {
+                
+            },
+            error: function(data) {
+                console.log(data.message);
+            }
+        });
+
+    }
+
     function deletePath(node){
         var path        = node.id.replace(/_/g,'/');
         var $navTree    =  $("#navTree");
