@@ -47,28 +47,35 @@ $(document).ready(function(){
         var items = {
             'item1' : {
                 'label' : 'Copy Path',
+                'icon'  : 'fa fa-files-o',
                 'action': function(){ return copyPath(node)}
             },
             'item2' : {
                 'label' : 'Paste Path',
+                'icon'  : 'fa fa-clipboard',
                 'action': function(){return pastePath(node)}
             },
             'item3' : {
                     'label' : 'Delete Path',
+                    'icon' : 'fa fa-trash-o',
                     'separator_after' : true,
                     'action' : function(){ return deletePath(node)}
             },
             'item4' : {
                 'label' : 'Administration',
+                'icon'  : 'fa fa-cogs',
                 'submenu' : {
                     'subItem1' : {
-                        'label' : 'User'
+                        'label' : 'Users',
+                        'icon': 'fa fa-users'
                     },
                     'subItem2' : {
-                        'label' : 'Policies'
+                        'label' : 'Policies',
+                        'icon': 'fa fa-file-text-o'
                     },
                     'subItem3' : {
-                        'label' : 'Application Roles'
+                        'label' : 'Application Roles',
+                        'icon': 'fa fa-puzzle-piece'
                     }
                 }
             }
