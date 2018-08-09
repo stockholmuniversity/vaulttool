@@ -51,6 +51,8 @@ $(document).ready(function(){
                 'action': function(){
                     sessionStorage.setItem('deletePath', 'true');
                     sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
+                    sessionStorage.setItem('enablePaste','true');
+
                 }
             },
             'item2' : {
@@ -59,6 +61,8 @@ $(document).ready(function(){
                 'action': function(){
                     sessionStorage.removeItem('deletePath');
                     sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
+
+                    sessionStorage.setItem('enablePaste','true');
                 }
             },
             'item3' : {
@@ -68,6 +72,7 @@ $(document).ready(function(){
                     sessionStorage.setItem('toPath', node.id.replace(/_/g,'/'));
 
                     handlePaths();
+                    sessionStorage.removeItem('enablePaste');
                     }
             },
             'item4' : {
@@ -102,16 +107,19 @@ $(document).ready(function(){
             }
         };
 
-        if(node.type === 'leafNode'){
+        if(node.type === 'leafNode' || node.type === 'rootNode'){
             items.item1._disabled = true;
             items.item2._disabled = true;
             items.item3._disabled = true;
             items.item4._disabled = true;
-        } else if (node.type === 'rootNode'){
-            items.item1._disabled = true;
-            items.item2._disabled = true;
-            items.item3._disabled = true;
-            items.item4._disabled = true;
+        }
+
+        if(node.type !== 'leafNode'){
+            if(sessionStorage.enablePaste){
+                items.item3._disabled = false;
+            } else {
+                items.item3._disabled = true;
+            }
         }
 
         items.item5._disabled = (!node.original.admin);
