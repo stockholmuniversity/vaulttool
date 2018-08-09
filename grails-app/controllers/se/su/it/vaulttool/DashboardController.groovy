@@ -110,6 +110,30 @@ class DashboardController {
 
     }
 
+    def handlePaths(){
+        String fromPath = params.fromPath ? params.fromPath as String : ''
+        String toPath = params.toPath ? params.toPath as String : ''
+        Boolean deletePath = params.deletePath ? true : false
+
+        Byte[] zipByteArray = []
+        Map<String, String> result = [:]
+        
+        if(fromPath && toPath){
+            zipByteArray = vaultService.copyPath(session.token, fromPath)
+            result = vaultService.pastePath(session.token, toPath, zipByteArray)
+
+            if(deletePath){
+                result << vaultService.deletePath(session.token, fromPath)
+            }
+        }
+
+        if(fromPath && !toPath){
+            result << vaultService.deletePath(session.token, fromPath)
+        }
+
+        return render (result as JSON)
+    }
+
     def search() {
         String secret = params?.secret?:""
         if(secret.empty) {

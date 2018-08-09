@@ -46,22 +46,43 @@ $(document).ready(function(){
 
         var items = {
             'item1' : {
-                'label' : 'Copy Path',
-                'icon'  : 'fa fa-files-o',
-                'action': function(){ return copyPath(node)}
+                'label' : 'Cut Path',
+                'icon'  : 'fa fa-scissors',
+                'action': function(){
+                    sessionStorage.setItem('deletePath', 'true');
+                    sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
+                }
             },
             'item2' : {
-                'label' : 'Paste Path',
-                'icon'  : 'fa fa-clipboard',
-                'action': function(){return pastePath(node)}
+                'label' : 'Copy Path',
+                'icon'  : 'fa fa-files-o',
+                'action': function(){
+                    sessionStorage.removeItem('deletePath');
+                    sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
+                }
             },
             'item3' : {
+                'label' : 'Paste Path',
+                'icon'  : 'fa fa-clipboard',
+                'action': function(){
+                    sessionStorage.setItem('toPath', node.id.replace(/_/g,'/'));
+
+                    handlePaths();
+                    }
+            },
+            'item4' : {
                     'label' : 'Delete Path',
                     'icon' : 'fa fa-trash-o',
                     'separator_after' : true,
-                    'action' : function(){ return deletePath(node)}
+                    'action' : function(){
+                        sessionStorage.removeItem('toPath');
+                        sessionStorage.removeItem('deletePath');
+                        sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
+
+                        handlePaths();
+                    }
             },
-            'item4' : {
+            'item5' : {
                 'label' : 'Administration',
                 'icon'  : 'fa fa-cogs',
                 'submenu' : {
@@ -85,62 +106,54 @@ $(document).ready(function(){
             items.item1._disabled = true;
             items.item2._disabled = true;
             items.item3._disabled = true;
+            items.item4._disabled = true;
         } else if (node.type === 'rootNode'){
             items.item1._disabled = true;
             items.item2._disabled = true;
             items.item3._disabled = true;
+            items.item4._disabled = true;
         }
 
-        items.item4._disabled = (!node.original.admin);
+        items.item5._disabled = (!node.original.admin);
 
         return items;
     }
 
-    function copyPath(node){
-        var path  = node.id.replace(/_/g,'/');
-        sessionStorage.setItem('path', path);
-        console.log(sessionStorage.path);
-    }
+   function handlePaths(){
+        var fromPath = (sessionStorage.fromPath) ? sessionStorage.fromPath:'';
+        var toPath = (sessionStorage.toPath) ? sessionStorage.toPath:'';
+        var deletePath = (sessionStorage.deletePath) ? sessionStorage.deletePath:'';
 
-    function pastePath(node){
-        var fromPath = sessionStorage.path;
-        var toPath = node.id.replace(/_/g,'/');
+       $.ajax({
+           type    : "POST",
+           url     : "/dashboard/handlePaths",
+           data    : {  fromPath    :   fromPath,
+                        toPath      :   toPath,
+                        deletePath  :   deletePath},
+           success: function (data) {
+               var $navTree    =  $("#navTree");
 
-        $.ajax({
-            type    : "POST",
-            url     : "/dashboard/copyPastePath",
-            data    : {path: fromPath, destination: toPath},
-            success: function (data) {
-                $('#navTree').jstree(true).open_node(toPath);
-            },
-            error: function(data) {
-                console.log(data.message);
-            }
-        });
+               if(deletePath || (fromPath && !toPath)) {
+                   var fromNode =   $navTree.jstree(true).get_node(fromPath.replace(/\//g,'_'));
+                   var children = fromNode.children;
+                   
+                   if(children.length > 0){
+                       $navTree.jstree(true).delete_node(children);
+                   }
+                   $navTree.jstree(true).delete_node(fromNode.id);
+               }
 
-    }
+               if(fromPath && toPath){
+                  $navTree.jstree(true).load_node(toPath.replace(/\//g,'_'));
+                  $navTree.jstree(true).open_node(toPath.replace(/\//g,'_'));
+               }
+           },
+           error: function(data) {
+               console.log(data.message);
+           }
+       });
 
-    function deletePath(node){
-        var path        = node.id.replace(/_/g,'/');
-        var $navTree    =  $("#navTree");
-
-        $.ajax({
-            type    : "POST",
-            url     : "/dashboard/deletePath",
-            data    : {path: path},
-            success: function (data) {
-                var children = $navTree.jstree(true).get_node(node.id).children;
-                if(children.length > 0){
-                    $navTree.jstree(true).delete_node(children);
-                }
-                $navTree.jstree(true).delete_node(node);
-            },
-            error: function(data) {
-                console.log(data.message);
-            }
-        });
-
-    }
+   }
 
     //Search plugin
     $('#quickSearch').keyup(function () {
