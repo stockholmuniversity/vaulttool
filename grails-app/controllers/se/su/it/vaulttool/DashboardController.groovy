@@ -51,7 +51,7 @@ class DashboardController {
                 node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), admin: isAdmin, type: 'pathNode', 'children': true, 'icon': 'fa fa-folder']
                 nodes.add(node)
             }  else {
-                node =  ['id': 'leaf_' + secret, 'text': secret, admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': secret]]
+                node =  ['id': 'leaf_' + secret, 'text': secret, admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': secret]]
                 leafs.add(node)
             }
             rootNodes = nodes + leafs
@@ -74,7 +74,7 @@ class DashboardController {
             if(secret.endsWith("/")){
                 node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, 'type':'pathNode', 'children': true, 'icon' : 'fa fa-folder']
              }  else {
-                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-key', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
+                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
             }
 
             childNodes.add(node)
