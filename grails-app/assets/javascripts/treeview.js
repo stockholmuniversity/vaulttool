@@ -92,16 +92,32 @@ $(document).ready(function(){
                 'icon'  : 'fa fa-cogs',
                 'submenu' : {
                     'subItem1' : {
-                        'label' : 'Users',
-                        'icon': 'fa fa-users'
+                        'label' : 'Administration',
+                        'icon': 'fa fa-tasks',
+                        'action' : function(){
+                            window.location.href = '/admin/index';
+                        }
                     },
                     'subItem2' : {
-                        'label' : 'Policies',
-                        'icon': 'fa fa-file-text-o'
+                        'label' : 'Users',
+                        'icon': 'fa fa-users',
+                        'action' : function(){
+                            window.location.href = '/admin/user';
+                        }
                     },
                     'subItem3' : {
+                        'label' : 'Policies',
+                        'icon': 'fa fa-file-text-o',
+                        'action' : function(){
+                            window.location.href = '/admin/policies';
+                        }
+                    },
+                    'subItem4' : {
                         'label' : 'Application Roles',
-                        'icon': 'fa fa-puzzle-piece'
+                        'icon': 'fa fa-puzzle-piece',
+                        'action' : function(){
+                            window.location.href = '/admin/approles';
+                        }
                     }
                 }
             }
@@ -114,7 +130,7 @@ $(document).ready(function(){
             items.item4._disabled = true;
         }
 
-        if(node.type !== 'leafNode'){
+        if(node.type !== 'leafNode' && node.type !== 'rootNode'){
             if(sessionStorage.enablePaste){
                 items.item3._disabled = false;
             } else {
@@ -185,6 +201,10 @@ $(document).ready(function(){
                data.instance.set_icon(data.node.id, 'fa fa-folder');
            }
        }
+       if(data.node.type === 'rootNode'){
+           window.location.href = '/dashboard/index';
+       }
+
     });
 
     //Click on secret to navigate to it's view
