@@ -1,5 +1,6 @@
 package se.su.it.vaulttool
 
+import grails.converters.JSON
 import org.springframework.web.multipart.MultipartFile
 
 class DashboardController {
@@ -30,6 +31,109 @@ class DashboardController {
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
         [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
     }
+
+    def loadRootPaths(){
+        def paths =  vaultRestService.getPaths(session.token)
+
+        def secrets = vaultRestService.listSecrets(session.token, "")
+
+        def rootNodes = []
+
+        def leafs = []
+        def nodes = []
+        def node = null
+
+        def isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+        
+        secrets.each {secret ->
+
+            if(secret.endsWith("/")){
+                node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), admin: isAdmin, type: 'pathNode', 'children': true, 'icon': 'fa fa-folder']
+                nodes.add(node)
+            }  else {
+                node =  ['id': 'leaf_' + secret, 'text': secret, admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': secret]]
+                leafs.add(node)
+            }
+            rootNodes = nodes + leafs
+         }
+
+        def rootNode = [['id': 'root', 'text': 'Root', admin: isAdmin, type: 'rootNode','children': rootNodes, 'icon':'fa fa-home fa-lg','state':['opened': true]]]
+
+        return render(rootNode as JSON)
+    }
+
+
+    def loadChildren(){
+        def secrets = vaultRestService.listSecrets(session.token, params['id'].toString().replaceAll("_","/"))
+        def childNodes = []
+
+        def isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+
+        secrets.each {secret ->
+            def node = null
+            if(secret.endsWith("/")){
+                node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, 'type':'pathNode', 'children': true, 'icon' : 'fa fa-folder']
+             }  else {
+                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
+            }
+
+            childNodes.add(node)
+        }
+        return render (childNodes as JSON)
+    }
+
+    def deletePath(String path){
+        String pathToDelete = params['path'] as String
+        
+        if(pathToDelete.empty){
+            redirect(actionName: "index")
+            return
+        }
+
+        Map<String, String> result = vaultService.deletePath(session.token, pathToDelete)
+        return render (result as JSON)
+    }
+
+    def copyPastePath() {
+        String path = params['path'] as String
+        String destination = params['destination'] as String
+
+        if(path.empty){
+            redirect(actionName: "index")
+            return
+        }
+
+        Byte[] zipByteArray = vaultService.copyPath(session.token, path)
+        Map<String, String> result = vaultService.pastePath(session.token, destination, zipByteArray)
+
+        return render (result as JSON)
+
+    }
+
+    def handlePaths(){
+        String fromPath = params.fromPath ? params.fromPath as String : ''
+        String toPath = params.toPath ? params.toPath as String : ''
+        Boolean deletePath = params.deletePath ? true : false
+
+        Byte[] zipByteArray = []
+        Map<String, String> result = [:]
+        
+        if(fromPath && toPath){
+            zipByteArray = vaultService.copyPath(session.token, fromPath)
+            result = vaultService.pastePath(session.token, toPath, zipByteArray)
+
+            if(deletePath){
+                result << vaultService.deletePath(session.token, fromPath)
+            }
+        }
+
+        if(fromPath && !toPath){
+            result << vaultService.deletePath(session.token, fromPath)
+        }
+
+        return render (result as JSON)
+    }
+
     def search() {
         String secret = params?.secret?:""
         if(secret.empty) {

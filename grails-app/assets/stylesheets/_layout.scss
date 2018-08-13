@@ -73,6 +73,20 @@ footer {
 /* ----- Header And Footer ----- */
 
 
+/* -------- Container ---------- */
+
+/*Container width for large desktop views since bootstrap width for default largest break point 1200 is only 1170*/
+@media (min-width: 1366px) {
+  .container {
+    max-width: 1350px;
+  }
+}
+
+/* -------- Container ---------- */
+
+
+
+
 /* ----- Headings ----- */
 
 h2 {

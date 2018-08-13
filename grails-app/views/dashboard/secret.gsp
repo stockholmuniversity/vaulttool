@@ -122,7 +122,7 @@
                     </div>
                 </div>
             </g:form>
-
+            
             <g:if test="${metadata.fileName && secret.binaryData}">
                 <div class="bottom-margin-small breakWithEllipsis">
                     <span class="fa fa-file"></span>&nbsp;${metadata.fileName}

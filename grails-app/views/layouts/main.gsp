@@ -14,8 +14,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <asset:stylesheet src="application.css"/>
-    <asset:javascript src="application.js"/>
     <asset:stylesheet src="font-awesome.min.css"/>
+    <asset:stylesheet src="default/style.min.css"/>
+    <asset:javascript src="application.js"/>
+    %{--<asset:javascript src="jstree.min.js"/>--}%
+    %{--<asset:javascript src="treeview.js"/>--}%
+
     <g:layoutHead/>
 </head>
 <body>
@@ -56,47 +60,31 @@
     </header>
 
     <div class="container">
-        <div class="row">
-            <g:if test="${controllerName == 'admin'}">
-                <div id="nav-column" class="col-md-3 bottom-margin-large">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
-                                <span class="fa fa-home"></span>
-                                Start
-                            </g:link>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <g:link action="user" class="menuNav ${(actionName == 'user') ? 'active':''}">
-                                <span class="fa fa-users"></span>
-                                Users
-                            </g:link>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <g:link action="policies" class="menuNav ${(actionName == 'policies') ? 'active':''}">
-                                <span class="fa fa-file-text-o"></span>
-                                Policies
-                            </g:link>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <g:link action="approles" class="menuNav ${(actionName == 'approles') ? 'active':''}">
-                                <span class="fa fa-key"></span>
-                                Application Roles
-                            </g:link>
-                        </div>
-                    </div>
-                    <div class="row">
 
+
+        <div class="row">
+                <div id="nav-column" class="col-md-auto bottom-margin-large" style="/*background-color: #99ACBF*/ background-color: #33597F; padding-left: 0; padding-right: 0; padding-top: 0;">
+
+                    <div class="bottom-margin-medium" style="margin-bottom: 10px; padding-top: 5px; padding-bottom: 5px; background-color: #E0E0E0;">
+                        <g:form action="search" controller="dashboard">
+                            <div class="input-group" style="padding-left: 5px; padding-right: 5px">
+                                <input id="searchQueryInput" class="form-control search-query-input" type="text" maxlength="60" name="secret" value="" placeholder="Search by key, title or description"/>
+                                %{--<div class="input-group-btn">--}%
+                                    <button class="btn search-query input-group-append" name="submit" value="Search secret" style="background-color: #1B95E0; border: 1px solid #1474b0;">
+                                        <span class="fa fa-search fa-lg"></span>
+                                    </button>
+                                %{--</div>--}%
+                            </div>
+                        </g:form>
+                         
+                        %{--<input id="quickSearch" type="text" style="width: 100%"/>--}%
+                    </div>
+                    %{--<div><span class="fa fa-home"></span>&nbsp;Root</div>--}%
+                    <div id="navTree">
                     </div>
                 </div>
-            </g:if>
-            <div id="main-column" class="${(controllerName == 'admin') ? 'col-md-9' : 'col-md-12' }">
+
+            <div id="main-column" class="col">
                 <g:if test="${flash.error}">
                     <div class="row">
                         <div class="col-sm-12">
