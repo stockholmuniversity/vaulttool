@@ -112,6 +112,28 @@
 /* ----- Miscellaneous ----- */
 
 
+
+#searchQueryInput::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  font-size: smaller;
+  opacity: 1; /* Firefox */
+}
+#searchQueryInput::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-size: smaller;
+}
+#searchQueryInput::-moz-placeholder { /* Firefox 19+ */
+  font-size: smaller;
+  opacity: 1; /* Firefox */
+}
+#searchQueryInput:-moz-placeholder { /* Firefox 18- */
+  font-size: smaller;
+  opacity: 1; /* Firefox */
+}
+
+#searchQueryInput {
+  &.form-control{
+    min-width: 210px;
+  }
+}
 /*Testing*/
 /*
 .jstree-default .jstree-node, .jstree-default .jstree-icon {
