@@ -36,7 +36,7 @@ $(document).ready(function(){
             'rootNode' : {},
             'leafNode' : {}
         },
-            'plugins': ['search', 'themes', 'contextmenu','types']
+            'plugins': ['search', 'themes', 'contextmenu','types','wholerow']
         
     });
 
@@ -188,6 +188,21 @@ $(document).ready(function(){
         console.log("after");
         return false;
 
+    });
+    
+    $('#navTree').on("click.jstree", function (event) {
+
+        //Toggle folder icon when clicking on the arrow
+        var node =  $('#navTree').jstree(true).get_node(event.target.parentNode.id);
+
+        if(node.id !== 'root'){
+            if($('#' + node.id).hasClass('jstree-open') || $('#' + node.id).hasClass('jstree-loading')){
+                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder-open');
+            } else if($('#' + node.id).hasClass('jstree-closed')) {
+                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder');
+            }
+        }
+        
     });
 
     //Expand and collapse path with left click on node
