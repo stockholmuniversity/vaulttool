@@ -1,6 +1,7 @@
 package se.su.it.vaulttool
 
 import groovy.json.JsonSlurper
+import groovyx.net.http.AsyncHTTPBuilder
 import groovyx.net.http.HTTPBuilder
 
 class VaultRestService {
@@ -9,16 +10,20 @@ class VaultRestService {
     static final public VAULTTOOLPOLICIESPATHNAME   = "vaulttoolpolicies"
     static final public VAULTTOOLAPPROLESPATHNAME   = "vaulttoolapproles"
     def grailsApplication
-    private HTTPBuilder http = null
+    private AsyncHTTPBuilder http = null
 
-    private synchronized HTTPBuilder getRestClient() {
+    private synchronized AsyncHTTPBuilder getRestClient() {
         if (!http) {
-            http = new HTTPBuilder(grailsApplication.config.vault.url)
+            //http = new HTTPBuilder(grailsApplication.config.vault.url)
+
+            http = new AsyncHTTPBuilder(
+                poolSize : 20,
+                uri : grailsApplication.config.vault.url)
         }
         return http
     }
 
-    private Map doRest(String token, String method, String restPath, String mediaType, Map theBody = [:], Map query = [:]) {
+    private synchronized Map doRest(String token, String method, String restPath, String mediaType, Map theBody = [:], Map query = [:]) {
         Map result = [:]
         def internalMethod
 
@@ -60,7 +65,7 @@ class VaultRestService {
                     log.warn("Failure while doing REST REQUEST: ${resp?.statusLine}, ${reader}")
                     result = ["status": resp.status]
                 }
-            }
+            }.get()
         } catch (Throwable ex) {
             ex.printStackTrace()
         }
