@@ -36,7 +36,7 @@ $(document).ready(function(){
             'rootNode' : {},
             'leafNode' : {}
         },
-            'plugins': ['search', 'themes', 'contextmenu','types']
+            'plugins': ['search', 'themes', 'contextmenu','types','wholerow']
         
     });
 
@@ -190,6 +190,76 @@ $(document).ready(function(){
 
     });
 
+    $('#navTree').on('loaded.jstree', function(evenet){
+       $('#root > div').addClass('jstree-wholerow-clicked');
+       $('#root > a').addClass('jstree-clicked');
+    });
+
+    $('#navTree').on("click.jstree", function (event) {
+
+        //Toggle folder icon when clicking on the arrow
+        var node =  $('#navTree').jstree(true).get_node(event.target.parentNode.id);
+
+        if(node.id !== 'root'){
+            if($('#' + node.id).hasClass('jstree-open') || $('#' + node.id).hasClass('jstree-loading')){
+                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder-open');
+            } else if($('#' + node.id).hasClass('jstree-closed')) {
+                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder');
+            }
+
+            //This is hackish. Force tree to show wholerow-styling when user clicks on arrow as there is a bug in the plugin.
+            var elem = $("#navTree").find('div.jstree-wholerow-clicked');
+            $.each(elem, function(index, val){
+                $(val).removeClass('jstree-wholerow-clicked');
+            });
+
+            var elem2 = $("#navTree").find('a.jstree-clicked');
+            $.each(elem2, function(index, val){
+                $(val).removeClass('jstree-clicked');
+            });
+            sessionStorage.setItem('forceRowClass',node.id);
+
+        } else {
+            window.location.href = '/dashboard/index';
+        }
+        
+    });
+    
+    $('#navTree').on('after_open.jstree', function(event){
+        var elem = $("#navTree").find('div.jstree-wholerow-clicked');
+        $.each(elem, function(index, val){
+            $(val).removeClass('jstree-wholerow-clicked');
+        });
+        var elem2 = $("#navTree").find('a.jstree-clicked');
+        $.each(elem2, function(index, val){
+            $(val).removeClass('jstree-clicked');
+        });
+
+
+        var nodeId = sessionStorage.forceRowClass;
+        $('#' + nodeId + '> div').addClass('jstree-wholerow-clicked');
+        $('#' + nodeId + '> a').addClass('jstree-clicked');
+        
+    });
+
+    $('#navTree').on('after_close.jstree', function(event){
+
+        var elem = $("#navTree").find('div.jstree-wholerow-clicked');
+        $.each(elem, function(index, val){
+            $(val).removeClass('jstree-wholerow-clicked');
+        });
+        var elem2 = $("#navTree").find('a.jstree-clicked');
+        $.each(elem2, function(index, val){
+            $(val).removeClass('jstree-clicked');
+        });
+
+        var nodeId = sessionStorage.forceRowClass;
+        $('#' + nodeId + '> div').addClass('jstree-wholerow-clicked');
+        $('#' + nodeId + '> a').addClass('jstree-clicked');
+
+    });
+
+    
     //Expand and collapse path with left click on node
     $('#navTree').on('select_node.jstree', function(e, data){
        data.instance.toggle_node(data.node);
