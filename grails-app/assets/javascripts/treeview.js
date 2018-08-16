@@ -179,6 +179,27 @@ $(document).ready(function(){
 
    }
 
+   function removeWholeRowClasses(){
+        var $navTree    = $("#navTree");
+        var el1         = $navTree.find('div.jstree-wholerow-clicked');
+        var el2         = $navTree.find('a.jstree-clicked');
+
+        $.each(el1, function(index, val){
+           $(val).removeClass('jstree-wholerow-clicked');
+        });
+
+        $.each(el2, function(index, val){
+           $(val).removeClass('jstree-clicked');
+        });
+   }
+   
+   function addWholeRowClasses(){
+       var nodeId = sessionStorage.forceRowClass;
+
+       $('#' + nodeId + '> div').addClass('jstree-wholerow-clicked');
+       $('#' + nodeId + '> a').addClass('jstree-clicked');
+   }
+
     //Search plugin
     $('#quickSearch').keyup(function () {
         var value = $('#quickSearch').val();
@@ -190,10 +211,12 @@ $(document).ready(function(){
 
     });
 
-    $('#navTree').on('loaded.jstree', function(evenet){
+    $('#navTree').on('loaded.jstree', function(event){
        $('#root > div').addClass('jstree-wholerow-clicked');
        $('#root > a').addClass('jstree-clicked');
     });
+
+
 
     $('#navTree').on("click.jstree", function (event) {
 
@@ -207,16 +230,7 @@ $(document).ready(function(){
                 $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder');
             }
 
-            //This is hackish. Force tree to show wholerow-styling when user clicks on arrow as there is a bug in the plugin.
-            var elem = $("#navTree").find('div.jstree-wholerow-clicked');
-            $.each(elem, function(index, val){
-                $(val).removeClass('jstree-wholerow-clicked');
-            });
-
-            var elem2 = $("#navTree").find('a.jstree-clicked');
-            $.each(elem2, function(index, val){
-                $(val).removeClass('jstree-clicked');
-            });
+            removeWholeRowClasses();
             sessionStorage.setItem('forceRowClass',node.id);
 
         } else {
@@ -224,39 +238,17 @@ $(document).ready(function(){
         }
         
     });
-    
+
+    //Handle the display of active node
     $('#navTree').on('after_open.jstree', function(event){
-        var elem = $("#navTree").find('div.jstree-wholerow-clicked');
-        $.each(elem, function(index, val){
-            $(val).removeClass('jstree-wholerow-clicked');
-        });
-        var elem2 = $("#navTree").find('a.jstree-clicked');
-        $.each(elem2, function(index, val){
-            $(val).removeClass('jstree-clicked');
-        });
-
-
-        var nodeId = sessionStorage.forceRowClass;
-        $('#' + nodeId + '> div').addClass('jstree-wholerow-clicked');
-        $('#' + nodeId + '> a').addClass('jstree-clicked');
-        
+        removeWholeRowClasses();
+        addWholeRowClasses();
     });
 
+    //Handle the display of active node 
     $('#navTree').on('after_close.jstree', function(event){
-
-        var elem = $("#navTree").find('div.jstree-wholerow-clicked');
-        $.each(elem, function(index, val){
-            $(val).removeClass('jstree-wholerow-clicked');
-        });
-        var elem2 = $("#navTree").find('a.jstree-clicked');
-        $.each(elem2, function(index, val){
-            $(val).removeClass('jstree-clicked');
-        });
-
-        var nodeId = sessionStorage.forceRowClass;
-        $('#' + nodeId + '> div').addClass('jstree-wholerow-clicked');
-        $('#' + nodeId + '> a').addClass('jstree-clicked');
-
+        removeWholeRowClasses();
+        addWholeRowClasses();
     });
 
     
