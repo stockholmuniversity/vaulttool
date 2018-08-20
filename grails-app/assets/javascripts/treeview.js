@@ -200,20 +200,29 @@ $(document).ready(function(){
        $('#' + nodeId + '> a').addClass('jstree-clicked');
    }
 
-    //Search plugin
-    $('#quickSearch').keyup(function () {
-        var value = $('#quickSearch').val();
-        console.log(value);
-        //$('#navTree').jstree('search', value);
-        $('#navTree').jstree(true).search(value, true);
-        console.log("after");
-        return false;
-
-    });
 
     $('#navTree').on('loaded.jstree', function(event){
        $('#root > div').addClass('jstree-wholerow-clicked');
        $('#root > a').addClass('jstree-clicked');
+
+        //This works to open all nodes. However selecting the last node is not what wee want
+        /*$('#navTree').jstree(true).load_node(['SchemaTool','SchemaTool_foo'], function(node, status){
+            console.log(node);
+            $('#navTree').jstree(true).open_node('SchemaTool_foo_vantar', function(){},false);
+            $('#navTree').jstree(true).select_node('SchemaTool_foo_vantar');
+        });*/
+        
+        if(sessionStorage.openItems){
+
+            var nodeArr = JSON.parse(sessionStorage.openItems);
+            
+            //THis works to open parent nodes. don't delete until the rest of the function is fixed.
+            $.each(nodeArr, function(index,val){
+                $('#navTree').jstree(true).load_node(val);
+                $('#navTree').jstree(true).open_node(val);
+            });
+            
+        }
     });
 
 
@@ -263,22 +272,35 @@ $(document).ready(function(){
                data.instance.set_icon(data.node.id, 'fa fa-folder');
            }
        }
-       if(data.node.type === 'rootNode'){
-           window.location.href = '/dashboard/index';
-       }
 
-    });
-
-    //Click on secret to navigate to it's view
-    $('#navTree').on('select_node.jstree', function(e, data){
         if(data.instance.is_leaf(data.node)){
+
+           //Save open nodes to be opened later on reload after click secret
+            var el = $("#navTree").find('li.jstree-open');
+            var nodeArr = [];
+            $.each(el, function(index, val){
+                nodeArr.push($(val).attr('id'));
+            });
+            nodeArr = nodeArr.filter(function(item){
+                return item !== 'root'
+            });
+            sessionStorage.setItem('openItems',JSON.stringify(nodeArr));
+
+
+            //Load secrets view
             var key = $("#" + data.node.a_attr.id).data('secretkey');
             window.location.href = '/dashboard/secret?key='+ key;
-        } else{
-            var path = (data.node.id !== 'root') ? data.node.id.replace(/_/g,'/'):'';
-            //window.location.href = '/dashboard/index?selectedPath='+ path;
-
         }
+
+
+       if(data.node.type === 'rootNode'){
+           window.location.href = '/dashboard/index';
+
+           if(sessionStorage.openItems){
+               sessionStorage.removeItem('openItems');
+           }
+       }
+
     });
 
 });
