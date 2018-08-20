@@ -141,6 +141,11 @@
 #root > .jstree-icon {
     background-image: none;
 }
+
+[id=root] > a {
+  font-size: larger;
+}
+
 .jstree-icon {
    color: #FFFFFF;
 }
