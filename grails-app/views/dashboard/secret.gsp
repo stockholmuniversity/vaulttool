@@ -86,10 +86,11 @@
                 </g:form>
             </div>
 
-            <g:form action="index">
+            %{--Not needed at this moment. Still keeping just in case--}%
+            %{--<g:form action="index">
                 <g:hiddenField name="selectedPath" value="${session.selectedPath}"/>
                 <g:submitButton class="btn btn-default pull-right right-margin-small" name="submit" value="Close"/>
-            </g:form>
+            </g:form>--}%
 
             <div class="clearfix"></div>
 
