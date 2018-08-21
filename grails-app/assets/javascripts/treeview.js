@@ -84,7 +84,7 @@ $(document).ready(function(){
                         sessionStorage.removeItem('deletePath');
                         sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
 
-                        handlePaths();
+                        showModal();
                     }
             },
             'item5' : {
@@ -143,6 +143,35 @@ $(document).ready(function(){
         return items;
     }
 
+   function showModal(){
+        $("<div class='modal' tabindex='-1' role='dialog' id='deleteModal'>" +
+                "<div class='modal-dialog modal-dialog-center' role='document'>" +
+                "<div class='modal-content'>" +
+                "<div class='modal-header'>" +
+                "<h3 class='modal-title'>" +
+                "<span class='fa fa-exclamation-triangle'></span>&nbsp;&nbsp;" +
+                "Delete path" +
+                "</h3>" +
+                "</div>" +
+                "<div class='modal-body'>" +
+                "<div class='bottom-margin-medium'>" + "Vill du ta bort " + sessionStorage.fromPath + "?" + "</div>" +
+                "<div class='bottom-margin-medium'>"  + sessionStorage.fromPath + " samt alla paths och alla secrets under " + sessionStorage.fromPath + " kommer att tas bort." +"</div>"+
+                "<div>" + "Vill du fortsätta?" + "</div>"+
+                "</div>" +
+                "<div class='modal-footer'>" +
+                "<button type='button' class='btn btn-primary' data-dismiss='modal'>"+ "Avbryt" + "</button>"+
+                "<button id='deleteButton' type='button' class='btn btn-default' data-dismiss='modal'>"+ "Ja" + "</button>"+
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>").modal('show');
+
+        $('#deleteButton').on('click', function(){
+           handlePaths();
+        });
+
+   }
+
    function handlePaths(){
         var fromPath = (sessionStorage.fromPath) ? sessionStorage.fromPath:'';
         var toPath = (sessionStorage.toPath) ? sessionStorage.toPath:'';
@@ -179,21 +208,53 @@ $(document).ready(function(){
 
    }
 
-    //Search plugin
-    $('#quickSearch').keyup(function () {
-        var value = $('#quickSearch').val();
-        console.log(value);
-        //$('#navTree').jstree('search', value);
-        $('#navTree').jstree(true).search(value, true);
-        console.log("after");
-        return false;
+   function removeWholeRowClasses(){
+        var $navTree    = $("#navTree");
+        var el1         = $navTree.find('div.jstree-wholerow-clicked');
+        var el2         = $navTree.find('a.jstree-clicked');
 
-    });
+        $.each(el1, function(index, val){
+           $(val).removeClass('jstree-wholerow-clicked');
+        });
 
-    $('#navTree').on('loaded.jstree', function(evenet){
+        $.each(el2, function(index, val){
+           $(val).removeClass('jstree-clicked');
+        });
+   }
+   
+   function addWholeRowClasses(){
+       var nodeId = sessionStorage.forceRowClass;
+
+       $('#' + nodeId + '> div').addClass('jstree-wholerow-clicked');
+       $('#' + nodeId + '> a').addClass('jstree-clicked');
+   }
+
+
+    $('#navTree').on('loaded.jstree', function(event){
        $('#root > div').addClass('jstree-wholerow-clicked');
        $('#root > a').addClass('jstree-clicked');
+
+        //This works to open all nodes. However selecting the last node is not what wee want
+        /*$('#navTree').jstree(true).load_node(['SchemaTool','SchemaTool_foo'], function(node, status){
+            console.log(node);
+            $('#navTree').jstree(true).open_node('SchemaTool_foo_vantar', function(){},false);
+            $('#navTree').jstree(true).select_node('SchemaTool_foo_vantar');
+        });*/
+        
+        if(sessionStorage.openItems){
+
+            var nodeArr = JSON.parse(sessionStorage.openItems);
+            
+            //THis works to open parent nodes. don't delete until the rest of the function is fixed.
+            $.each(nodeArr, function(index,val){
+                $('#navTree').jstree(true).load_node(val);
+                $('#navTree').jstree(true).open_node(val);
+            });
+            
+        }
     });
+
+
 
     $('#navTree').on("click.jstree", function (event) {
 
@@ -207,16 +268,7 @@ $(document).ready(function(){
                 $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder');
             }
 
-            //This is hackish. Force tree to show wholerow-styling when user clicks on arrow as there is a bug in the plugin.
-            var elem = $("#navTree").find('div.jstree-wholerow-clicked');
-            $.each(elem, function(index, val){
-                $(val).removeClass('jstree-wholerow-clicked');
-            });
-
-            var elem2 = $("#navTree").find('a.jstree-clicked');
-            $.each(elem2, function(index, val){
-                $(val).removeClass('jstree-clicked');
-            });
+            removeWholeRowClasses();
             sessionStorage.setItem('forceRowClass',node.id);
 
         } else {
@@ -224,39 +276,17 @@ $(document).ready(function(){
         }
         
     });
-    
+
+    //Handle the display of active node
     $('#navTree').on('after_open.jstree', function(event){
-        var elem = $("#navTree").find('div.jstree-wholerow-clicked');
-        $.each(elem, function(index, val){
-            $(val).removeClass('jstree-wholerow-clicked');
-        });
-        var elem2 = $("#navTree").find('a.jstree-clicked');
-        $.each(elem2, function(index, val){
-            $(val).removeClass('jstree-clicked');
-        });
-
-
-        var nodeId = sessionStorage.forceRowClass;
-        $('#' + nodeId + '> div').addClass('jstree-wholerow-clicked');
-        $('#' + nodeId + '> a').addClass('jstree-clicked');
-        
+        removeWholeRowClasses();
+        addWholeRowClasses();
     });
 
+    //Handle the display of active node 
     $('#navTree').on('after_close.jstree', function(event){
-
-        var elem = $("#navTree").find('div.jstree-wholerow-clicked');
-        $.each(elem, function(index, val){
-            $(val).removeClass('jstree-wholerow-clicked');
-        });
-        var elem2 = $("#navTree").find('a.jstree-clicked');
-        $.each(elem2, function(index, val){
-            $(val).removeClass('jstree-clicked');
-        });
-
-        var nodeId = sessionStorage.forceRowClass;
-        $('#' + nodeId + '> div').addClass('jstree-wholerow-clicked');
-        $('#' + nodeId + '> a').addClass('jstree-clicked');
-
+        removeWholeRowClasses();
+        addWholeRowClasses();
     });
 
     
@@ -271,22 +301,35 @@ $(document).ready(function(){
                data.instance.set_icon(data.node.id, 'fa fa-folder');
            }
        }
-       if(data.node.type === 'rootNode'){
-           window.location.href = '/dashboard/index';
-       }
 
-    });
-
-    //Click on secret to navigate to it's view
-    $('#navTree').on('select_node.jstree', function(e, data){
         if(data.instance.is_leaf(data.node)){
+
+           //Save open nodes to be opened later on reload after click secret
+            var el = $("#navTree").find('li.jstree-open');
+            var nodeArr = [];
+            $.each(el, function(index, val){
+                nodeArr.push($(val).attr('id'));
+            });
+            nodeArr = nodeArr.filter(function(item){
+                return item !== 'root'
+            });
+            sessionStorage.setItem('openItems',JSON.stringify(nodeArr));
+
+
+            //Load secrets view
             var key = $("#" + data.node.a_attr.id).data('secretkey');
             window.location.href = '/dashboard/secret?key='+ key;
-        } else{
-            var path = (data.node.id !== 'root') ? data.node.id.replace(/_/g,'/'):'';
-            //window.location.href = '/dashboard/index?selectedPath='+ path;
-
         }
+
+
+       if(data.node.type === 'rootNode'){
+           window.location.href = '/dashboard/index';
+
+           if(sessionStorage.openItems){
+               sessionStorage.removeItem('openItems');
+           }
+       }
+
     });
 
 });

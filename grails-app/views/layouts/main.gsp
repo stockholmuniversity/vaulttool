@@ -70,7 +70,7 @@
                              <div class="input-group" style="padding-left: 5px; padding-right: 5px">
                                  <input id="searchQueryInput" class="form-control search-query-input" type="text" maxlength="60" name="secret" value="" placeholder="Path, key, title or description"/>
                                  %{--<div class="input-group-btn">--}%
-                                 <button class="btn search-query input-group-append" name="submit" value="Search secret" style="background-color: #1B95E0; border: 1px solid #1474b0;">
+                                 <button id="searchQueryInputBtn" class="btn search-query input-group-append" name="submit" value="Search secret">
                                      <span class="fa fa-search fa-lg"></span>
                                  </button>
                                  %{--</div>--}%
