@@ -13,7 +13,7 @@ buildscript {
     }
 }
 
-version "1.0.2-rc05"
+version "1.0.2-rc06"
 group "se.su.it"
 
 apply plugin:"eclipse"
