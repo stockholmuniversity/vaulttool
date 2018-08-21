@@ -163,7 +163,34 @@ li a.jstree-hovered, li a.jstree-clicked{
 
   }
 
-.jstree-wholerow-clicked {
+li.jstree-leaf{
+
+  a.jstree-anchor {
+    color: #f8b607 !important;
+    font-weight: lighter;
+
+    i.jstree-icon{
+      color: #f8b607 !important;
+    }
+    
+  }
+  a.jstree-hovered, a.jstree-clicked {
+    color: #212529 !important;
+
+    i.jstree-icon{
+      color: #212529 !important;
+    }
+  }
+}
+
+
+[id=searchQueryInputBtn]{
+background-color: $main-colour;
+border: 1px solid $main-colour;
+  &:hover {
+    background-color: $main-colour-2;
+    border: 1px solid $main-colour-2;
+  }
 
 }
 
