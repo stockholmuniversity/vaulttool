@@ -170,3 +170,21 @@ li a.jstree-hovered, li a.jstree-clicked{
 .force-wholerow {
 background: linear-gradient(to bottom,#beebff 0,#a8e4ff 100%) !important;
 }
+
+.modal {
+
+  .modal-content {
+    border: 5px solid $main-colour;
+
+    .modal-header {
+      background: $main-colour;
+      color: $opposite-colour;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+  }
+  .modal-footer {
+    border: none;
+  }
+}

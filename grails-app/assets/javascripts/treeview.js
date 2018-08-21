@@ -84,7 +84,7 @@ $(document).ready(function(){
                         sessionStorage.removeItem('deletePath');
                         sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
 
-                        handlePaths();
+                        showModal();
                     }
             },
             'item5' : {
@@ -142,6 +142,35 @@ $(document).ready(function(){
 
         return items;
     }
+
+   function showModal(){
+        $("<div class='modal' tabindex='-1' role='dialog' id='deleteModal'>" +
+                "<div class='modal-dialog modal-dialog-center' role='document'>" +
+                "<div class='modal-content'>" +
+                "<div class='modal-header'>" +
+                "<h3 class='modal-title'>" +
+                "<span class='fa fa-exclamation-triangle'></span>&nbsp;&nbsp;" +
+                "Delete path" +
+                "</h3>" +
+                "</div>" +
+                "<div class='modal-body'>" +
+                "<div class='bottom-margin-medium'>" + "Vill du ta bort " + sessionStorage.fromPath + "?" + "</div>" +
+                "<div class='bottom-margin-medium'>"  + sessionStorage.fromPath + " samt alla paths och alla secrets under " + sessionStorage.fromPath + " kommer att tas bort." +"</div>"+
+                "<div>" + "Vill du fortsätta?" + "</div>"+
+                "</div>" +
+                "<div class='modal-footer'>" +
+                "<button type='button' class='btn btn-primary' data-dismiss='modal'>"+ "Avbryt" + "</button>"+
+                "<button id='deleteButton' type='button' class='btn btn-default' data-dismiss='modal'>"+ "Ja" + "</button>"+
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>").modal('show');
+
+        $('#deleteButton').on('click', function(){
+           handlePaths();
+        });
+
+   }
 
    function handlePaths(){
         var fromPath = (sessionStorage.fromPath) ? sessionStorage.fromPath:'';
