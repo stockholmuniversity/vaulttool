@@ -29,6 +29,10 @@ class DashboardController {
             }
         }
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
+
+        if(request.xhr){
+            return render(template: 'overview', model: [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData])
+        }
         [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
     }
 
@@ -178,7 +182,7 @@ class DashboardController {
         }
 
         MetaData metaData = MetaData.findBySecretKey(key)
-        [secret: response.entry, metadata: metaData]
+        return render (template: 'secret', model: [secret: response.entry, metadata: metaData])
     }
 
     def updateSecret() {

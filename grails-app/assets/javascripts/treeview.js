@@ -323,7 +323,7 @@ $(document).ready(function(){
 
 
        if(data.node.type === 'rootNode'){
-           window.location.href = '/dashboard/index';
+           //window.location.href = '/dashboard/index';
 
            if(sessionStorage.openItems){
                sessionStorage.removeItem('openItems');

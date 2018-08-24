@@ -1,21 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
-<head>
-    <meta name="layout" content="main"/>
-    <title>${session.applicationName?:'Vaulttool'} - Secret (${metadata.title})</title>
-
-    <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
-    <asset:javascript src="secret.js"/>
-</head>
-
-<body>
-
     <div class="card bottom-margin-large">
         <div class="card-header">
             <h3>Secret</h3>
         </div>
         <div class="card-body">
-            <g:form action="updateSecret">
+            <form name="saveSecretForm">
                 <g:hiddenField name="key" value="${secret.key}"/>
 
                 <div class="row bottom-margin-small">
@@ -75,15 +63,16 @@
                 </div>
 
                 <div class="pull-right">
-                    <g:submitButton style="" class="btn btn-primary" name="submit" value="Save secret"/>
+                    <button style="" class="btn btn-primary" id="saveSecretSubmit" value="Save secret">Save Secret</button>
                 </div>
 
-            </g:form>
+            </form>
 
             <div class="pull-left">
-                <g:form action="delete"><g:hiddenField name="key" value="${secret.key}"/>
-                    <g:submitButton class="btn btn-danger pull-right" name="submit" value="Delete secret"/>
-                </g:form>
+                <form name="deleteSecretForm">
+                    <g:hiddenField name="key" value="${secret.key}"/>
+                    <button id="deleteSecretSubmit" class="btn btn-danger pull-right" name="submit" value="Delete secret">Delete secret</button>
+                </form>
             </div>
 
             %{--Not needed at this moment. Still keeping just in case--}%
@@ -146,6 +135,3 @@
             </g:if>
         </div>
     </div>
-
-</body>
-</html>
