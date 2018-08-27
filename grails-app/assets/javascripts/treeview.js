@@ -144,31 +144,28 @@ $(document).ready(function(){
     }
 
    function showModal(){
-        $("<div class='modal' tabindex='-1' role='dialog' id='deleteModal'>" +
-                "<div class='modal-dialog modal-dialog-center' role='document'>" +
-                "<div class='modal-content'>" +
-                "<div class='modal-header'>" +
-                "<h3 class='modal-title'>" +
-                "<span class='fa fa-exclamation-triangle'></span>&nbsp;&nbsp;" +
-                "Delete path" +
-                "</h3>" +
-                "</div>" +
-                "<div class='modal-body'>" +
-                "<div class='bottom-margin-medium'>" + "Vill du ta bort " + sessionStorage.fromPath + "?" + "</div>" +
-                "<div class='bottom-margin-medium'>"  + sessionStorage.fromPath + " samt alla paths och alla secrets under " + sessionStorage.fromPath + " kommer att tas bort." +"</div>"+
-                "<div>" + "Vill du fortsätta?" + "</div>"+
-                "</div>" +
-                "<div class='modal-footer'>" +
-                "<button type='button' class='btn btn-primary' data-dismiss='modal'>"+ "Avbryt" + "</button>"+
-                "<button id='deleteButton' type='button' class='btn btn-default' data-dismiss='modal'>"+ "Ja" + "</button>"+
-                "</div>" +
-                "</div>" +
-                "</div>" +
-                "</div>").modal('show');
 
-        $('#deleteButton').on('click', function(){
-           handlePaths();
-        });
+         utilityModule.modalDialog({
+             icon: 'exclamation-triangle',
+             title: 'Delete path',
+             body:  "<div class='bottom-margin-medium'>" + "Vill du ta bort " +"<strong>" + sessionStorage.fromPath +"</strong>"+ "?" + "</div>" +
+                    "<div class='bottom-margin-medium'>" + sessionStorage.fromPath + " samt alla paths och alla secrets under " + sessionStorage.fromPath + " kommer att tas bort." +"</div>"+
+                    "<div>" + "Vill du fortsätta?" + "</div>",
+             buttons : [
+                 {
+                     title: 'Avbryt',
+                     type: 'primary',
+                     click: null
+                 },
+                 {
+                     title: 'Ja',
+                     type: 'default',
+                     click: function(){
+                         handlePaths();}
+                 }
+             ]
+
+         });
 
    }
 
@@ -317,8 +314,8 @@ $(document).ready(function(){
 
 
             //Load secrets view
-            var key = $("#" + data.node.a_attr.id).data('secretkey');
-            window.location.href = '/dashboard/secret?key='+ key;
+            //var key = $("#" + data.node.a_attr.id).data('secretkey');
+            //window.location.href = '/dashboard/secret?key='+ key;
         }
 
 
@@ -331,6 +328,8 @@ $(document).ready(function(){
        }
 
     });
+
+    
 
 });
 

@@ -42,7 +42,7 @@ $(document).ready(function(){
     });
 
 
-
+    $(document).off('change');
     $(document).on('change','#attachment', function() {
         var fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
         if($("#uploadFile").hasClass('d-none')){
@@ -59,8 +59,9 @@ $(document).ready(function(){
         $(this).height(this.scrollHeight);
     });
 
-
-    $("#createSecretSubmit").bind('click', function(event){
+    
+    $(document).off('click', "#createSecretSubmit");
+    $(document).on('click', "#createSecretSubmit", function(event){
         event.preventDefault();
 
         var selectedPath = $('[name="selectedPath"]').val();
@@ -80,14 +81,14 @@ $(document).ready(function(){
 
             },
             complete: function(){
-                saveSecret();
+                //saveSecret();
             }
         });
 
     });
 
-    function saveSecret(){
-        $('#saveSecretSubmit').bind('click', function(event){
+    $(document).off('click', '#saveSecretSubmit');
+    $(document).on('click', '#saveSecretSubmit', function(event){
             event.preventDefault();
 
             var key         = $('[name="key"]').val();
@@ -114,13 +115,68 @@ $(document).ready(function(){
 
         });
 
-    }
 
-    showSecret();
-
+    $(document).off('click', '#deleteSecretSubmit');
     $(document).on('click', '#deleteSecretSubmit', function(){
         event.preventDefault();
-        showModal();
+
+        var key = $('[name="key"]').val();
+
+        utilityModule.modalDialog({
+            icon: 'exclamation-triangle',
+            title: 'Delete secret',
+            body: 'Vill du ta bort ' + key + "?",
+            buttons : [
+                {
+                    title: 'Avbryt',
+                    type: 'primary',
+                    click: null
+                },
+                {
+                    title: 'Ja',
+                    type: 'default',
+                    click: function(){deleteSecret();}
+                }
+            ]
+        });
+    });
+    
+    $(document).off('click', '.jstree-leaf');
+    $(document).on('click', '.jstree-leaf', function(event){
+        event.preventDefault();
+
+        var key = $(this).find('a').data('secretkey');
+        console.log(key);
+        $.ajax({
+            type: "POST",
+            url: "/dashboard/secret",
+            data: { key : key},
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+        
+    });
+
+    $(document).off('click', ".secretsListLink");
+    $(document).on('click', ".secretsListLink", function(event){
+        event.preventDefault();
+        var key = $(this).data('key');
+
+        $.ajax({
+            type: "POST",
+            url: "/dashboard/secret",
+            data: { key : key},
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
     });
 
 
@@ -138,57 +194,7 @@ $(document).ready(function(){
         });
     }
 
-    function showSecret(){
-        $(".secretsListLink").bind('click', function(event){
-            event.preventDefault();
-            var key = $(this).data('key');
 
-            $.ajax({
-                type: "POST",
-                url: "/dashboard/secret",
-                data: { key : key},
-                success: function (data) {
-                    $('#dashboard').html(data);
-                },
-                error: function(data) {
-
-                }
-            });
-        });
-    }
-
-
-    function showModal(){
-
-        var key = $('[name="key"]').val();
-
-        $("<div class='modal' tabindex='-1' role='dialog' id='deleteModal'>" +
-                "<div class='modal-dialog modal-dialog-center' role='document'>" +
-                "<div class='modal-content'>" +
-                "<div class='modal-header'>" +
-                "<h3 class='modal-title'>" +
-                "<span class='fa fa-exclamation-triangle'></span>&nbsp;&nbsp;" +
-                "Delete secret" +
-                "</h3>" +
-                "</div>" +
-                "<div class='modal-body'>" +
-                "<div class='bottom-margin-medium'>" + "Vill du ta bort " + key + "?" + "</div>" +
-                "</div>" +
-                "<div class='modal-footer'>" +
-                "<button type='button' class='btn btn-primary' data-dismiss='modal'>"+ "Avbryt" + "</button>"+
-                "<button id='deleteButton' type='button' class='btn btn-default' data-dismiss='modal'>"+ "Ja" + "</button>"+
-                "</div>" +
-                "</div>" +
-                "</div>" +
-                "</div>").modal('show');
-
-        $('#deleteButton').on('click', function(){
-            deleteSecret();
-        });
-
-    }
-
-
-
+    
 
 });

@@ -16,6 +16,7 @@ class DashboardController {
     }*/
 
     def index() {
+
         String selectedPath = params?.selectedPath?:""
         session.selectedPath = selectedPath
         def paths = vaultRestService.getPaths(session.token)
