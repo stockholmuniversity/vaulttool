@@ -1,5 +1,7 @@
 $(document).ready(function(){
-    $("#userInfoToggle").on('click', function(e){
+
+    $(document).off('click', '#userInfoToggle');
+    $(document).on('click', '#userInfoToggle',function(e){
         $("#userInfoMenu").toggleClass('d-none');
         $("#userInfoToggle").toggleClass('userInfoToggled');
     });
