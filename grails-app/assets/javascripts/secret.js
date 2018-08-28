@@ -64,7 +64,7 @@ $(document).ready(function(){
     });
 
 
-    $(document).off('change');
+    $(document).off('change','#attachment');
     $(document).on('change','#attachment', function() {
         var fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
         if($("#uploadFile").hasClass('d-none')){
@@ -73,6 +73,18 @@ $(document).ready(function(){
         $('#fileSelected').html(fileName);
 
     });
+
+    $(document).off('change', '#importZipInputFileId');
+    $(document).on('change', '#importZipInputFileId', function() {
+        var fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
+        if($("#adminUploadFile").hasClass('d-none')){
+            $("#adminUploadFile").removeClass('d-none');
+        }
+        $('#adminFileSelected').html(fileName);
+
+    });
+
+
 
     $("[name='description']").height($("[name='description']").prop('scrollHeight'));
     
@@ -201,72 +213,44 @@ $(document).ready(function(){
         });
     });
     
-    $(document).off('click', '[name=administration]');
-    $(document).on('click', '[name=administration]', function(event){
+    $(document).off('click', '[name=admin]');
+    $(document).on('click', '[name=admin]', function(event){
         event.preventDefault();
-
-        $.ajax({
-            type: "POST",
-            url: "/admin/index",
-            
-            success: function (data) {
-                $('#dashboard').html(data);
-            },
-            error: function(data) {
-
-            }
-        });
+        showAdminViews('index');
     });
 
     $(document).off('click', '[name=user]');
     $(document).on('click', '[name=user]', function(event){
         event.preventDefault();
-
-        $.ajax({
-            type: "POST",
-            url: "/admin/user",
-
-            success: function (data) {
-                $('#dashboard').html(data);
-            },
-            error: function(data) {
-
-            }
-        });
+        showAdminViews('user');
     });
+
     $(document).off('click', '[name=policies]');
     $(document).on('click', '[name=policies]', function(event){
         event.preventDefault();
-
-        $.ajax({
-            type: "POST",
-            url: "/admin/policies",
-
-            success: function (data) {
-                $('#dashboard').html(data);
-            },
-            error: function(data) {
-
-            }
-        });
+        showAdminViews('policies');
     });
+    
     $(document).off('click', '[name=approles]');
     $(document).on('click', '[name=approles]', function(event){
         event.preventDefault();
-        
+        showAdminViews('approles');
+    });
+    
+
+    function showAdminViews(controllerFunction){
         $.ajax({
             type: "POST",
-            url: "/admin/approles",
+            url: "/admin/" + controllerFunction,
 
             success: function (data) {
-                console.log("foobar");
                 $('#dashboard').html(data);
             },
             error: function(data) {
 
             }
         });
-    });
+    }
 
     function deleteSecret(){
         var key = $('[name="key"]').val();
