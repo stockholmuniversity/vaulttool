@@ -1,4 +1,26 @@
 $(document).ready(function(){
+    $(document).off('click', '#userInfoToggle');
+    $(document).on('click', '#userInfoToggle',function(e){
+        $("#userInfoMenu").toggleClass('d-none');
+        $("#userInfoToggle").toggleClass('userInfoToggled');
+    });
+
+    //Scroll to top
+    var $scrollToTop = $('.scrollTop');
+    $(window).scroll(function(){
+        if($(this).scrollTop() > 800){
+            $scrollToTop.fadeIn();
+        } else {
+            $scrollToTop.fadeOut();
+        }
+    });
+
+    $scrollToTop.click(function(event){
+        event.preventDefault();
+        $('html, body').animate({scrollTop:0},800);
+    });
+
+
     $("#pwdCheckbox").change(function(){
 
         // Check the checkbox state
@@ -178,7 +200,73 @@ $(document).ready(function(){
             }
         });
     });
+    
+    $(document).off('click', '[name=administration]');
+    $(document).on('click', '[name=administration]', function(event){
+        event.preventDefault();
 
+        $.ajax({
+            type: "POST",
+            url: "/admin/index",
+            
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+    });
+
+    $(document).off('click', '[name=user]');
+    $(document).on('click', '[name=user]', function(event){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/user",
+
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+    });
+    $(document).off('click', '[name=policies]');
+    $(document).on('click', '[name=policies]', function(event){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/policies",
+
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+    });
+    $(document).off('click', '[name=approles]');
+    $(document).on('click', '[name=approles]', function(event){
+        event.preventDefault();
+        
+        $.ajax({
+            type: "POST",
+            url: "/admin/approles",
+
+            success: function (data) {
+                console.log("foobar");
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+    });
 
     function deleteSecret(){
         var key = $('[name="key"]').val();

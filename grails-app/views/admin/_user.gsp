@@ -1,14 +1,3 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
-<head>
-    <meta name="layout" content="main"/>
-    <title>${session.applicationName?:'Vaulttool'} - User Administration</title>
-    <asset:javascript src="inputrules.js"/>
-    <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
-</head>
-
-<body>
-    
     <div class="card bottom-margin-large">
         <div class="card-header">
             <h3>User Administration</h3>
@@ -70,6 +59,3 @@
             </g:each>
         </div>
     </div>
-
-</body>
-</html>

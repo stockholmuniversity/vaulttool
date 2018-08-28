@@ -16,6 +16,9 @@ class AdminController {
 
     def index() {
         List<Map<String,List<String>>> appRoles = vaultRestService.getAppRoles(session.token)
+        if(request.xhr){
+            return render(template: 'admin', model: [approles: appRoles])
+        }
         [approles: appRoles]
     }
 
@@ -42,6 +45,11 @@ class AdminController {
                 secretUsers << [secret: secret, userdata: vaultRestService.getUserSecret(session.token, secret)]
             }
         }
+
+        if(request.xhr){
+            return render(template: 'user', model: [secrets: secretUsers.sort{it.secret}])
+        }
+
         [secrets: secretUsers.sort{it.secret}]
     }
 
@@ -108,6 +116,10 @@ class AdminController {
     def policies() {
         List<String> paths = vaultRestService.getPaths(session.token)
         List<Map<String,String>> policies = vaultRestService.getPolicies(session.token)
+
+        if(request.xhr){
+            return render(template: 'policies', model: [policies: policies, paths: paths])
+        }
 
         [policies: policies, paths: paths]
     }
@@ -179,6 +191,10 @@ class AdminController {
     def approles() {
         List<Map<String,String>> policies = vaultRestService.getPolicies(session.token)
         List<Map<String,List<String>>> appRoles = vaultRestService.getAppRoles(session.token)
+
+        if(request.xhr){
+            return render(template: 'approles', model: [approles: appRoles, policies: policies])
+        }
 
         [approles: appRoles, policies: policies]
     }
