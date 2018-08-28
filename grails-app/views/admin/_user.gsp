@@ -3,7 +3,7 @@
             <h3>User Administration</h3>
         </div>
         <div class="card-body">
-            <g:form action="createUser">
+            <form name="createUserForm">
                 <div class="row bottom-margin-small">
                     <div class="col-md-3">
                         <label for="eppn"><strong>EPPN</strong></label>
@@ -23,11 +23,11 @@
                 <div class="row">
                     <div class="col-md-9">
                         <div class="pull-right">
-                            <g:submitButton class="btn btn-primary" name="submit" value="Create/Update User"/>
+                            <button id="createUserButton" class="btn btn-primary" value="Create/Update User">Create/Update User</button>
                         </div>
                     </div>
                 </div>
-            </g:form>
+            </form>
         </div>
 
     </div>
@@ -50,7 +50,7 @@
                     </div>
                     <div class="col-md-4 col-sm-6 col-6">
                         <div class="pull-right">
-                            <g:link class="btn btn-danger button-danger-small" action="deleteUser" params='[key: "${secret.secret}"]'>Delete</g:link>
+                            <g:link class="btn btn-danger button-danger-small deleteUserLink" params='[key: "${secret.secret}"]' data-key="${secret.secret}">Delete</g:link>
                         </div>
 
                     </div>

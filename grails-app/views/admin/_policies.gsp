@@ -14,7 +14,7 @@
             <h3>Policy Administration</h3>
         </div>
         <div class="card-body">
-            <g:form action="createPolicy">
+            <form name="createPolicyForm" id="createPolicyForm">
                 <div class="row bottom-margin-small">
                     <div class="col-md-2">
                         <label for="name"><strong>Policy name</strong></label>
@@ -54,9 +54,9 @@
                     </div>
                 </div>
                 <div class="pull-right">
-                    <g:submitButton class="btn btn-primary" name="submit" value="Create/Update Policy"/>
+                    <button id="createUpdatePolicyButton" class="btn btn-primary" value="Create/Update Policy">Create/Update Policy</button>
                 </div>
-            </g:form>
+            </form>
         </div>
     </div>
 
@@ -85,7 +85,7 @@
                         </div>
                     </div>
                     <div class="col-lg-1 col-md-2 col-sm-3 col-3">
-                        <g:link class="btn btn-danger button-danger-small pull-right" action="deletePolicy" params='[policy: "${policy.policy}"]'>Delete</g:link>
+                        <g:link class="btn btn-danger button-danger-small pull-right deletePolicyLink" params='[policy: "${policy.policy}"]' data-policy="${policy.policy}">Delete</g:link>
                     </div>
                 </div>
             </g:each>

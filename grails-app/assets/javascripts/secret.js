@@ -212,7 +212,89 @@ $(document).ready(function(){
             }
         });
     });
-    
+
+    $(document).off('click', '#createUserButton');
+    $(document).on('click', '#createUserButton', function(event){
+        event.preventDefault();
+
+        var eppn    = $('#eppn').val();
+        var sms     = $('#sms').val();
+        
+        $.ajax({
+            type: "POST",
+            url: "/admin/createUser",
+            data: { eppn    : eppn,
+                    sms     : sms},
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+       
+    });
+
+    $(document).off('click', '.deleteUserLink');
+    $(document).on('click', '.deleteUserLink', function(event){
+        event.preventDefault();
+
+        var key = $(this).data('key');
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/deleteUser",
+            data: { key : key},
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+
+    });
+
+    $(document).off('click', '#createUpdatePolicyButton');
+    $(document).on('click', '#createUpdatePolicyButton', function(event){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/createPolicy",
+            data : $("#createPolicyForm").serialize(),
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+
+    });
+
+    $(document).off('click', '.deletePolicyLink');
+    $(document).on('click', '.deletePolicyLink', function(event){
+        event.preventDefault();
+
+        var policy = $(this).data('policy');
+        
+        $.ajax({
+            type: "POST",
+            url: "/admin/deletePolicy",
+            data : {policy:policy},
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+
+    });
+
+
+
     $(document).off('click', '[name=admin]');
     $(document).on('click', '[name=admin]', function(event){
         event.preventDefault();
