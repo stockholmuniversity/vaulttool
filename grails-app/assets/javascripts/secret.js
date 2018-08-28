@@ -292,6 +292,45 @@ $(document).ready(function(){
         });
 
     });
+    
+
+    $(document).off('click', '#createUpdateApproleButton');
+    $(document).on('click', '#createUpdateApproleButton', function(event){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/createApprole",
+            data : $("#createApproleForm").serialize(),
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+
+    });
+
+    $(document).off('click', '.deleteApproleLink');
+    $(document).on('click', '.deleteApproleLink', function(event){
+        event.preventDefault();
+
+        var approle = $(this).data('approle');
+        $.ajax({
+            type: "POST",
+            url: "/admin/deleteApprole",
+            data : {approle:approle},
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+
+    });
+
 
 
 
@@ -307,8 +346,8 @@ $(document).ready(function(){
         showAdminViews('user');
     });
 
-    $(document).off('click', '[name=policies]');
-    $(document).on('click', '[name=policies]', function(event){
+    $(document).off('click', '[name=policiesAdmin]');
+    $(document).on('click', '[name=policiesAdmin]', function(event){
         event.preventDefault();
         showAdminViews('policies');
     });
@@ -321,6 +360,7 @@ $(document).ready(function(){
     
 
     function showAdminViews(controllerFunction){
+        console.log("foo");
         $.ajax({
             type: "POST",
             url: "/admin/" + controllerFunction,

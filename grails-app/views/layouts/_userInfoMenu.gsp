@@ -42,7 +42,7 @@
                 <g:link name="user" class="btn btn-default btn-sm btn-block">
                     Users
                 </g:link>
-                <g:link name="policies" class="btn btn-default btn-sm btn-block">
+                <g:link name="policiesAdmin" class="btn btn-default btn-sm btn-block">
                     Policies
                 </g:link>
                 <g:link name="approles" class="btn btn-default btn-sm btn-block">
