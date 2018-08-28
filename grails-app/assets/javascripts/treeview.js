@@ -271,7 +271,15 @@ $(document).ready(function(){
         } else {
             window.location.href = '/dashboard/index';
         }
-        
+
+        //Clear user info menu since then user has left admin and navigated to a secret
+        if($('#navTree').jstree(true).is_leaf(node)){
+            var buttons = $('.activeAdminBtn');
+            $.each(buttons, function(index,val){
+                $(val).removeClass('activeAdminBtn');
+            });
+        }
+
     });
 
     //Handle the display of active node

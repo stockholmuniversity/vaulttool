@@ -51,14 +51,16 @@
 
             </div>
 
-            <div class="btn-group-vertical btn-block btn-group">
-                <g:if test="${controllerName == 'admin'}">
-                    <g:link class="btn btn-default btn-sm btn-block" controller="dashboard" action="index">
+
+            <g:if test="${controllerName == 'admin'}">
+                <div class="btn-group-vertical btn-block btn-group">
+                    <g:link id="backToIndexLink" class="btn btn-default btn-sm btn-block">
                         <span class="fa fa-arrow-left"></span>
                         Tillbaka
                     </g:link>
-                </g:if>
-            </div>
+                </div>
+            </g:if>
+
         </g:if>
 
         <g:if test="${session.token != null}">

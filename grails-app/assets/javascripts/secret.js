@@ -180,7 +180,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         var key = $(this).find('a').data('secretkey');
-        console.log(key);
+        
         $.ajax({
             type: "POST",
             url: "/dashboard/secret",
@@ -331,42 +331,49 @@ $(document).ready(function(){
 
     });
 
-
-
+    $(document).off('click', '#backToIndexLink');
+    $(document).on('click', '#backToIndexLink', function(event){
+        event.preventDefault();
+        navigateViews('/dashboard/index', this);
+    });
 
     $(document).off('click', '[name=admin]');
     $(document).on('click', '[name=admin]', function(event){
         event.preventDefault();
-        showAdminViews('index');
+        navigateViews('/admin/index', this);
     });
 
     $(document).off('click', '[name=user]');
     $(document).on('click', '[name=user]', function(event){
         event.preventDefault();
-        showAdminViews('user');
+        navigateViews('/admin/user', this);
     });
 
     $(document).off('click', '[name=policiesAdmin]');
     $(document).on('click', '[name=policiesAdmin]', function(event){
         event.preventDefault();
-        showAdminViews('policies');
+        navigateViews('/admin/policies', this);
     });
     
     $(document).off('click', '[name=approles]');
     $(document).on('click', '[name=approles]', function(event){
         event.preventDefault();
-        showAdminViews('approles');
+        navigateViews('/admin/approles', this);
     });
     
 
-    function showAdminViews(controllerFunction){
-        console.log("foo");
+    function navigateViews(url, btn){
         $.ajax({
             type: "POST",
-            url: "/admin/" + controllerFunction,
-
+            url: url,
             success: function (data) {
                 $('#dashboard').html(data);
+
+                var buttons = $('.activeAdminBtn');
+                $.each(buttons, function(index,val){
+                    $(val).removeClass('activeAdminBtn');
+                });
+                $(btn).addClass('activeAdminBtn');
             },
             error: function(data) {
 

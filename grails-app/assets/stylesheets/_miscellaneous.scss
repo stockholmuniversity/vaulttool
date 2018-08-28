@@ -215,3 +215,15 @@ background: linear-gradient(to bottom,#beebff 0,#a8e4ff 100%) !important;
     border: none;
   }
 }
+
+.btn-group-vertical{
+
+  .btn-block:hover{
+    color: #FFFFFF;
+    background-color: #33597F;
+  }
+  .btn-block.activeAdminBtn{
+    color: #FFFFFF;
+    background-color: #33597F;
+  }
+}
