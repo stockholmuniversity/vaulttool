@@ -4,13 +4,9 @@ $(document).ready(function(){
         'core': {
             'check_callback': true,
             'data': {
-                'url': function(node){
-                    //console.log(node.id);
-                    return node.id === '#' ? '/dashboard/loadRootPaths': '/dashboard/loadChildren'
-                },
+                'url': function(node){return node.id === '#' ? '/dashboard/loadRootPaths': '/dashboard/loadChildren'},
                 'dataType': 'json',
-                'data': function(node){
-                    return {'id': node.id, 'foo':'foo'}
+                'data': function(node){return {'id': node.id}
                 }
             },
             'themes': {
