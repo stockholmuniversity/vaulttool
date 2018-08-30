@@ -125,20 +125,10 @@ $(document).ready(function(){
     $(document).on('click', '#saveSecretSubmit', function(event){
             event.preventDefault();
 
-            var key         = $('[name="key"]').val();
-            var title       = $('#title').val();
-            var description = $('#description').val();
-            var userName    = $('#username').val();
-            var password    = $('#password').val();
-
             $.ajax({
                 type: "POST",
                 url: "/dashboard/updateSecret",
-                data: { key         : key,
-                    path        : title,
-                    description : description,
-                    userName    : userName,
-                    password    : password},
+                data: $('#saveSecretForm').serialize(),
                 success: function (data) {
                     $('#dashboard').html(data);
                 },

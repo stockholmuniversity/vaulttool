@@ -3,7 +3,7 @@
             <h3>Secret</h3>
         </div>
         <div class="card-body">
-            <form name="saveSecretForm">
+            <form name="saveSecretForm" id="saveSecretForm">
                 <g:hiddenField name="key" value="${secret.key}"/>
 
                 <div class="row bottom-margin-small">
