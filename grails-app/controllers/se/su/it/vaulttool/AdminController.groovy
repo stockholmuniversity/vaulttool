@@ -28,6 +28,11 @@ class AdminController {
             String errorMsg = "Failed when trying to sudo. Error was: No group supplied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
+            
             redirect(action: "index")
             return
         }
@@ -373,6 +378,10 @@ class AdminController {
             String errorMsg = "Failed when trying to import zip-file. Error was: File not found in request."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(actionName: "index")
             return
         }

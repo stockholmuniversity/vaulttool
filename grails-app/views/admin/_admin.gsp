@@ -3,7 +3,7 @@
         <h3>Administration</h3>
     </div>
     <div class="card-body">
-        <g:form action="sudo">
+        <form  id="sudoForm" name="sudoForm">
             <div class="row">
                 <div class="col-sm-12">
                     <h4>
@@ -14,19 +14,19 @@
                         <g:select class="form-control" from="${approles*.appRole}" id="sudo" name="sudo" noSelection="${['':'Select group']}"/>
                     </div>
                     <div class="pull-right">
-                        <g:submitButton class="btn btn-primary" name="submit" value="Sudo now"/>
+                        <button id="sudoButton" class="btn btn-primary" name="sudoButton" value="Sudo now">Sudo now</button>
                     </div>
                 </div>
 
             </div>
-        </g:form>
+        </form>
     </div>
 </div>
 <div class="row bottom-margin-large">
     <div class="col-sm-12 col-lg-7 bottom-margin-medium">
         <div class="card">
             <div class="card-body">
-                <g:form action="importZip" method="post" enctype="multipart/form-data" useToken="false">
+                <form name="importZip" id="importZip" action="javascript:" enctype="multipart/form-data" method="post">
                     <div class="bottom-margin-small">
                         <h4>
                             <span class="fa fa-file-text"></span>
@@ -40,10 +40,10 @@
                         <span id="adminFileSelected"></span>
                     </div>
                     <div class="pull-right">
-                        <g:submitButton id="adminUploadFile" class="btn btn-primary d-none" name="submit" value="Import zip-file"/>
+                        <button id="adminUploadFile" class="btn btn-primary d-none" name="submit" value="Import zip-file">Import Zip-file</button>
                     </div>
                     <div class="clearfix"></div>
-                </g:form>
+                </form>
             </div>
         </div>
     </div>
@@ -56,7 +56,7 @@
                         Export secrets and users
                     </h4>
                 </div>
-                <g:link action="export" class="btn btn-primary">
+                <g:link name="exportLink" action="export" class="btn btn-primary">
                     Export secrets and users
                 </g:link>
             </div>

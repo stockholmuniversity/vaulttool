@@ -24,14 +24,12 @@
     </div>
 
 
-        <g:if test="${session.sudo != null}">
-            <div class="btn-group-vertical btn-block btn-group">
-                <g:link class="btn btn-default btn-sm btn-block" controller="public" action="disableSudo">
+            <div id="disableSudo" class="btn-group-vertical btn-block btn-group ${session.sudo != null?'':'d-none'}">
+                <g:link name="disableSudoModeLink" class="btn btn-default btn-sm btn-block">
                     <span class="fa fa-user"></span>
                     Disable Sudo Mode
                 </g:link>
             </div>
-        </g:if>
 
         <g:if test="${session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup}">
             <div class="btn-group-vertical btn-block btn-group">

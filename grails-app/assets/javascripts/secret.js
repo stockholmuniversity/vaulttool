@@ -67,8 +67,8 @@ $(document).ready(function(){
     $(document).off('change','#attachment');
     $(document).on('change','#attachment', function() {
         var fileName = $(this).val().replace(/C:\\fakepath\\/i, '');
-        if($("#uploadFile").hasClass('d-none')){
-            $("#uploadFile").removeClass('d-none');
+        if($("#uploadSecretFileButton").hasClass('d-none')){
+            $("#uploadSecretFileButton").removeClass('d-none');
         }
         $('#fileSelected').html(fileName);
 
@@ -210,6 +210,103 @@ $(document).ready(function(){
             error: function(data) {
 
             }
+        });
+    });
+
+    $(document).off('click', '#sudoButton');
+    $(document).on('click', '#sudoButton', function(event){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/admin/sudo",
+            data: $('#sudoForm').serialize(),
+            success: function (data) {
+                $('#dashboard').html(data);
+                if($('#disableSudo').hasClass('d-none')){
+                    $('#disableSudo').removeClass('d-none');
+                }
+            },
+            error: function(data) {
+                console.log(data.responseText);
+            }
+        });
+    });
+
+    $(document).off('click', '[name=disableSudoModeLink]');
+    $(document).on('click', '[name=disableSudoModeLink]', function(event){
+        event.preventDefault();
+        
+        $.ajax({
+            type: "POST",
+            url: "/public/disableSudo",
+            success: function (data) {
+                $('#dashboard').html(data);
+                if(!$('#disableSudo').hasClass('d-none')){
+                    $('#disableSudo').addClass('d-none');
+                }
+            },
+            error: function(data) { }
+        });
+
+    });
+
+    $(document).off('click', '#adminUploadFile');
+    $(document).on('click', '#adminUploadFile', function(event){
+        event.preventDefault();
+
+        var formData = new FormData($('#importZip')[0]);
+        $.ajax({
+            type: "POST",
+            url: "/admin/importZip",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                $('#dashboard').html(data);
+                if($('#disableSudo').hasClass('d-none')){
+                    $('#disableSudo').removeClass('d-none');
+                }
+            },
+            error: function(data) {
+                console.log(data.responseText);
+            }
+        });
+    });
+
+    $(document).off('click', '#uploadSecretFileButton');
+    $(document).on('click', '#uploadSecretFileButton', function(event){
+        event.preventDefault();
+
+        var formData = new FormData($('#uploadSecretFileForm')[0]);
+        
+        $.ajax({
+            type: "POST",
+            url: "/dashboard/upload",
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+                console.log(data.responseText);
+            }
+        });
+    });
+
+    $(document).off('click', '#deleteFileButton');
+    $(document).on('click', '#deleteFileButton', function(event){
+        event.preventDefault();
+
+        $.ajax({
+            type: "POST",
+            url: "/dashboard/deleteFile",
+            data: $('#deleteFileForm').serialize(),
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {}
         });
     });
 

@@ -305,6 +305,10 @@ class DashboardController {
             String errorMsg = "Failed when trying to upload file. Error was: No secret supplied"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(actionName: "index")
             return
         }
