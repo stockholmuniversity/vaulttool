@@ -157,6 +157,7 @@ $(document).ready(function(){
             success: function (data) {
                 $('#dashboard').html(data);
                 utilityModule.showMessage('info', 'Successfully created secret ' + selectedPath);
+                $("#navTree").jstree(true).refresh();
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
@@ -576,6 +577,7 @@ $(document).ready(function(){
             success: function (data) {
                 $('#dashboard').html(data);
                 utilityModule.showMessage('info', 'Successfully deleted secret ' + key);
+                $("#navTree").jstree(true).refresh();
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
