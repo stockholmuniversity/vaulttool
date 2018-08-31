@@ -97,6 +97,7 @@ $(document).ready(function(){
     $(document).off('click', "#createSecretSubmit");
     $(document).on('click', "#createSecretSubmit", function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         var selectedPath = $('[name="selectedPath"]').val();
         var path = $('#path').val();
@@ -110,13 +111,13 @@ $(document).ready(function(){
                 secret      : secret},
             success: function (data) {
                 $('#dashboard').html(data);
+                utilityModule.showMessage('info', 'Successfully created secret ' + selectedPath);
             },
             error: function(data) {
-
-            },
-            complete: function(){
-                //saveSecret();
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
             }
+
         });
 
     });
@@ -124,6 +125,9 @@ $(document).ready(function(){
     $(document).off('click', '#saveSecretSubmit');
     $(document).on('click', '#saveSecretSubmit', function(event){
             event.preventDefault();
+            utilityModule.hideMessage();
+
+            var key = $('[name="key"]').val();
 
             $.ajax({
                 type: "POST",
@@ -131,9 +135,11 @@ $(document).ready(function(){
                 data: $('#saveSecretForm').serialize(),
                 success: function (data) {
                     $('#dashboard').html(data);
+                    utilityModule.showMessage('info', 'Successfully updated secret ' + key);
                 },
                 error: function(data) {
-
+                    utilityModule.showMessage('error', data.responseText);
+                    console.log(data.responseText);
                 }
             });
 
@@ -143,6 +149,7 @@ $(document).ready(function(){
     $(document).off('click', '#deleteSecretSubmit');
     $(document).on('click', '#deleteSecretSubmit', function(){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         var key = $('[name="key"]').val();
 
@@ -168,6 +175,7 @@ $(document).ready(function(){
     $(document).off('click', '.jstree-leaf');
     $(document).on('click', '.jstree-leaf', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         var key = $(this).find('a').data('secretkey');
         
@@ -179,7 +187,8 @@ $(document).ready(function(){
                 $('#dashboard').html(data);
             },
             error: function(data) {
-
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
             }
         });
         
@@ -188,6 +197,8 @@ $(document).ready(function(){
     $(document).off('click', ".secretsListLink");
     $(document).on('click', ".secretsListLink", function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
+
         var key = $(this).data('key');
 
         $.ajax({
@@ -198,7 +209,8 @@ $(document).ready(function(){
                 $('#dashboard').html(data);
             },
             error: function(data) {
-
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
             }
         });
     });
@@ -206,6 +218,7 @@ $(document).ready(function(){
     $(document).off('click', '#sudoButton');
     $(document).on('click', '#sudoButton', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         $.ajax({
             type: "POST",
@@ -218,6 +231,7 @@ $(document).ready(function(){
                 }
             },
             error: function(data) {
+                utilityModule.showMessage('error', data.responseText);
                 console.log(data.responseText);
             }
         });
@@ -226,6 +240,7 @@ $(document).ready(function(){
     $(document).off('click', '[name=disableSudoModeLink]');
     $(document).on('click', '[name=disableSudoModeLink]', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
         
         $.ajax({
             type: "POST",
@@ -244,6 +259,7 @@ $(document).ready(function(){
     $(document).off('click', '#adminUploadFile');
     $(document).on('click', '#adminUploadFile', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         var formData = new FormData($('#importZip')[0]);
         $.ajax({
@@ -259,6 +275,7 @@ $(document).ready(function(){
                 }
             },
             error: function(data) {
+                utilityModule.showMessage('error', data.responseText);
                 console.log(data.responseText);
             }
         });
@@ -267,6 +284,7 @@ $(document).ready(function(){
     $(document).off('click', '#uploadSecretFileButton');
     $(document).on('click', '#uploadSecretFileButton', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         var formData = new FormData($('#uploadSecretFileForm')[0]);
         
@@ -280,6 +298,7 @@ $(document).ready(function(){
                 $('#dashboard').html(data);
             },
             error: function(data) {
+                utilityModule.showMessage('error', data.responseText);
                 console.log(data.responseText);
             }
         });
@@ -288,6 +307,9 @@ $(document).ready(function(){
     $(document).off('click', '#deleteFileButton');
     $(document).on('click', '#deleteFileButton', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
+
+        var key = $('[name="key"]').val();
 
         $.ajax({
             type: "POST",
@@ -295,14 +317,19 @@ $(document).ready(function(){
             data: $('#deleteFileForm').serialize(),
             success: function (data) {
                 $('#dashboard').html(data);
+                utilityModule.showMessage('info','Successfully updated secret ' + key);
             },
-            error: function(data) {}
+            error: function(data) {
+                utilityModule.showMessage('error',data.responseText);
+                console.log(data.responseText);
+            }
         });
     });
 
     $(document).off('click', '#createUserButton');
     $(document).on('click', '#createUserButton', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         var eppn    = $('#eppn').val();
         var sms     = $('#sms').val();
@@ -314,9 +341,11 @@ $(document).ready(function(){
                     sms     : sms},
             success: function (data) {
                 $('#dashboard').html(data);
+                utilityModule.showMessage('info','Successfully created/updated user ' + eppn);
             },
             error: function(data) {
-
+               utilityModule.showMessage('error', data.responseText);
+               console.log(data.responseText);
             }
         });
        
@@ -325,6 +354,7 @@ $(document).ready(function(){
     $(document).off('click', '.deleteUserLink');
     $(document).on('click', '.deleteUserLink', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         var key = $(this).data('key');
 
@@ -334,9 +364,11 @@ $(document).ready(function(){
             data: { key : key},
             success: function (data) {
                 $('#dashboard').html(data);
+                utilityModule.showMessage('info','Successfully deleted user ' + key);
             },
             error: function(data) {
-
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
             }
         });
 
@@ -345,6 +377,9 @@ $(document).ready(function(){
     $(document).off('click', '#createUpdatePolicyButton');
     $(document).on('click', '#createUpdatePolicyButton', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
+
+        var policy = $('#name').val();
 
         $.ajax({
             type: "POST",
@@ -352,9 +387,11 @@ $(document).ready(function(){
             data : $("#createPolicyForm").serialize(),
             success: function (data) {
                 $('#dashboard').html(data);
+                utilityModule.showMessage('info','Successfully created policy ' + policy);
             },
             error: function(data) {
-
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
             }
         });
 
@@ -363,6 +400,7 @@ $(document).ready(function(){
     $(document).off('click', '.deletePolicyLink');
     $(document).on('click', '.deletePolicyLink', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         var policy = $(this).data('policy');
         
@@ -372,9 +410,11 @@ $(document).ready(function(){
             data : {policy:policy},
             success: function (data) {
                 $('#dashboard').html(data);
+                utilityModule.showMessage('info', 'Successfully deleted policy ' + policy);
             },
             error: function(data) {
-
+                utilityModule.showMessage('error',data.responseText);
+                console.log(data.responseText);
             }
         });
 
@@ -384,6 +424,9 @@ $(document).ready(function(){
     $(document).off('click', '#createUpdateApproleButton');
     $(document).on('click', '#createUpdateApproleButton', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
+
+        var appRoleName = $('#name').val();
 
         $.ajax({
             type: "POST",
@@ -391,9 +434,11 @@ $(document).ready(function(){
             data : $("#createApproleForm").serialize(),
             success: function (data) {
                 $('#dashboard').html(data);
+                utilityModule.showMessage('info','Successfully created approle ' + appRoleName);
             },
             error: function(data) {
-
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
             }
         });
 
@@ -402,6 +447,7 @@ $(document).ready(function(){
     $(document).off('click', '.deleteApproleLink');
     $(document).on('click', '.deleteApproleLink', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
 
         var approle = $(this).data('approle');
         $.ajax({
@@ -410,9 +456,11 @@ $(document).ready(function(){
             data : {approle:approle},
             success: function (data) {
                 $('#dashboard').html(data);
+                utilityModule.showMessage('info','Successfully deleted approle ' + approle);
             },
             error: function(data) {
-
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
             }
         });
 
@@ -421,30 +469,35 @@ $(document).ready(function(){
     $(document).off('click', '#backToIndexLink');
     $(document).on('click', '#backToIndexLink', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
         navigateViews('/dashboard/index', this);
     });
 
     $(document).off('click', '[name=admin]');
     $(document).on('click', '[name=admin]', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
         navigateViews('/admin/index', this);
     });
 
     $(document).off('click', '[name=user]');
     $(document).on('click', '[name=user]', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
         navigateViews('/admin/user', this);
     });
 
     $(document).off('click', '[name=policiesAdmin]');
     $(document).on('click', '[name=policiesAdmin]', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
         navigateViews('/admin/policies', this);
     });
     
     $(document).off('click', '[name=approles]');
     $(document).on('click', '[name=approles]', function(event){
         event.preventDefault();
+        utilityModule.hideMessage();
         navigateViews('/admin/approles', this);
     });
     
@@ -477,8 +530,12 @@ $(document).ready(function(){
             data: { key : key},
             success: function (data) {
                 $('#dashboard').html(data);
+                utilityModule.showMessage('info', 'Successfully deleted secret ' + key);
             },
-            error: function(data) {}
+            error: function(data) {
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
+            }
         });
     }
 

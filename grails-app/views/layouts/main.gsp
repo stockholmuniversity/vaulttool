@@ -110,6 +110,12 @@
                         </div>
                     </div>
                 </g:if>
+                <g:else>
+                    <div id="message" class="alert alert-success d-none">
+                        <strong>Meddelande:</strong>
+                        <span class="messageText"></span>
+                    </div>
+                </g:else>
                 <div class="row">
                     <div class="col-sm-12">
                         <g:render template="/layouts/scrollTop"/>

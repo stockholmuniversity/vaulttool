@@ -65,6 +65,10 @@ class AdminController {
             String errorMsg = "Failed when trying to create/update user. Error was: No EPPN supplied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "user")
             return
         }
@@ -72,6 +76,10 @@ class AdminController {
             String errorMsg = "Failed when trying to create/update user. Error was: No Cellphone Number supplied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "user")
             return
         }
@@ -79,11 +87,15 @@ class AdminController {
         User entry = new User()
         entry.key       = key
         entry.smsNumber = sms
-        Map response = vaultRestService.putUserSecret(session.token, key, entry)
-        if(response) {
-            String errorMsg = "Failed when trying to create/update user ${key}. Error was: ${response.status?:'Unknown Error'}"
+        Map resp = vaultRestService.putUserSecret(session.token, key, entry)
+        if(resp) {
+            String errorMsg = "Failed when trying to create/update user ${key}. Error was: ${resp.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             return redirect(action: "user")
         }
         UserData userData   = UserData.findOrCreateByEppn(eppn)
@@ -101,15 +113,23 @@ class AdminController {
             String errorMsg = "Failed when trying to delete user. Error was: No secret supplied.}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "user")
             return
         }
 
-        Map response = vaultRestService.deleteUserSecret(session.token, key)
-        if(response) {
-            String errorMsg = "Failed when trying to delete user ${key}. Error was: ${response.status?:'Unknown Error'}"
+        Map resp = vaultRestService.deleteUserSecret(session.token, key)
+        if(resp) {
+            String errorMsg = "Failed when trying to delete user ${key}. Error was: ${resp.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             return redirect(action: "user")
         }
         UserData userData = UserData.findBySecretKey(key)
@@ -142,6 +162,10 @@ class AdminController {
             String errorMsg = "Failed when trying to create/update policy. Error was: No name supplied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "policies")
             return
         }
@@ -149,6 +173,10 @@ class AdminController {
             String errorMsg = "Failed when trying to create/update policy. Error was: No capabilities selected."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "policies")
             return
         }
@@ -159,11 +187,15 @@ class AdminController {
         policy.setName(policyName)
         policy.setPath(policyPath)
 
-        Map response = vaultRestService.putPolicy(session.token, policy)
-        if(response) {
-            String errorMsg = "Failed when trying to create/update policy ${policyName}. Error was: ${response.status?:'Unknown Error'}"
+        Map resp = vaultRestService.putPolicy(session.token, policy)
+        if(resp) {
+            String errorMsg = "Failed when trying to create/update policy ${policyName}. Error was: ${resp.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             return redirect(action: "policies")
         }
         flash.message = "Successfully created policy ${policyName}"
@@ -181,11 +213,15 @@ class AdminController {
             return
         }
 
-        Map response = vaultRestService.deletePolicy(session.token, policy)
-        if(response) {
-            String errorMsg = "Failed when trying to delete policy ${policy}. Error was: ${response.status?:'Unknown Error'}"
+        Map resp = vaultRestService.deletePolicy(session.token, policy)
+        if(resp) {
+            String errorMsg = "Failed when trying to delete policy ${policy}. Error was: ${resp.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             return redirect(action: "policies")
         }
         flash.message = "Successfully deleted policy ${policy}"
@@ -212,6 +248,10 @@ class AdminController {
             String errorMsg = "Failed when trying to create/update approle. Error was: No name supplied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "approles")
             return
         }
@@ -224,14 +264,22 @@ class AdminController {
             String errorMsg = "Failed when trying to create/update approle. Error was: No policy supplied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "approles")
             return
         }
-        Map response = vaultRestService.postApprole(session.token, appRoleName, policies)
-        if(response) {
-            String errorMsg = "Failed when trying to create/update approle ${appRoleName}. Error was: ${response.status?:'Unknown Error'}"
+        Map resp = vaultRestService.postApprole(session.token, appRoleName, policies)
+        if(resp) {
+            String errorMsg = "Failed when trying to create/update approle ${appRoleName}. Error was: ${resp.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             return redirect(action: "approles")
         }
 
@@ -245,15 +293,23 @@ class AdminController {
             String errorMsg = "Failed when trying to delete approle. Error was: No approle name supplied.}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "approles")
             return
         }
 
-        Map response = vaultRestService.deleteApprole(session.token, approle)
-        if(response) {
-            String errorMsg = "Failed when trying to delete approle ${approle}. Error was: ${response.status?:'Unknown Error'}"
+        Map resp = vaultRestService.deleteApprole(session.token, approle)
+        if(resp) {
+            String errorMsg = "Failed when trying to delete approle ${approle}. Error was: ${resp.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             return redirect(action: "approles")
         }
         flash.message = "Successfully deleted approle ${approle}"
