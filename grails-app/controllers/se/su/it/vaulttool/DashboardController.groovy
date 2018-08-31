@@ -158,6 +158,10 @@ class DashboardController {
             redirect(action: "index")
             return                      
         }
+        if(request.xhr){
+            return render(template: 'search', model: [metadatas: metaDatas])
+        }
+
         [metadatas: metaDatas]
 
     }

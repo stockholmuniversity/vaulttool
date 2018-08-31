@@ -93,7 +93,52 @@ $(document).ready(function(){
         $(this).height(this.scrollHeight);
     });
 
-    
+
+    $(document).off('click', "#cancelBtn");
+    $(document).on('click', "#cancelBtn", function(event){
+        event.preventDefault();
+        utilityModule.hideMessage();
+
+        $.ajax({
+            type: "POST",
+            url: "/dashboard/index",
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
+            }
+
+        });
+
+    });
+
+
+
+    $(document).off('click', "#searchQueryInputBtn");
+    $(document).on('click', "#searchQueryInputBtn", function(event){
+        event.preventDefault();
+        utilityModule.hideMessage();
+
+        $.ajax({
+            type: "POST",
+            url: "/dashboard/search",
+            data: $('#searchForm').serialize(),
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
+            }
+
+        });
+
+    });
+
+
+
     $(document).off('click', "#createSecretSubmit");
     $(document).on('click', "#createSecretSubmit", function(event){
         event.preventDefault();
