@@ -3,7 +3,7 @@
             <h3>Secret</h3>
         </div>
         <div class="card-body">
-            <form name="saveSecretForm">
+            <form name="saveSecretForm" id="saveSecretForm">
                 <g:hiddenField name="key" value="${secret.key}"/>
 
                 <div class="row bottom-margin-small">
@@ -93,7 +93,7 @@
                     Upload file
                 </h4>
             </div>
-            <g:form action="upload" method="post" enctype="multipart/form-data" useToken="false">
+            <form id="uploadSecretFileForm" name="uploadSecretFileForm" action="javascript:" enctype="multipart/form-data" method="post">
                 <g:hiddenField name="key" value="${secret.key}"/>
                 <div class="row bottom-margin-small">
                     <div class="col-sm-12">
@@ -108,11 +108,10 @@
 
                 <div class="row bottom-margin-medium">
                     <div class="col-sm-12">
-                        <g:submitButton id="uploadFile" class="btn btn-primary d-none" name="submit" value="Upload file"/>
+                        <button id="uploadSecretFileButton" class="btn btn-primary d-none" name="uploadSecretFileButton" value="Upload file">Upload file</button>
                     </div>
                 </div>
-            </g:form>
-            
+            </form>
             <g:if test="${metadata.fileName && secret.binaryData}">
                 <div class="bottom-margin-small breakWithEllipsis">
                     <span class="fa fa-file"></span>&nbsp;${metadata.fileName}
@@ -126,10 +125,10 @@
                     </div>
                 </g:form>
                 <div class="pull-left">
-                    <g:form action="deleteFile">
+                    <form id="deleteFileForm" name="deleteFileForm">
                         <g:hiddenField name="key" value="${secret.key}"/>
-                        <g:submitButton class="btn btn-danger" name="submit" value="Delete file"/>
-                    </g:form>
+                        <button id="deleteFileButton" class="btn btn-danger" name="deleteFileButton" value="Delete file">Delete file</button>
+                    </form>
                 </div>
                 <div class="clearfix"></div>
             </g:if>
