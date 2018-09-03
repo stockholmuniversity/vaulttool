@@ -9,7 +9,7 @@
             </strong>
         </div>
         <div>
-            Current group: ${session?.group?:"Unknown Group"}
+            Current group: <span id="currentGroup">${session?.group?:"Unknown Group"}</span>
         </div>
    </div>
 

@@ -261,10 +261,13 @@ $(document).ready(function(){
         });
     });
 
+    var origGroup = $('#sudo').val();
+
     $(document).off('click', '#sudoButton');
     $(document).on('click', '#sudoButton', function(event){
         event.preventDefault();
         utilityModule.hideMessage();
+        var group = $('#sudo').val();
 
         $.ajax({
             type: "POST",
@@ -275,6 +278,7 @@ $(document).ready(function(){
                 if($('#disableSudo').hasClass('d-none')){
                     $('#disableSudo').removeClass('d-none');
                 }
+                $('#currentGroup').html(group);
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
@@ -296,6 +300,7 @@ $(document).ready(function(){
                 if(!$('#disableSudo').hasClass('d-none')){
                     $('#disableSudo').addClass('d-none');
                 }
+                $('#currentGroup').html(origGroup);
             },
             error: function(data) { }
         });
