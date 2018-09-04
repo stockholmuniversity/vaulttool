@@ -1,5 +1,5 @@
 <div id="userInfoToggle" class="pull-right pointer">
-    <span class="fa fa-user fa-2x fa2xSmaller"></span>
+    <span id="userInfoToggleIcon" class="fa fa-user fa-2x fa2xSmaller"></span>
 </div>
 <div id="userInfoMenu" class="box d-none">
     <div class="bottom-margin-medium">
