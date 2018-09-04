@@ -1,8 +1,17 @@
 $(document).ready(function(){
-    $(document).off('click', '#userInfoToggle');
-    $(document).on('click', '#userInfoToggle',function(e){
-        $("#userInfoMenu").toggleClass('d-none');
-        $("#userInfoToggle").toggleClass('userInfoToggled');
+
+    $(document).on('mouseup', function(event){
+        var $userInfoMenu       = $('#userInfoMenu');
+        var $userInfoToggle     = $("#userInfoToggle");
+        var $userInfoToggleIcon = $('#userInfoToggleIcon');
+
+        if($userInfoToggleIcon.is(event.target)){
+            $userInfoMenu.toggleClass('d-none');
+            $userInfoToggle.toggleClass('userInfoToggled');
+        } else if (!$userInfoToggleIcon.is(event.target) && !$userInfoMenu.is(event.target) && $userInfoMenu.has(event.target).length === 0) {
+            $userInfoMenu.addClass('d-none');
+            $userInfoToggle.removeClass('userInfoToggled');
+        }
     });
 
     //Scroll to top

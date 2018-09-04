@@ -83,7 +83,7 @@
              </g:if>
 
             <div id="main-column" class="col">
-                <g:if test="${flash.error}">
+                %{--<g:if test="${flash.error}">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="alert alert-danger">${flash.error}</div>
@@ -110,12 +110,12 @@
                         </div>
                     </div>
                 </g:if>
-                <g:else>
-                    <div id="message" class="alert alert-success d-none">
+                <g:else>--}%
+                    <div id="messageDiv" class="alert alert-success d-none">
                         <strong>Meddelande:</strong>
-                        <span class="messageText"></span>
+                        <span id="messageText"></span>
                     </div>
-                </g:else>
+                %{--</g:else>--}%
                 <div class="row">
                     <div class="col-sm-12">
                         <g:render template="/layouts/scrollTop"/>

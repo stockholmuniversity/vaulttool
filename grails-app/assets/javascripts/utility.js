@@ -1,38 +1,38 @@
 var utilityModule = (function ($) {
 
-    var $messageDiv = $('#message');
-    var $messageText = $('#messageText');
-
-
-    var showMessage = function(type, message){
+     function setClasses(type){
 
         if (type && type === "info") {
-            $("#message").removeClass(function (index, css) {
+            $('#messageDiv').removeClass(function (index, css) {
                 return (css.match(/(^|\s)alert\S+/g) || []).join(' ');
             }).addClass("alert alert-success");
         } else if (type && type === "warning") {
-            $("#message").removeClass(function (index, css) {
+            $('#messageDiv').removeClass(function (index, css) {
                 return (css.match(/(^|\s)alert\S+/g) || []).join(' ');
             }).addClass("alert alert-warning");
         } else if (type && type === "error") {
-            $("#message").removeClass(function (index, css) {
+            $('#messageDiv').removeClass(function (index, css) {
                 return (css.match(/(^|\s)alert\S+/g) || []).join(' ');
             }).addClass("alert alert-danger");
         } else {
-            $("#message").removeClass(function (index, css) {
+            $('#messageDiv').removeClass(function (index, css) {
                 return (css.match(/(^|\s)alert\S+/g) || []).join(' ');
             }).addClass("alert alert-success");
         }
+     }
 
-        $messageText.text(message);
-        if($messageDiv.hasClass('d-none')){
-            $messageDiv.removeClass('d-none')
+    var showMessage = function(type, message){
+        setClasses(type);
+        $('#messageText').text(message);
+
+        if($('#messageDiv').hasClass('d-none')){
+            $('#messageDiv').removeClass('d-none');
         }
     };
 
     var hideMessage = function(){
-        if(!$messageDiv.hasClass('d-none')){
-            $messageDiv.addClass('d-none')
+        if(!$('#messageDiv').hasClass('d-none')){
+            $('#messageDiv').addClass('d-none');
         }
     };
 
@@ -82,6 +82,7 @@ var utilityModule = (function ($) {
         modalDialog: modalDialog,
         showMessage: showMessage,
         hideMessage: hideMessage
+
     }
 
 }(jQuery));
