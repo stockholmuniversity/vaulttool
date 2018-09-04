@@ -105,8 +105,10 @@ $(document).ready(function(){
             url: "/public/setGroup",
             data: $('#setGroupForm').serialize(),
             success: function (data) {
-                $('#dashboard').html(data);
-                $('#currentGroup').html(group);
+                //$('#dashboard').html(data);
+                window.location.href = '/';
+
+                //$('#currentGroup').html(group);
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
@@ -285,7 +287,7 @@ $(document).ready(function(){
         });
     });
 
-    var origGroup = $('#sudo').val();
+    //var origGroup = $('#sudo').val();
 
     $(document).off('click', '#sudoButton');
     $(document).on('click', '#sudoButton', function(event){
@@ -302,7 +304,8 @@ $(document).ready(function(){
                 if($('#disableSudo').hasClass('d-none')){
                     $('#disableSudo').removeClass('d-none');
                 }
-                $('#currentGroup').html(group);
+                window.location.href = '/';
+                //$('#currentGroup').html(group);
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
@@ -324,7 +327,8 @@ $(document).ready(function(){
                 if(!$('#disableSudo').hasClass('d-none')){
                     $('#disableSudo').addClass('d-none');
                 }
-                $('#currentGroup').html(origGroup);
+                window.location.href = '/';
+                //$('#currentGroup').html(origGroup);
             },
             error: function(data) { }
         });
