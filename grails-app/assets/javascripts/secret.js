@@ -98,12 +98,15 @@ $(document).ready(function(){
         event.preventDefault();
         utilityModule.hideMessage();
 
+        var group = $('[name="grouo"]').val();
+
         $.ajax({
             type: "POST",
             url: "/public/setGroup",
             data: $('#setGroupForm').serialize(),
             success: function (data) {
                 $('#dashboard').html(data);
+                $('#currentGroup').html(group);
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
