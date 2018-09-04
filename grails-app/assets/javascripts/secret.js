@@ -93,6 +93,27 @@ $(document).ready(function(){
         $(this).height(this.scrollHeight);
     });
 
+    $(document).off('change', "[name=group]");
+    $(document).on('change', "[name=group]", function(event){
+        event.preventDefault();
+        utilityModule.hideMessage();
+
+        $.ajax({
+            type: "POST",
+            url: "/public/setGroup",
+            data: $('#setGroupForm').serialize(),
+            success: function (data) {
+                $('#dashboard').html(data);
+            },
+            error: function(data) {
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
+            }
+
+        });
+
+    });
+
 
     $(document).off('click', "#cancelBtn");
     $(document).on('click', "#cancelBtn", function(event){

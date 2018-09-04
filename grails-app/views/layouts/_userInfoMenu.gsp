@@ -17,9 +17,9 @@
     <div class="bottom-margin-xsmall">
 
         <g:if test="${session.groups != null && session.groups.size() > 1 && !session.sudo}">
-            <g:form style="" controller="public" action="setGroup" method="post">
-                <g:select onchange="submit();" class="form-control input-sm" name="group" from="${session.groups}" value="${session?.group?:""}"/>
-            </g:form>
+            <form id="setGroupForm" name="setGroupForm">
+                <g:select class="form-control input-sm" name="group" from="${session.groups}" value="${session?.group?:""}"/>
+            </form>
         </g:if>
     </div>
 
