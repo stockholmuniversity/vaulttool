@@ -98,17 +98,12 @@ $(document).ready(function(){
         event.preventDefault();
         utilityModule.hideMessage();
 
-        var group = $('[name="group"]').val();
-
         $.ajax({
             type: "POST",
             url: "/public/setGroup",
             data: $('#setGroupForm').serialize(),
             success: function (data) {
-                //$('#dashboard').html(data);
                 window.location.href = '/';
-
-                //$('#currentGroup').html(group);
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
@@ -287,14 +282,11 @@ $(document).ready(function(){
         });
     });
 
-    //var origGroup = $('#sudo').val();
-
     $(document).off('click', '#sudoButton');
     $(document).on('click', '#sudoButton', function(event){
         event.preventDefault();
         utilityModule.hideMessage();
-        var group = $('#sudo').val();
-
+        
         $.ajax({
             type: "POST",
             url: "/admin/sudo",
@@ -305,7 +297,6 @@ $(document).ready(function(){
                     $('#disableSudo').removeClass('d-none');
                 }
                 window.location.href = '/';
-                //$('#currentGroup').html(group);
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
@@ -328,7 +319,6 @@ $(document).ready(function(){
                     $('#disableSudo').addClass('d-none');
                 }
                 window.location.href = '/';
-                //$('#currentGroup').html(origGroup);
             },
             error: function(data) { }
         });

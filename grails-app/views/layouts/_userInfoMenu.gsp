@@ -30,7 +30,7 @@
                     Disable Sudo Mode
                 </g:link>
             </div>
-        <g:hiddenField name="isAdmin" value="${session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup}"/>
+        
         <g:if test="${session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup}">
             <div class="btn-group-vertical btn-block btn-group">
 
