@@ -98,7 +98,7 @@ $(document).ready(function(){
         event.preventDefault();
         utilityModule.hideMessage();
 
-        var group = $('[name="grouo"]').val();
+        var group = $('[name="group"]').val();
 
         $.ajax({
             type: "POST",
