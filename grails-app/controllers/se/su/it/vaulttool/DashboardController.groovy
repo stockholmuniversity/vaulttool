@@ -1,12 +1,22 @@
 package se.su.it.vaulttool
 
+import grails.converters.JSON
 import org.springframework.web.multipart.MultipartFile
 
 class DashboardController {
     def vaultRestService
+    def vaultService
     def utilityService
 
+    /*def test(){
+        def nisse = vaultService.deletePath(session.token, "testgroup/scrum3/")
+        def byteArray = vaultService.copyPath(session.token, "systemutveckling/scrum3/")
+        def result = vaultService.pastePath(session.token, "testgroup", byteArray)
+        redirect(action: "index")
+    }*/
+
     def index() {
+
         String selectedPath = params?.selectedPath?:""
         session.selectedPath = selectedPath
         def paths = vaultRestService.getPaths(session.token)
@@ -20,8 +30,115 @@ class DashboardController {
             }
         }
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
+
+        if(request.xhr){
+            return render(template: 'overview', model: [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData])
+        }
         [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
     }
+
+    def loadRootPaths(){
+        def paths =  vaultRestService.getPaths(session.token)
+
+        def secrets = vaultRestService.listSecrets(session.token, "")
+
+        def rootNodes = []
+
+        def leafs = []
+        def nodes = []
+        def node = null
+
+        def isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+        
+        secrets.each {secret ->
+
+            if(secret.endsWith("/")){
+                node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), admin: isAdmin, type: 'pathNode', 'children': true, 'icon': 'fa fa-folder']
+                nodes.add(node)
+            }  else {
+                node =  ['id': 'leaf_' + secret, 'text': secret, admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': secret]]
+                leafs.add(node)
+            }
+            rootNodes = nodes + leafs
+         }
+
+        def rootNode = [['id': 'root', 'text': 'Root', admin: isAdmin, type: 'rootNode','children': rootNodes, 'icon':'fa fa-home fa-lg','state':['opened': true]]]
+
+        return render(rootNode as JSON)
+    }
+
+
+    def loadChildren(){
+        def secrets = vaultRestService.listSecrets(session.token, params['id'].toString().replaceAll("_","/"))
+        def childNodes = []
+
+        def isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+
+        secrets.each {secret ->
+            def node = null
+            if(secret.endsWith("/")){
+                node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, 'type':'pathNode', 'children': true, 'icon' : 'fa fa-folder']
+             }  else {
+                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
+            }
+
+            childNodes.add(node)
+        }
+        return render (childNodes as JSON)
+    }
+
+    def deletePath(String path){
+        String pathToDelete = params['path'] as String
+        
+        if(pathToDelete.empty){
+            redirect(actionName: "index")
+            return
+        }
+
+        Map<String, String> result = vaultService.deletePath(session.token, pathToDelete)
+        return render (result as JSON)
+    }
+
+    def copyPastePath() {
+        String path = params['path'] as String
+        String destination = params['destination'] as String
+
+        if(path.empty){
+            redirect(actionName: "index")
+            return
+        }
+
+        Byte[] zipByteArray = vaultService.copyPath(session.token, path)
+        Map<String, String> result = vaultService.pastePath(session.token, destination, zipByteArray)
+
+        return render (result as JSON)
+
+    }
+
+    def handlePaths(){
+        String fromPath = params.fromPath ? params.fromPath as String : ''
+        String toPath = params.toPath ? params.toPath as String : ''
+        Boolean deletePath = params.deletePath ? true : false
+
+        Byte[] zipByteArray = []
+        Map<String, String> result = [:]
+        
+        if(fromPath && toPath){
+            zipByteArray = vaultService.copyPath(session.token, fromPath)
+            result = vaultService.pastePath(session.token, toPath, zipByteArray)
+
+            if(deletePath){
+                result << vaultService.deletePath(session.token, fromPath)
+            }
+        }
+
+        if(fromPath && !toPath){
+            result << vaultService.deletePath(session.token, fromPath)
+        }
+
+        return render (result as JSON)
+    }
+
     def search() {
         String secret = params?.secret?:""
         if(secret.empty) {
@@ -32,10 +149,19 @@ class DashboardController {
 
         List<MetaData> metaDatas = MetaData.findAllBySecretKeyInList(keyTree).findAll{it.secretKey.contains(secret) || (it.title?it.title.contains(secret):false) || (it.description?it.description.contains(secret):false)}
         if(!metaDatas){
-            flash.warning ='No secrets found'
+            String errorMsg = 'No secrets found'
+            flash.warning = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "index")
-            return
+            return                      
         }
+        if(request.xhr){
+            return render(template: 'search', model: [metadatas: metaDatas])
+        }
+
         [metadatas: metaDatas]
 
     }
@@ -46,27 +172,39 @@ class DashboardController {
             String errorMsg = "Failed when trying to read secret. Error was: No key supplied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "index")
             return
         }
 
-        Expando response = vaultRestService.getSecret(session.token, key)
-        if(response.status) {
+        Expando resp = vaultRestService.getSecret(session.token, key)
+        if(resp.status) {
             String errorMsg = "Failed when trying to read secret ${key}. Error was: Permission denied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "index")
             return
-        } else if(!response.entry) {
+        } else if(!resp.entry) {
             String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "index")
             return
         }
 
         MetaData metaData = MetaData.findBySecretKey(key)
-        [secret: response.entry, metadata: metaData]
+        return render (template: 'secret', model: [secret: resp.entry, metadata: metaData])
     }
 
     def updateSecret() {
@@ -75,20 +213,32 @@ class DashboardController {
             String errorMsg = "Failed when trying to update secret. Error was: No key supplied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(actionName: "index")
             return
         }
-        Expando response = vaultRestService.getSecret(session.token, key)
-        if(response.status) {
-            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
+        Expando resp = vaultRestService.getSecret(session.token, key)
+        if(resp.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${resp.status}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "index")
             return
-        } else if(!response.entry) {
+        } else if(!resp.entry) {
             String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "index")
             return
         }
@@ -97,16 +247,20 @@ class DashboardController {
         metaData.title          = params?.title?:""
         metaData.description    = params?.description?:""
 
-        Entry entry = response.entry
+        Entry entry = resp.entry
         entry.key           = key
         entry.userName      = params?.userName?:""
         entry.pwd           = params?.password?:""
 
-        Map response2 = vaultRestService.putSecret(session.token, key, entry)
-        if(response2) {
-            String errorMsg = "Failed when trying to update secret ${key}. Error was: ${response2.status?:'Unknown Error'}"
+        Map resp2 = vaultRestService.putSecret(session.token, key, entry)
+        if(resp2) {
+            String errorMsg = "Failed when trying to update secret ${key}. Error was: ${resp2.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
         } else {
             flash.message = "Successfully updated secret ${key}"
             metaData.save(flush: true)
@@ -122,6 +276,10 @@ class DashboardController {
             String errorMsg = "Failed when trying to create secret. Error was: No key supplied."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(actionName: "index")
             return
         }
@@ -135,16 +293,24 @@ class DashboardController {
             String errorMsg = "Failed when trying to create secret ${key}. Error was: Secret already exist"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(actionName: "index")
             return
         }
         Entry entry = new Entry()
         entry.key = key
-        Map response = vaultRestService.putSecret(session.token, key, entry)
-        if(response) {
-            String errorMsg = "Failed when trying to create secret ${key}. Error was: ${response.status?:'Unknown Error'}"
+        Map resp = vaultRestService.putSecret(session.token, key, entry)
+        if(resp) {
+            String errorMsg = "Failed when trying to create secret ${key}. Error was: ${resp.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             return redirect(action: "index")
         }
         MetaData metaData = new MetaData()
@@ -167,15 +333,21 @@ class DashboardController {
             return
         }
 
-        Map response = vaultRestService.deleteSecret(session.token, key)
-        if(response) {
-            String errorMsg = "Failed when trying to delete secret ${key}. Error was: ${response.status?:'Unknown Error'}"
+        Map resp = vaultRestService.deleteSecret(session.token, key)
+        if(resp) {
+            String errorMsg = "Failed when trying to delete secret ${key}. Error was: ${resp.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             return redirect(action: "secret", params: [key: key])
         }
         MetaData metaData = MetaData.findBySecretKey(key)
-        metaData.delete()
+        if(metaData) {
+            metaData.delete(flush: true)
+        }
         flash.message = "Successfully deleted secret ${key}"
         redirect(actionName: "index")
     }
@@ -186,18 +358,22 @@ class DashboardController {
             String errorMsg = "Failed when trying to upload file. Error was: No secret supplied"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(actionName: "index")
             return
         }
 
-        Expando response = vaultRestService.getSecret(session.token, key)
-        if(response.status) {
-            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
+        Expando resp = vaultRestService.getSecret(session.token, key)
+        if(resp.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${resp.status}"
             log.error(errorMsg)
             flash.error = errorMsg
             redirect(action: "index")
             return
-        } else if(!response.entry) {
+        } else if(!resp.entry) {
             String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
             log.error(errorMsg)
             flash.error = errorMsg
@@ -214,11 +390,11 @@ class DashboardController {
             return
         }
 
-        Entry entry = response.entry
+        Entry entry = resp.entry
         entry.binaryData = f.bytes
-        Map response2 = vaultRestService.putSecret(session.token, key, entry)
-        if(response2) {
-            String errorMsg = "Failed when trying to upload file for secret ${key}. Error was: ${response2.status?:'Unknown Error'}"
+        Map resp2 = vaultRestService.putSecret(session.token, key, entry)
+        if(resp2) {
+            String errorMsg = "Failed when trying to upload file for secret ${key}. Error was: ${resp2.status?:'Unknown Error'}"
             log.error(errorMsg)
             flash.error = errorMsg
         } else {
@@ -240,21 +416,21 @@ class DashboardController {
             return
         }
 
-        Expando response2 = vaultRestService.getSecret(session.token, key)
-        if(response2.status) {
-            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response2.status}"
+        Expando resp2 = vaultRestService.getSecret(session.token, key)
+        if(resp2.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${resp2.status}"
             log.error(errorMsg)
             flash.error = errorMsg
             redirect(action: "index")
             return
-        } else if(!response2.entry) {
+        } else if(!resp2.entry) {
             String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
             log.error(errorMsg)
             flash.error = errorMsg
             redirect(action: "index")
             return
         }
-        Entry entry = response2.entry
+        Entry entry = resp2.entry
         MetaData metaData = MetaData.findBySecretKey(key)
         response.setContentType("application/octet-stream")
         response.setHeader("Content-disposition", "filename=\"${metaData.fileName}\"")
@@ -268,21 +444,33 @@ class DashboardController {
             String errorMsg = "Failed when trying to delete file. Error was: No secret supplied"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(actionName: "index")
             return
         }
 
-        Expando response = vaultRestService.getSecret(session.token, key)
-        if(response.status) {
-            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${response.status}"
+        Expando resp = vaultRestService.getSecret(session.token, key)
+        if(resp.status) {
+            String errorMsg = "Failed when trying to read secret ${key}. Error was: ${resp.status}"
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "index")
             return
-        } else if(!response.entry) {
+        } else if(!resp.entry) {
             String errorMsg = "Failed when trying to read secret ${key}. Error was: secret not found."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "index")
             return
         }
@@ -291,20 +479,28 @@ class DashboardController {
             String errorMsg = "Failed when trying to read metadata for secret ${key}. Error was: metadata not found."
             log.error(errorMsg)
             flash.error = errorMsg
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             redirect(action: "index")
             return
         }
         metaData.secretKey      = key
         metaData.fileName       = ""
 
-        Entry entry = response.entry
+        Entry entry = resp.entry
         entry.key           = key
         entry.binaryData    = "".getBytes()
 
-        Map response2 = vaultRestService.putSecret(session.token, key, entry)
-        if(response2) {
-            String errorMsg = "Failed when trying to update secret ${key}. Error was: ${response2.status?:'Unknown Error'}"
+        Map resp2 = vaultRestService.putSecret(session.token, key, entry)
+        if(resp2) {
+            String errorMsg = "Failed when trying to update secret ${key}. Error was: ${resp2.status?:'Unknown Error'}"
             log.error(errorMsg)
+            if(request.xhr){
+                response.status = 400
+                return render(errorMsg)
+            }
             flash.error = errorMsg
         } else {
             flash.message = "Successfully updated secret ${key}"

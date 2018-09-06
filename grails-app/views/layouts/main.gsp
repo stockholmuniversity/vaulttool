@@ -14,8 +14,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
     <asset:stylesheet src="application.css"/>
-    <asset:javascript src="application.js"/>
     <asset:stylesheet src="font-awesome.min.css"/>
+    <asset:stylesheet src="default/style.min.css"/>
+    <asset:javascript src="application.js"/>
+    <asset:javascript src="jstree.min.js"/>
+    <asset:javascript src="treeview.js"/>
+    <asset:javascript src="secret.js"/>
+    <asset:javascript src="utility.js"/>
+
     <g:layoutHead/>
 </head>
 <body>
@@ -56,48 +62,28 @@
     </header>
 
     <div class="container">
-        <div class="row">
-            <g:if test="${controllerName == 'admin'}">
-                <div id="nav-column" class="col-md-3 bottom-margin-large">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <g:link action="index" class="menuNav ${(actionName == 'index') ? 'active':''}">
-                                <span class="fa fa-home"></span>
-                                Start
-                            </g:link>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <g:link action="user" class="menuNav ${(actionName == 'user') ? 'active':''}">
-                                <span class="fa fa-users"></span>
-                                Users
-                            </g:link>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <g:link action="policies" class="menuNav ${(actionName == 'policies') ? 'active':''}">
-                                <span class="fa fa-file-text-o"></span>
-                                Policies
-                            </g:link>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <g:link action="approles" class="menuNav ${(actionName == 'approles') ? 'active':''}">
-                                <span class="fa fa-key"></span>
-                                Application Roles
-                            </g:link>
-                        </div>
-                    </div>
-                    <div class="row">
 
-                    </div>
-                </div>
-            </g:if>
-            <div id="main-column" class="${(controllerName == 'admin') ? 'col-md-9' : 'col-md-12' }">
-                <g:if test="${flash.error}">
+
+        <div class="row">
+             <g:if test="${controllerName != 'public'}">
+                 <div id="nav-column" class="col-lg-auto bottom-margin-large" style="background-color: #33597F; padding-left: 0; padding-right: 0; padding-top: 0;">
+                     <div class="bottom-margin-medium" style="margin-bottom: 10px; padding-top: 5px; padding-bottom: 5px; background-color: #E0E0E0;">
+                         <form id="searchForm" name="searchForm">
+                             <div class="input-group" style="padding-left: 5px; padding-right: 5px">
+                                 <input id="searchQueryInput" class="form-control search-query-input" type="text" maxlength="60" name="secret" value="" placeholder="Path, key, title or description"/>
+                                 <button id="searchQueryInputBtn" class="btn search-query input-group-append" name="submit" value="Search secret">
+                                     <span class="fa fa-search fa-lg"></span>
+                                 </button>
+                             </div>
+                         </form>
+                     </div>
+                     <div id="navTree">
+                     </div>
+                 </div>
+             </g:if>
+
+            <div id="main-column" class="col">
+                %{--<g:if test="${flash.error}">
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="alert alert-danger">${flash.error}</div>
@@ -124,6 +110,12 @@
                         </div>
                     </div>
                 </g:if>
+                <g:else>--}%
+                    <div id="messageDiv" class="alert alert-success d-none">
+                        <strong>Meddelande:</strong>
+                        <span id="messageText"></span>
+                    </div>
+                %{--</g:else>--}%
                 <div class="row">
                     <div class="col-sm-12">
                         <g:render template="/layouts/scrollTop"/>

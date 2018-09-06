@@ -1,21 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
-<html>
-<head>
-    <meta name="layout" content="main"/>
-    <title>${session.applicationName?:'Vaulttool'} - Secret (${metadata.title})</title>
-
-    <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
-    <asset:javascript src="secret.js"/>
-</head>
-
-<body>
-
     <div class="card bottom-margin-large">
         <div class="card-header">
             <h3>Secret</h3>
         </div>
         <div class="card-body">
-            <g:form action="updateSecret">
+            <form name="saveSecretForm" id="saveSecretForm">
                 <g:hiddenField name="key" value="${secret.key}"/>
 
                 <div class="row bottom-margin-small">
@@ -75,21 +63,23 @@
                 </div>
 
                 <div class="pull-right">
-                    <g:submitButton style="" class="btn btn-primary" name="submit" value="Save secret"/>
+                    <button style="" class="btn btn-primary" id="saveSecretSubmit" value="Save secret">Save Secret</button>
                 </div>
 
-            </g:form>
+            </form>
 
             <div class="pull-left">
-                <g:form action="delete"><g:hiddenField name="key" value="${secret.key}"/>
-                    <g:submitButton class="btn btn-danger pull-right" name="submit" value="Delete secret"/>
-                </g:form>
+                <form name="deleteSecretForm">
+                    <g:hiddenField name="key" value="${secret.key}"/>
+                    <button id="deleteSecretSubmit" class="btn btn-danger pull-right" name="submit" value="Delete secret">Delete secret</button>
+                </form>
             </div>
 
-            <g:form action="index">
+            %{--Not needed at this moment. Still keeping just in case--}%
+            %{--<g:form action="index">
                 <g:hiddenField name="selectedPath" value="${session.selectedPath}"/>
                 <g:submitButton class="btn btn-default pull-right right-margin-small" name="submit" value="Close"/>
-            </g:form>
+            </g:form>--}%
 
             <div class="clearfix"></div>
 
@@ -103,7 +93,7 @@
                     Upload file
                 </h4>
             </div>
-            <g:form action="upload" method="post" enctype="multipart/form-data" useToken="false">
+            <form id="uploadSecretFileForm" name="uploadSecretFileForm" action="javascript:" enctype="multipart/form-data" method="post">
                 <g:hiddenField name="key" value="${secret.key}"/>
                 <div class="row bottom-margin-small">
                     <div class="col-sm-12">
@@ -118,11 +108,10 @@
 
                 <div class="row bottom-margin-medium">
                     <div class="col-sm-12">
-                        <g:submitButton id="uploadFile" class="btn btn-primary d-none" name="submit" value="Upload file"/>
+                        <button id="uploadSecretFileButton" class="btn btn-primary d-none" name="uploadSecretFileButton" value="Upload file">Upload file</button>
                     </div>
                 </div>
-            </g:form>
-
+            </form>
             <g:if test="${metadata.fileName && secret.binaryData}">
                 <div class="bottom-margin-small breakWithEllipsis">
                     <span class="fa fa-file"></span>&nbsp;${metadata.fileName}
@@ -136,15 +125,12 @@
                     </div>
                 </g:form>
                 <div class="pull-left">
-                    <g:form action="deleteFile">
+                    <form id="deleteFileForm" name="deleteFileForm">
                         <g:hiddenField name="key" value="${secret.key}"/>
-                        <g:submitButton class="btn btn-danger" name="submit" value="Delete file"/>
-                    </g:form>
+                        <button id="deleteFileButton" class="btn btn-danger" name="deleteFileButton" value="Delete file">Delete file</button>
+                    </form>
                 </div>
                 <div class="clearfix"></div>
             </g:if>
         </div>
     </div>
-
-</body>
-</html>

@@ -1,19 +1,9 @@
-<%@ page import="se.su.it.vaulttool.VaultRestService" contentType="text/html;charset=UTF-8" %>
-<html>
-<head>
-    <meta name="layout" content="main"/>
-    <title>${session.applicationName?:'Vaulttool'} - AppRole(Entitlement) Administration</title>
-    <asset:javascript src="inputrules.js"/>
-    <asset:link rel="icon" href="favicon.ico" type="image/x-ico" />
-</head>
-
-<body>
     <div class="card bottom-margin-large">
         <div class="card-header">
             <h3>Application Roles Administration</h3>
         </div>
         <div class="card-body">
-            <g:form action="createApprole">
+            <form id="createApproleForm" name="createApproleForm">
                 <div class="row bottom-margin-small">
                     <div class="col-md-2">
                         <label for="name"><strong>Role</strong></label>
@@ -34,11 +24,9 @@
                 </div>
 
                 <div class="pull-right">
-                    <g:submitButton class="btn btn-primary" name="submit" value="Create/Update Role"/>
+                    <button id="createUpdateApproleButton" class="btn btn-primary" name="createUpdateApproleButton" value="Create/Update Role">Create/Update Role</button>
                 </div>
-
-
-            </g:form>
+            </form>
         </div>
     </div>
     <div class="card bottom-margin-large">
@@ -61,7 +49,7 @@
                         </div>
                     </div>
                     <div class="col-lg-1 col-md-2 col-sm-3 col-3">
-                        <g:link class="btn btn-danger button-danger-small pull-right" action="deleteApprole" params='[approle: "${approle.appRole}"]'>Delete</g:link>
+                        <g:link class="btn btn-danger button-danger-small pull-right deleteApproleLink" params='[approle: "${approle.appRole}"]' data-approle="${approle.appRole}">Delete</g:link>
                     </div>
                 </div>
             </g:each>
@@ -93,5 +81,3 @@
             </g:each>
         </div>
    </div>
-</body>
-</html>

@@ -110,3 +110,120 @@
   padding-left: 5px;
 }
 /* ----- Miscellaneous ----- */
+
+
+
+#searchQueryInput::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  font-size: smaller;
+  opacity: 1; /* Firefox */
+}
+#searchQueryInput::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-size: smaller;
+}
+#searchQueryInput::-moz-placeholder { /* Firefox 19+ */
+  font-size: smaller;
+  opacity: 1; /* Firefox */
+}
+#searchQueryInput:-moz-placeholder { /* Firefox 18- */
+  font-size: smaller;
+  opacity: 1; /* Firefox */
+}
+
+#searchQueryInput {
+  &.form-control{
+    min-width: 210px;
+  }
+}
+
+
+/*JsTree styling*/
+
+#root > .jstree-icon {
+    background-image: none;
+}
+
+[id=root] > a {
+  font-size: larger;
+}
+
+.jstree-icon {
+   color: #FFFFFF;
+}
+li a.jstree-anchor {
+  color: #FFFFFF !important;
+}
+
+
+li a.jstree-hovered, li a.jstree-clicked{
+    color: #212529 !important;
+
+    i{
+      color: #212529 !important;
+    }
+
+  }
+
+li.jstree-leaf{
+
+  a.jstree-anchor {
+    color: #f8b607 !important;
+    font-weight: lighter;
+
+    i.jstree-icon{
+      color: #f8b607 !important;
+    }
+    
+  }
+  a.jstree-hovered, a.jstree-clicked {
+    color: #212529 !important;
+
+    i.jstree-icon{
+      color: #212529 !important;
+    }
+  }
+}
+
+
+[id=searchQueryInputBtn]{
+background-color: $main-colour;
+border: 1px solid $main-colour;
+  &:hover {
+    background-color: $main-colour-2;
+    border: 1px solid $main-colour-2;
+  }
+
+}
+
+.force-wholerow {
+background: linear-gradient(to bottom,#beebff 0,#a8e4ff 100%) !important;
+}
+
+.modal {
+
+  .modal-content {
+    border: 5px solid $main-colour;
+
+    .modal-header {
+      background: $main-colour;
+      color: $opposite-colour;
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+
+  }
+  .modal-footer {
+    border: none;
+  }
+}
+
+.btn-group-vertical{
+
+  .btn-block:hover{
+    color: #FFFFFF;
+    background-color: #33597F;
+  }
+  .btn-block.activeAdminBtn{
+    color: #FFFFFF;
+    background-color: #33597F;
+  }
+}
