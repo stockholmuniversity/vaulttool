@@ -9,11 +9,11 @@ buildscript {
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:2.14.8"
         classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
         classpath 'org.grails.plugins:database-migration:3.0.3'
-        classpath 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.9' 
+        classpath 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.9'
     }
 }
 
-version "1.0.2-rc05"
+version "1.0.2-rc07"
 group "se.su.it"
 
 apply plugin:"eclipse"
@@ -58,6 +58,7 @@ dependencies {
     compile "org.grails.plugins:database-migration:3.0.3"
     compile "org.apache.commons:commons-email:1.4"
     compile 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.9'
+    compile 'org.grails.plugins:build-test-data:3.3.1'
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.9"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web"
@@ -95,7 +96,8 @@ publish {
 publishing {
   publications {
     mavenJava(MavenPublication) {
-      from components.web
+        artifactId = 'vaulttool'
+        from components.web
     }
   }
 
