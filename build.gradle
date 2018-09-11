@@ -10,6 +10,7 @@ buildscript {
         classpath "org.grails.plugins:hibernate5:${gormVersion-".RELEASE"}"
         classpath 'org.grails.plugins:database-migration:3.0.3'
         classpath 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.9'
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
     }
 }
 
@@ -23,6 +24,7 @@ apply plugin:"org.grails.grails-web"
 apply plugin:"org.grails.grails-gsp"
 apply plugin:"asset-pipeline"
 apply plugin:"maven-publish"
+apply plugin:"org.sonarqube"
 
 repositories {
     mavenLocal()
