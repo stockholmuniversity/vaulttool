@@ -30,11 +30,11 @@ suNodeWithNexusCredentials {
             }
 
             stage('SonarQube analysis')
-                    { 
-                        withSonarQubeEnv('My SonarQube Server')
-                    { 
-                 sh './gradlew --info sonarqube' 
-                    } 
+            {
+                withSonarQubeEnv('sonarqube')
+                {
+                    sh './gradlew --info sonarqube'
+                }
             }
 
             stage("Build")
