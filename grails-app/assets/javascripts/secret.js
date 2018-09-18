@@ -30,10 +30,11 @@ $(document).ready(function(){
     });
 
 
-    $("#pwdCheckbox").change(function(){
-
+    $('body').on('change', '#pwdCheckbox', function(){
+        
         // Check the checkbox state
         if($(this).is(':checked')){
+
             // Changing type attribute
             $("#password").attr("type","text");
 
@@ -48,7 +49,7 @@ $(document).ready(function(){
         }
 
     });
-    $("#copyPwd").click(function(event) {
+    $(document).on('click', '#copyPwd', function(event) {
         event.preventDefault();
         event.stopPropagation();
         var pwd = $("#password").val();
@@ -60,7 +61,8 @@ $(document).ready(function(){
         $("#hiddenpwd").remove();
         console.debug("hej");
     });
-    $("#copyUsername").click(function(event) {
+    
+    $(document).on('click','#copyUsername', function(event) {
         event.preventDefault();
         event.stopPropagation();
         var userName = $("#username").val();
