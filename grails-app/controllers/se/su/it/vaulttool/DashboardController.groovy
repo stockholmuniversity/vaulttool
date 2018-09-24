@@ -115,6 +115,18 @@ class DashboardController {
 
     }
 
+    def overWriteCheck(){
+        String fromPath = params.fromPath ? params.fromPath as String : ''
+        String toPath = params.toPath ? params.toPath as String : ''
+        def sToPath = vaultRestService.listSecrets(session.token, toPath)
+
+        String key = fromPath.split("/").last() + "/"
+        if(sToPath.contains(key)){
+            return render(text: 'danger')
+        }
+        return render(text: 'proceed')
+    }
+
     def handlePaths(){
         String fromPath = params.fromPath ? params.fromPath as String : ''
         String toPath = params.toPath ? params.toPath as String : ''

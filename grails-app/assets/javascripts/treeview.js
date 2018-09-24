@@ -56,7 +56,7 @@ $(document).ready(function(){
                 'action': function(){
                     sessionStorage.setItem('toPath', node.id.replace(/_/g,'/'));
 
-                    handlePaths();
+                    overWriteCheck();
                     sessionStorage.removeItem('enablePaste');
                     }
             },
@@ -116,6 +116,48 @@ $(document).ready(function(){
 
          });
 
+   }
+
+   function overWriteCheck(){
+       var fromPath = (sessionStorage.fromPath) ? sessionStorage.fromPath:'';
+       var toPath = (sessionStorage.toPath) ? sessionStorage.toPath:'';
+       
+       $.ajax({
+           type: 'POST',
+           url: '/dashboard/overWriteCheck',
+           data: {fromPath : fromPath,
+           toPath : toPath},
+           success: function(data){
+               console.log(data);
+               if(data === 'danger'){
+
+                   utilityModule.modalDialog({
+                       icon: 'exclamation-triangle',
+                       title: 'Copy path',
+                       body:  "<div class='bottom-margin-medium'>" + "Det finns redan en path med samma namn. "  + "Secrets under denna path kan komma att skrivas över." + "</div>" +
+                       "<div>" + "Vill du fortsätta?" + "</div>",
+                       buttons : [
+                           {
+                               title: 'Avbryt',
+                               type: 'primary',
+                               click: null
+                           },
+                           {
+                               title: 'Ja',
+                               type: 'default',
+                               click: function(){
+                                   handlePaths();}
+                           }
+                       ]
+
+                   });
+
+               } else {
+                   handlePaths();
+               }
+           },
+           error: function(){}
+       })
    }
 
    function handlePaths(){
