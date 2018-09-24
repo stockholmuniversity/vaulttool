@@ -11,9 +11,9 @@
                 <label for="selectedPath"><strong>Path</strong></label>
             </div>
             <div class="col-sm-4">
-                <g:form action="index">
-                    <g:select class="form-control" onchange="submit();" id="selectedPath" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>
-                </g:form>
+                <form id="selectPathForm" name="selectPathForm">
+                    <g:select class="form-control" id="selectedPath" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>
+                </form>
             </div>
             <div class="col-sm-6">
                 Capabilities: <i>(${capabilities.join(", ")})</i>
