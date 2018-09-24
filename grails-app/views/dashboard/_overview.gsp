@@ -11,15 +11,15 @@
                 <label for="selectedPath"><strong>Path</strong></label>
             </div>
             <div class="col-sm-4">
-                <g:form action="index">
-                    <g:select class="form-control" onchange="submit();" id="selectedPath" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>
-                </g:form>
+                <form id="selectPathForm" name="selectPathForm">
+                    <g:select class="form-control" id="selectedPath" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>
+                </form>
             </div>
             <div class="col-sm-6">
                 Capabilities: <i>(${capabilities.join(", ")})</i>
             </div>
         </div>
-        <g:form id="createSecretForm">
+        <form id="createSecretForm" name="createSecretForm">
             <g:hiddenField name="selectedPath" value="${selectedPath}"/>
             <div class="row bottom-margin-xsmall">
                 <div class="col-sm-2"></div>
@@ -37,10 +37,10 @@
                 </div>
             </div>
             <div class="pull-right">
-                <g:submitButton class="btn btn-primary" name="createSecretSubmit" value="Create secret"/>
+                <button id="createSecretSubmitBtn" class="btn btn-primary" name="createSecretSubmitBtn" value="Create secret">Create secret</button>
             </div>
             <div class="clearfix"></div>
-        </g:form>
+        </form>
     </div>
 </div>
 
