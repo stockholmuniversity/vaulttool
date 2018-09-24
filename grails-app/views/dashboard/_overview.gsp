@@ -19,7 +19,7 @@
                 Capabilities: <i>(${capabilities.join(", ")})</i>
             </div>
         </div>
-        <g:form id="createSecretForm">
+        <form id="createSecretForm" name="createSecretForm">
             <g:hiddenField name="selectedPath" value="${selectedPath}"/>
             <div class="row bottom-margin-xsmall">
                 <div class="col-sm-2"></div>
@@ -37,10 +37,10 @@
                 </div>
             </div>
             <div class="pull-right">
-                <g:submitButton class="btn btn-primary" name="createSecretSubmit" value="Create secret"/>
+                <button id="createSecretSubmitBtn" class="btn btn-primary" name="createSecretSubmitBtn" value="Create secret">Create secret</button>
             </div>
             <div class="clearfix"></div>
-        </g:form>
+        </form>
     </div>
 </div>
 

@@ -192,8 +192,8 @@ $(document).ready(function(){
 
 
 
-    $(document).off('click', "#createSecretSubmit");
-    $(document).on('click', "#createSecretSubmit", function(event){
+    $(document).off('click', "#createSecretSubmitBtn");
+    $(document).on('click', "#createSecretSubmitBtn", function(event){
         event.preventDefault();
         utilityModule.hideMessage();
 
@@ -204,12 +204,14 @@ $(document).ready(function(){
         $.ajax({
             type: "POST",
             url: "/dashboard/createSecret",
-            data: { selectedPath: selectedPath,
-                path        : path,
-                secret      : secret},
+            data: { selectedPath    : selectedPath,
+                    path            : path,
+                    secret          : secret},
             success: function (data) {
                 $('#dashboard').html(data);
-                utilityModule.showMessage('info', 'Successfully created secret ' + selectedPath);
+                var key = $('#key').val();
+                utilityModule.showMessage('info', 'Successfully created secret ' + key);
+                
                 $("#navTree").jstree(true).refresh();
             },
             error: function(data) {
