@@ -641,7 +641,15 @@ $(document).ready(function(){
             success: function (data) {
                 $('#dashboard').html(data);
                 utilityModule.showMessage('info', 'Successfully deleted secret ' + key);
-                $("#navTree").jstree(true).refresh();
+
+                //Deselect active node and then refresh to prevent active node from closing since jstree.select_node is fired on refresh.
+                // (jstree makes node active again after refresh)
+                var node = key.split("/")[0];
+                var selected = $("#navTree").jstree(true).get_selected();
+
+                $("#navTree").jstree(true).deselect_node(selected);
+                $("#navTree").jstree(true).refresh_node(node);
+
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
