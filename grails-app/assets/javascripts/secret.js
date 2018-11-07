@@ -255,7 +255,7 @@ $(document).ready(function(){
 
 
     $(document).off('click', '#deleteSecretSubmit');
-    $(document).on('click', '#deleteSecretSubmit', function(){
+    $(document).on('click', '#deleteSecretSubmit', function(event){
         event.preventDefault();
         utilityModule.hideMessage();
 
