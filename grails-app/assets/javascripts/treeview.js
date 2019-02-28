@@ -89,6 +89,9 @@ $(document).ready(function(){
             }
         }
 
+        //TODO:The cut function should be disabled for now. We need to check the capabilities of the user on the recipient path when cutting and pasting.
+        items.item1._disabled = true;
+
         return items;
     }
 
