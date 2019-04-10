@@ -83,45 +83,48 @@
              </g:if>
 
             <div id="main-column" class="col">
-                %{--<g:if test="${flash.error}">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="alert alert-danger">${flash.error}</div>
-                        </div>
-                    </div>
-                </g:if>
-                <g:if test="${flash.warning}">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="alert alert-warning">
-                                ${flash.warning}
+                <div class="sticky-top sticky-offset">%{--Testing the sticky function--}%
+                    %{--<g:if test="${flash.error}">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="alert alert-danger">${flash.error}</div>
                             </div>
-
                         </div>
-                    </div>
-                </g:if>
-                <g:if test="${flash.message}">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="alert alert-success">
-                                ${flash.message}
+                    </g:if>
+                    <g:if test="${flash.warning}">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="alert alert-warning">
+                                    ${flash.warning}
+                                </div>
+
                             </div>
-
                         </div>
-                    </div>
-                </g:if>
-                <g:else>--}%
+                    </g:if>
+                    <g:if test="${flash.message}">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="alert alert-success">
+                                    ${flash.message}
+                                </div>
+
+                            </div>
+                        </div>
+                    </g:if>
+                    <g:else>--}%
                     <div id="messageDiv" class="alert alert-success d-none">
                         <strong>Meddelande:</strong>
                         <span id="messageText"></span>
                     </div>
-                %{--</g:else>--}%
-                <div class="row">
-                    <div class="col-sm-12">
-                        <g:render template="/layouts/scrollTop"/>
-                        <g:layoutBody/>
+                    %{--</g:else>--}%
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <g:render template="/layouts/scrollTop"/>
+                            <g:layoutBody/>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
