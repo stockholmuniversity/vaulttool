@@ -137,10 +137,25 @@ class VaultRestService {
     }
 
     List<String> listSecrets(String token, String path = "") {
+        List<String> secrets = []
         Map query = ["list":true]
-        Map response = getJsonByUrlAndType(token, "/v1/secret/${VAULTTOOLSECRETSPATHNAME}/${path}", query)
 
-        return response?.data?.keys?:[]
+        Map response = getJsonByUrlAndType(grailsApplication.config.vault.vaulttoken, "/v1/secret/${VAULTTOOLSECRETSPATHNAME}/${path}", query)
+
+        response?.data?.keys?.each {
+            String tmpPath = path
+            if(path && !path.isEmpty()) {
+                tmpPath = "${path}/${it}".replace("//", "/")
+            } else {
+                tmpPath = it
+            }
+            List<String> capabilities = getCapabilities(token, tmpPath)
+            if(capabilities.contains("root") || capabilities.contains("list")) {
+                secrets << it
+            }
+        }
+
+        return secrets
     }
 
     Map putSecret(String token, String key, Entry secret) {
@@ -193,7 +208,7 @@ class VaultRestService {
                 policies << [policy: response2?.data?.name?:"", rules: response2?.data?.rules?:""]
             }
         }
-        policies.removeAll {it.policy == "default" || it.policy == "root" || !it.rules.contains("secret/${VAULTTOOLSECRETSPATHNAME}")}
+        policies.removeAll {it.policy == "root" || !it.rules.contains("secret/${VAULTTOOLSECRETSPATHNAME}")}
 
         return policies
     }
@@ -233,7 +248,6 @@ class VaultRestService {
     }
 
     Map postApprole(String token, String appRole, List<String> policies) {
-        policies << "defaultvaulttool"
         Map body = ["policies": policies.join(",")]
         return putJsonByUrlAndType(token,"/v1/auth/approle/role/${appRole}", body, null)
     }
