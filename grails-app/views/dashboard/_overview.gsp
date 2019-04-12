@@ -1,7 +1,7 @@
 <div class="card bottom-margin-large">
     <div class="card-header">
         <h3>
-            New secret
+            New subpath and/or secret
         </h3>
     </div>
 
@@ -11,29 +11,34 @@
                 <label for="selectedPath"><strong>Path</strong></label>
             </div>
             <div class="col-sm-4">
+                <span id="selectedPath_new">${(selectedPath) ?: 'Root/' }</span>
                 <form id="selectPathForm" name="selectPathForm">
-                    <g:select class="form-control" id="selectedPath" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>
+                <g:hiddenField name="selectedPath" value="${selectedPath}"/>
+                    %{--<g:select class="form-control" id="selectedPath" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>--}%
                 </form>
+       
             </div>
             <div class="col-sm-6">
-                Capabilities: <i>(${capabilities.join(", ")})</i>
+                Your capabilities on this path : <i>(${capabilities.join(", ")})</i>
             </div>
         </div>
         <form id="createSecretForm" name="createSecretForm">
             <g:hiddenField name="selectedPath" value="${selectedPath}"/>
             <div class="row bottom-margin-xsmall">
-                <div class="col-sm-2"></div>
+                <div class="col-sm-2">
+                    <label for="path"><strong>New subpath</strong> <br />(optional)</label>
+                </div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control allowonly7bit" maxlength="20" id="path" name="path" value="" placeholder="Enter path (optional)"/>
+                    <input type="text" class="form-control allowonly7bit" maxlength="20" id="path" name="path" value="" placeholder="Subpath name"/>
                 </div>
             </div>
 
             <div class="row bottom-margin-xsmall">
                 <div class="col-sm-2">
-                    <label for="secret"><strong>Secret</strong></label>
+                    <label for="secret"><strong>New secret</strong><br />(optional)</label>
                 </div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control allowonly7bit" maxlength="20" name="secret" id="secret" value="" placeholder="Enter secret"/>
+                    <input type="text" class="form-control allowonly7bit" maxlength="20" name="secret" id="secret" value="" placeholder="Secret name"/>
                 </div>
             </div>
             <div class="pull-right">

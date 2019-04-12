@@ -191,22 +191,13 @@ $(document).ready(function(){
     });
 
 
-
-    $(document).off('click', "#createSecretSubmitBtn");
-    $(document).on('click', "#createSecretSubmitBtn", function(event){
-        event.preventDefault();
-        utilityModule.hideMessage();
-
-        var selectedPath = $('[name="selectedPath"]').val();
-        var path = $('#path').val();
-        var secret = $('#secret').val();
-
+    function createPathAndSecret(selectedPath, path, secret){
         $.ajax({
             type: "POST",
             url: "/dashboard/createSecret",
             data: { selectedPath    : selectedPath,
-                    path            : path,
-                    secret          : secret},
+                path            : path,
+                secret          : secret},
             success: function (data) {
                 $('#dashboard').html(data);
                 var key = $('#key').val();
@@ -227,7 +218,43 @@ $(document).ready(function(){
             }
 
         });
+    }
 
+    function createOnlyPath(selectedPath, path){
+        $.ajax({
+            type: "POST",
+            url: "/dashboard/createPath",
+            data: { selectedPath    : selectedPath,
+                    path            : path},
+            success: function (data) {
+                utilityModule.showMessage('info', data.success);
+                console.log(data.success);
+            },
+            error: function(data) {
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
+            }
+
+        });
+    }
+    
+    $(document).off('click', "#createSecretSubmitBtn");
+    $(document).on('click', "#createSecretSubmitBtn", function(event){
+        event.preventDefault();
+        utilityModule.hideMessage();
+
+        var selectedPath = $('[name="selectedPath"]').val();
+        var path = $('#path').val();
+        var secret = $('#secret').val();
+
+        if((path && secret) || (!path && secret)) {
+            createPathAndSecret(selectedPath, path, secret);
+        } else if(path && !secret) {
+            createOnlyPath(selectedPath, path);
+        }  else {
+            utilityModule.showMessage('error', 'No path or secret supplied.');
+            console.log("No path or secret supplied");
+        }
     });
 
     $(document).off('click', '#saveSecretSubmit');
