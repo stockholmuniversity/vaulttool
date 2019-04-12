@@ -251,8 +251,30 @@ $(document).ready(function(){
                 $(val).removeClass('activeAdminBtn');
             });
         }
-
+        
+        //Set the path in view
+        navigatePaths(node);
+     
     });
+
+    function navigatePaths(node){
+
+        if(!$('#navTree').jstree(true).is_leaf(node)){
+            var selectedPath = node.id.replace(/_/g,"/") + "/";
+
+            $.ajax({
+                type: 'POST',
+                url: "/dashboard/index",
+                data: {selectedPath: selectedPath},
+                success: function(data){
+                    $("#dashboard").html(data);
+                },
+                error: function(){
+
+                }
+            })
+        } 
+    }
 
     //Handle the display of active node
     $('#navTree').on('after_open.jstree', function(event){

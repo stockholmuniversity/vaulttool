@@ -16,7 +16,7 @@ class DashboardController {
     }*/
 
     def index() {
-
+        println "hej: ${params}"
         String selectedPath = params?.selectedPath?:""
         session.selectedPath = selectedPath
         def paths = vaultRestService.getPaths(session.token)
@@ -32,6 +32,7 @@ class DashboardController {
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
 
         if(request.xhr){
+            log.info "xhr"
             return render(template: 'overview', model: [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData])
         }
         [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
@@ -278,6 +279,22 @@ class DashboardController {
             metaData.save(flush: true)
         }
         return redirect(action: "secret", params: [key: key])
+    }
+
+    def createPath(){
+        String sourcePath = params?.selectedPath?:""
+        String newPath = params?.path?:""
+        
+        Map<String,String> result = vaultService.createPath(session.token, sourcePath, newPath)
+
+        if(result.error){
+            println result
+            String errorMsg = result.error
+            log.error(errorMsg)
+            response.status = 400
+            return render(errorMsg)
+        }
+        return render (result as JSON)
     }
 
     def createSecret() {
