@@ -11,7 +11,7 @@
                 <label for="selectedPath"><strong>Path</strong></label>
             </div>
             <div class="col-sm-4">
-                <span id="selectedPath_new">${(selectedPath) ?: 'Root/' }</span>
+                <h5><span id="selectedPath_new">${(selectedPath) ?: 'Root/' }</span></h5>
                 <form id="selectPathForm" name="selectPathForm">
                 <g:hiddenField name="selectedPath" value="${selectedPath}"/>
                     %{--<g:select class="form-control" id="selectedPath" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>--}%
