@@ -16,7 +16,7 @@ class DashboardController {
     }*/
 
     def index() {
-        println "hej: ${params}"
+
         String selectedPath = params?.selectedPath?:""
         session.selectedPath = selectedPath
         def paths = vaultRestService.getPaths(session.token)
@@ -288,7 +288,6 @@ class DashboardController {
         Map<String,String> result = vaultService.createPath(session.token, sourcePath, newPath)
 
         if(result.error){
-            println result
             String errorMsg = result.error
             log.error(errorMsg)
             response.status = 400
