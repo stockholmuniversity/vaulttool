@@ -247,6 +247,10 @@ $(document).ready(function(){
         var path = $('#path').val();
         var secret = $('#secret').val();
 
+        if(path.endsWith("/")) {
+            path = path.substr(0, path.length -1);
+        }
+
         if((path && secret) || (!path && secret)) {
             createPathAndSecret(selectedPath, path, secret);
         } else if(path && !secret) {
