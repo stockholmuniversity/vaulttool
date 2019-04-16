@@ -221,6 +221,9 @@ $(document).ready(function(){
     }
 
     function createOnlyPath(selectedPath, path){
+
+        /*var node = selectedPath + path;
+        console.log(node);*/
         $.ajax({
             type: "POST",
             url: "/dashboard/createPath",
@@ -229,6 +232,14 @@ $(document).ready(function(){
             success: function (data) {
                 utilityModule.showMessage('info', data.success);
                 console.log(data.success);
+                /*console.log(selectedPath);
+                $("#navTree").jstree(true).load_node(node.replace(/\//g,'_'));
+                $("#navTree").jstree(true).open_node(node.replace(/\//g,'_'));
+                $("#navTree").jstree(true).refresh_node(selectedPath.replace(/\//g,'_'));
+
+                //Replace last underscore with empty value
+                console.log(selectedPath.replace(/\//g,'_').replace(/_$/,''));
+                */
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);

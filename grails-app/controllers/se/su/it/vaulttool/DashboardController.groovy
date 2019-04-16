@@ -32,7 +32,6 @@ class DashboardController {
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
 
         if(request.xhr){
-            log.info "xhr"
             return render(template: 'overview', model: [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData])
         }
         [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
