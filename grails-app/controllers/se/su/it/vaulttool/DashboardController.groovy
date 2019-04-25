@@ -16,7 +16,6 @@ class DashboardController {
     }*/
 
     def index() {
-        println "hej: ${params}"
         String selectedPath = params?.selectedPath?:""
         session.selectedPath = selectedPath
         def paths = vaultRestService.getPaths(session.token)
@@ -138,7 +137,7 @@ class DashboardController {
         
         if(fromPath && toPath){
             zipByteArray = vaultService.copyPath(session.token, fromPath)
-            result = vaultService.pastePath(session.token, toPath, zipByteArray)
+            result = vaultService.pastePath(session.eppn, session.token, toPath, zipByteArray)
 
             if(deletePath){
                 result << vaultService.deletePath(session.token, fromPath)
@@ -259,6 +258,7 @@ class DashboardController {
         metaData.secretKey      = key
         metaData.title          = params?.title?:""
         metaData.description    = params?.description?:""
+        metaData.updatedBy      = session.eppn?:null
 
         Entry entry = resp.entry
         entry.key           = key
@@ -347,6 +347,7 @@ class DashboardController {
         metaData.title = ""
         metaData.description = ""
         metaData.fileName = ""
+        metaData.updatedBy = session.eppn
         metaData.save(flush: true)
         flash.message = "Successfully created secret ${key}"
         return redirect(action: "secret", params: [key: key])
@@ -517,6 +518,7 @@ class DashboardController {
         }
         metaData.secretKey      = key
         metaData.fileName       = ""
+        metaData.updatedBy      = session.eppn
 
         Entry entry = resp.entry
         entry.key           = key

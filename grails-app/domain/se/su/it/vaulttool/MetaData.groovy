@@ -7,6 +7,7 @@ class MetaData {
     String title
     String description
     String fileName
+    String updatedBy
 
     static mapping = {
         description(type: 'text')
@@ -17,5 +18,7 @@ class MetaData {
         title(nullable:true)
         description(nullable:true)
         fileName(nullable:true)
+        updatedBy(nullable:true)
+
     }
 }

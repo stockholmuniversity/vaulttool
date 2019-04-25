@@ -132,7 +132,7 @@ class VaultService {
         return zipByteArray
     }
 
-    Map<String, String> pastePath(String token, String destinationPath, Byte[] zipByteArray) {
+    Map<String, String> pastePath(String eppn, String token, String destinationPath, Byte[] zipByteArray) {
         if(!destinationPath.endsWith("/") && destinationPath.length() > 0) {
             destinationPath += "/"
         }
@@ -194,6 +194,7 @@ class VaultService {
             metaData.title = ish.metaData.title
             metaData.description = ish.metaData.description
             metaData.fileName = ish.metaData.fileName
+            metaData.updatedBy = eppn
             metaData.save(flush: true)
         }
 

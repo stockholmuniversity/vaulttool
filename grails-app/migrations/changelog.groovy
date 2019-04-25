@@ -69,4 +69,12 @@ databaseChangeLog = {
     changeSet(author: "jqvar (generated)", id: "1481104076212-3") {
         addUniqueConstraint(columnNames: "secret_key", constraintName: "UC_USER_DATASECRET_KEY_COL", tableName: "user_data")
     }
+
+    changeSet(author: "jqvar", id: "201904250915") {
+        addColumn(tableName: "meta_data") {
+            column(name: "updated_by", type: "varchar(255)") {
+                constraints(nullable: true)
+            }
+        }
+    }
 }
