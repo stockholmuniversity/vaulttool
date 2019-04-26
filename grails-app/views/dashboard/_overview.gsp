@@ -6,9 +6,11 @@
     </div>
 
     <div class="card-body">
-        <div class="row bottom-margin-xsmall">
+        <div class="row bottom-margin-large">
             <div class="col-sm-2">
-                <label for="selectedPath"><strong>Path</strong></label>
+                %{--<label for="selectedPath"><strong>Path</strong></label>--}%
+                <h5>Path</h5>
+
             </div>
             <div class="col-sm-4">
                 <h5><span id="selectedPath_new">${(selectedPath) ?: 'Root/' }</span></h5>
@@ -19,7 +21,7 @@
        
             </div>
             <div class="col-sm-6">
-                Your capabilities on this path : <i>(${capabilities.join(", ")})</i>
+                Your capabilities on this path : <em>${capabilities.join(", ")}</em>
             </div>
         </div>
         <form id="createSecretForm" name="createSecretForm">
@@ -42,7 +44,7 @@
                 </div>
             </div>
             <div class="pull-right">
-                <button id="createSecretSubmitBtn" class="btn btn-primary" name="createSecretSubmitBtn" value="Create secret">Create secret</button>
+                <button id="createSecretSubmitBtn" class="btn btn-primary" name="createSecretSubmitBtn" value="Create secret">Create</button>
             </div>
             <div class="clearfix"></div>
         </form>

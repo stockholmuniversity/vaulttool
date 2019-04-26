@@ -16,14 +16,15 @@ class DashboardController {
     }*/
 
     def index() {
+
         String selectedPath = params?.selectedPath?:""
         session.selectedPath = selectedPath
         def paths = vaultRestService.getPaths(session.token)
         List<Map<String, MetaData>> secretMetaData = []
         def secrets = vaultRestService.listSecrets(session.token, selectedPath)
 
-        secrets.removeAll {it.endsWith("/")}
-        if(secrets) {
+        secrets.removeAll {it.endsWith("/") || it == 'dummykeydontuse'}
+            if(secrets) {
             secrets.each {String secret ->
                 secretMetaData << [secret: secret, metadata: MetaData.findBySecretKey(selectedPath+secret)]
             }
@@ -31,7 +32,6 @@ class DashboardController {
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
 
         if(request.xhr){
-            log.info "xhr"
             return render(template: 'overview', model: [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData])
         }
         [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
@@ -77,9 +77,26 @@ class DashboardController {
         secrets.each {secret ->
             def node = null
             if(secret.endsWith("/")){
-                node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, 'type':'pathNode', 'children': true, 'icon' : 'fa fa-folder']
+                def sc = vaultRestService.listSecrets(session.token, params['id'].toString().replaceAll("_","/") + "/" + secret)
+
+                node = ['id'        :   params['id'] + '_' + secret.replace("/",""),
+                        parent      :   params['id'],
+                        'text'      :   secret.replace("/",""),
+                        admin       :   isAdmin,
+                        'type'      :   'pathNode',
+                        'children'  :   !(sc.size() == 1 && sc.contains('dummykeydontuse')),
+                        'icon'      :   'fa fa-folder',
+                        'a_attr'    :   ['class': 'path-no-children']]
              }  else {
-                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
+                node =  ['id'       :   'leaf_' + params['id'] + '_' + secret.replace("/",""),
+                         parent     :   params['id'],
+                         'text'     :   secret.replace("/",""),
+                         admin      :   isAdmin,
+                         type       :   'leafNode',
+                         'children' :   false,
+                         'icon'     :   'fa fa-lock',
+                         'state'    :   ['hidden': (secret == 'dummykeydontuse')],
+                         'a_attr'   :   ['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
             }
 
             childNodes.add(node)
@@ -288,7 +305,6 @@ class DashboardController {
         Map<String,String> result = vaultService.createPath(session.token, sourcePath, newPath)
 
         if(result.error){
-            println result
             String errorMsg = result.error
             log.error(errorMsg)
             response.status = 400
