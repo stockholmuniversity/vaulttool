@@ -134,3 +134,14 @@
             </g:if>
         </div>
     </div>
+
+    <div class="card bottom-margin-large">
+        <div class="card-body">
+            <span>
+                Updated: ${metadata.lastUpdated}
+                <g:if test="${metadata.updatedBy}">
+                    , By: ${metadata.updatedBy}
+                </g:if>
+            </span>
+        </div>
+    </div>

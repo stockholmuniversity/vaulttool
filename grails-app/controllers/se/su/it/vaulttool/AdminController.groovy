@@ -372,6 +372,10 @@ class AdminController {
                     zos.putNextEntry(entry)
                     zos.write(metaData.fileName?metaData.fileName.getBytes():"".getBytes())
                     zos.closeEntry()
+                    entry = new ZipEntry(secretsPath+obj.entry.key + "/updatedby.txt")
+                    zos.putNextEntry(entry)
+                    zos.write(metaData.updatedBy?metaData.updatedBy.getBytes():"".getBytes())
+                    zos.closeEntry()
                 }
             }
             vaultRestService.listUserSecrets(session.token).each{String secret ->
@@ -463,7 +467,7 @@ class AdminController {
                         if(keyWithFile.lastIndexOf("/") > -1) {
                             String secretKey = keyWithFile.substring(0, keyWithFile.lastIndexOf("/"))
                             String file = keyWithFile.substring(keyWithFile.lastIndexOf("/") + 1)
-                            if(["key.txt", "username.txt", "password.txt", "binarydata", "title.txt", "description.txt", "filename.txt"].any{keyWithFile.contains(it)}) {
+                            if(["key.txt", "username.txt", "password.txt", "binarydata", "title.txt", "description.txt", "filename.txt", "updatedby.txt"].any{keyWithFile.contains(it)}) {
                                 ByteArrayOutputStream out = new ByteArrayOutputStream()
                                 byte[] buffer = new byte[1024]
                                 int n
@@ -484,6 +488,8 @@ class AdminController {
                                     case "binarydata": importSecretHelper.entry.binaryData = out.toByteArray()
                                         break
                                     case "title.txt": importSecretHelper.metaData.title = out.toString()
+                                        break
+                                    case "updatedby.txt": importSecretHelper.metaData.updatedBy = out.toString()
                                         break
                                     case "description.txt": importSecretHelper.metaData.description = out.toString()
                                         break
@@ -586,6 +592,7 @@ class AdminController {
             metaData.title          = ish.metaData.title
             metaData.description    = ish.metaData.description
             metaData.fileName       = ish.metaData.fileName
+            metaData.updatedBy      = ish.metaData.updatedBy
             metaData.save(flush: true)
         }
         userList.each{ImportUserHelper iuh ->

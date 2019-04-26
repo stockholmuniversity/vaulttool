@@ -35,11 +35,11 @@ class Application extends GrailsAutoConfiguration implements EnvironmentAware{
         Connector ajpConnector = new Connector("AJP/1.3");
         try {
             ajpConnector.port = 8009
-            ajpConnector.protocol = "AJP/1.3"
             ajpConnector.redirectPort = 8443
             ajpConnector.enableLookups = false
             ajpConnector.setProperty("redirectPort", "8443")
             ajpConnector.setProperty("protocol", "AJP/1.3")
+            ajpConnector.setProperty("address", "127.0.0.1")
             ajpConnector.setProperty("enableLookups", "false")
             ajpConnector.URIEncoding = "UTF-8"
             return ajpConnector
