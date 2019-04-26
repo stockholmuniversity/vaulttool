@@ -213,17 +213,24 @@ $(document).ready(function(){
         });
    }
    
-   function addWholeRowClasses(){
-       var nodeId = sessionStorage.forceRowClass;
-       $('#' + nodeId + '> div').addClass('jstree-wholerow-clicked');
-       $('#' + nodeId + '> a').addClass('jstree-clicked');
+   function addWholeRowClasses(node){
+        var $selDiv = $('#' + node.id + '> div');
+        var $selLink = $('#' + node.id + '> a');
+        
+        //Use indexOf instead of startsWith since startsWith isn't supported in IE.
+        if(node.id.indexOf('leaf') === 0 || (node.a_attr != null) && (node.a_attr.class === 'path-no-children')){
+            $selDiv.addClass('jstree-wholerow-leaf');
+            $selLink.addClass('jstree-clicked-leaf');
+        } else {
+            $selDiv.addClass('jstree-wholerow-clicked');
+            $selLink.addClass('jstree-clicked');
+        }
    }
-
-
-    $('#navTree').on('loaded.jstree', function(event){
-       $('#root > div').addClass('jstree-wholerow-clicked');
-       $('#root > a').addClass('jstree-clicked');
-    });
+   //Triggered after the root node is loaded for the first time
+   $('#navTree').on('loaded.jstree', function(e){
+       var node = e.target.children[0].childNodes[0];
+       addWholeRowClasses(node);
+   });
 
     $('#navTree').on("click.jstree", function (event) {
 
@@ -236,10 +243,7 @@ $(document).ready(function(){
             } else if($('#' + node.id).hasClass('jstree-closed')) {
                 $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder');
             }
-
             removeWholeRowClasses();
-            sessionStorage.setItem('forceRowClass',node.id);
-
         } else {
             window.location.href = '/';
         }
@@ -258,8 +262,9 @@ $(document).ready(function(){
     });
 
     function navigatePaths(node){
-
-        if(!$('#navTree').jstree(true).is_leaf(node)){
+        utilityModule.hideMessage();
+        
+        if(node.type === 'pathNode' || !$('#navTree').jstree(true).is_leaf(node)){
             var selectedPath = node.id.replace(/_/g,"/") + "/";
 
             $.ajax({
@@ -273,33 +278,57 @@ $(document).ready(function(){
 
                 }
             })
-        } 
+        } else {
+            var key = node.id.substring(5).replace(/_/g, "/");
+
+            $.ajax({
+                type: "POST",
+                url: "/dashboard/secret",
+                data: { key : key},
+                success: function (data) {
+                    $('#dashboard').html(data);
+                },
+                error: function(data) {
+                    utilityModule.showMessage('error', data.responseText);
+                    console.log(data.responseText);
+                }
+            });
+        }
+
     }
 
-    //Handle the display of active node
-    $('#navTree').on('after_open.jstree', function(event){
+    //Handle the display of active node except leaf
+    $('#navTree').on('after_open.jstree', function(e, data){
         removeWholeRowClasses();
-        addWholeRowClasses();
+        addWholeRowClasses(data.node);
     });
 
-    //Handle the display of active node 
-    $('#navTree').on('after_close.jstree', function(event){
+    //Handle the display of active node except leaf
+    $('#navTree').on('after_close.jstree', function(e, data){
         removeWholeRowClasses();
-        addWholeRowClasses();
+        addWholeRowClasses(data.node);
     });
 
     
     //Expand and collapse path with left click on node
     $('#navTree').on('select_node.jstree', function(e, data){
-       data.instance.toggle_node(data.node);
+        data.instance.toggle_node(data.node);
 
-       if(!data.instance.is_leaf(data.node) && data.node.type !== 'rootNode'){
+        removeWholeRowClasses();
+        var $navTree = $("#navTree");
+        $navTree.find('div.jstree-wholerow-leaf').removeClass('jstree-wholerow-leaf');
+        $navTree.find('a.jstree-clicked-leaf').removeClass('jstree-clicked-leaf');
+
+        
+        if(!data.instance.is_leaf(data.node) && data.node.type !== 'rootNode'){
            if(data.instance.is_loading(data.node) || data.instance.is_open(data.node)){
                data.instance.set_icon(data.node.id, 'fa fa-folder-open');
            } else {
                data.instance.set_icon(data.node.id, 'fa fa-folder');
            }
-       }
+        } else if(data.instance.is_leaf(data.node)){
+           addWholeRowClasses(data.node);
+        }
        
     });
 

@@ -222,8 +222,14 @@ $(document).ready(function(){
 
     function createOnlyPath(selectedPath, path){
 
-        /*var node = selectedPath + path;
-        console.log(node);*/
+        //TODO:Maybe create node first then make ajax call (Node exists in memory and can be set to )...
+        // var node = selectedPath + path;
+        // console.log(node);
+        // var sel = $("#navTree").jstree(true).get_selected();
+        // console.log(sel);
+        // sel = $("#navTree").jstree(true).create_node(sel, path, 0 , false, true);
+        // console.log(sel);
+
         $.ajax({
             type: "POST",
             url: "/dashboard/createPath",
@@ -232,21 +238,19 @@ $(document).ready(function(){
             success: function (data) {
                 utilityModule.showMessage('info', data.success);
                 console.log(data.success);
-                /*console.log(selectedPath);
-                $("#navTree").jstree(true).load_node(node.replace(/\//g,'_'));
-                $("#navTree").jstree(true).open_node(node.replace(/\//g,'_'));
-                $("#navTree").jstree(true).refresh_node(selectedPath.replace(/\//g,'_'));
 
                 //Replace last underscore with empty value
-                console.log(selectedPath.replace(/\//g,'_').replace(/_$/,''));
-                */
+                //console.log(selectedPath.replace(/\//g,'_').replace(/_$/,''));
+
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
                 console.log(data.responseText);
+            },
+            complete: function(){
+                $("#navTree").jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
             }
-
-        });
+        })
     }
     
     $(document).off('click', "#createSecretSubmitBtn");
@@ -320,28 +324,6 @@ $(document).ready(function(){
                 }
             ]
         });
-    });
-    
-    $(document).off('click', '.jstree-leaf');
-    $(document).on('click', '.jstree-leaf', function(event){
-        event.preventDefault();
-        utilityModule.hideMessage();
-
-        var key = $(this).find('a').data('secretkey');
-        
-        $.ajax({
-            type: "POST",
-            url: "/dashboard/secret",
-            data: { key : key},
-            success: function (data) {
-                $('#dashboard').html(data);
-            },
-            error: function(data) {
-                utilityModule.showMessage('error', data.responseText);
-                console.log(data.responseText);
-            }
-        });
-        
     });
 
     $(document).off('click', ".secretsListLink");

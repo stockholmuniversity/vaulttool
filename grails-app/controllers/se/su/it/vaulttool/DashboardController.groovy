@@ -23,8 +23,8 @@ class DashboardController {
         List<Map<String, MetaData>> secretMetaData = []
         def secrets = vaultRestService.listSecrets(session.token, selectedPath)
 
-        secrets.removeAll {it.endsWith("/")}
-        if(secrets) {
+        secrets.removeAll {it.endsWith("/") || it == 'dummykeydontuse'}
+            if(secrets) {
             secrets.each {String secret ->
                 secretMetaData << [secret: secret, metadata: MetaData.findBySecretKey(selectedPath+secret)]
             }
@@ -77,9 +77,26 @@ class DashboardController {
         secrets.each {secret ->
             def node = null
             if(secret.endsWith("/")){
-                node = ['id':params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, 'type':'pathNode', 'children': true, 'icon' : 'fa fa-folder']
+                def sc = vaultRestService.listSecrets(session.token, params['id'].toString().replaceAll("_","/") + "/" + secret)
+                
+                node = ['id'        :   params['id'] + '_' + secret.replace("/",""),
+                        parent      :   params['id'],
+                        'text'      :   secret.replace("/",""),
+                        admin       :   isAdmin,
+                        'type'      :   'pathNode',
+                        'children'  :   !(sc.size() == 1 && sc.contains('dummykeydontuse')),
+                        'icon'      :   'fa fa-folder',
+                        'a_attr'    :   ['class': 'path-no-children']]
              }  else {
-                node =  ['id':'leaf_' + params['id'] + '_' + secret.replace("/",""), parent:params['id'], 'text': secret.replace("/",""), admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
+                node =  ['id'       :   'leaf_' + params['id'] + '_' + secret.replace("/",""),
+                         parent     :   params['id'],
+                         'text'     :   secret.replace("/",""),
+                         admin      :   isAdmin,
+                         type       :   'leafNode',
+                         'children' :   false,
+                         'icon'     :   'fa fa-lock',
+                         'state'    :   ['hidden': (secret == 'dummykeydontuse')],
+                         'a_attr'   :   ['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
             }
 
             childNodes.add(node)

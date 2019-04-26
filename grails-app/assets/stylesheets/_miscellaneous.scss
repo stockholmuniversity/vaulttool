@@ -149,12 +149,13 @@
 .jstree-icon {
    color: #FFFFFF;
 }
-li a.jstree-anchor {
-  color: #FFFFFF !important;
-}
 
-
-li a.jstree-hovered, li a.jstree-clicked{
+li {
+  a.jstree-anchor {
+    color: #FFFFFF !important;
+  }
+  
+  a.jstree-hovered, a.jstree-clicked, a.jstree-clicked-leaf{
     color: #212529 !important;
 
     i{
@@ -162,8 +163,17 @@ li a.jstree-hovered, li a.jstree-clicked{
     }
 
   }
+}
 
 li.jstree-leaf{
+
+  a.jstree-anchor.path-no-children {
+    color: $opposite-colour !important;
+
+    i.jstree-icon{
+      color: $opposite-colour !important;
+    }
+  }
 
   a.jstree-anchor {
     color: #f8b607 !important;
@@ -172,9 +182,13 @@ li.jstree-leaf{
     i.jstree-icon{
       color: #f8b607 !important;
     }
-    
+
   }
-  a.jstree-hovered, a.jstree-clicked {
+  a.jstree-hovered,
+  a.jstree-clicked,
+  a.jstree-hovered.path-no-children,
+  a.jstree-clicked-leaf,
+  a.jstree-clicked-leaf.path-no-children {
     color: #212529 !important;
 
     i.jstree-icon{
@@ -194,9 +208,10 @@ border: 1px solid $main-colour;
 
 }
 
-.force-wholerow {
+.force-wholerow, .jstree-wholerow-leaf {
 background: linear-gradient(to bottom,#beebff 0,#a8e4ff 100%) !important;
 }
+
 
 .modal {
 
