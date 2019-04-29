@@ -175,8 +175,8 @@ $(document).ready(function(){
             type: "POST",
             url: "/dashboard/createSecret",
             data: { selectedPath    : selectedPath,
-                path            : path,
-                secret          : secret},
+                    path            : path,
+                    secret          : secret},
             success: function (data) {
                 $('#dashboard').html(data);
                 var key = $('#key').val();
@@ -186,6 +186,9 @@ $(document).ready(function(){
                 // (jstree makes node active again after refresh)
                 var node = selectedPath.split("/")[0];
                 var selected = $("#navTree").jstree(true).get_selected();
+
+                //Needs to be set otherwise jstree.after_open will take the node supplied by the event
+                sessionStorage.setItem('forceRowClass',selected);
 
                 $("#navTree").jstree(true).deselect_node(selected);
                 $("#navTree").jstree(true).refresh_node(node);
