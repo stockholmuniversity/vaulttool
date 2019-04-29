@@ -19,22 +19,12 @@ class DashboardController {
 
         String selectedPath = params?.selectedPath?:""
         session.selectedPath = selectedPath
-        def paths = vaultRestService.getPaths(session.token)
-        List<Map<String, MetaData>> secretMetaData = []
-        def secrets = vaultRestService.listSecrets(session.token, selectedPath)
-
-        secrets.removeAll {it.endsWith("/") || it == 'dummykeydontuse'}
-            if(secrets) {
-            secrets.each {String secret ->
-                secretMetaData << [secret: secret, metadata: MetaData.findBySecretKey(selectedPath+secret)]
-            }
-        }
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
 
         if(request.xhr){
-            return render(template: 'overview', model: [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData])
+            return render(template: 'overview', model: [selectedPath: selectedPath, capabilities: capabilities])
         }
-        [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
+        [selectedPath: selectedPath, capabilities: capabilities]
     }
 
     def loadRootPaths(){
