@@ -86,7 +86,10 @@ class VaultService {
             String newPathKey = pathKey.substring(pathKey.indexOf(lastPathElement))
             def obj = vaultRestService.getSecret(token, pathKey)
             MetaData metaDataOrg = MetaData.findBySecretKey(obj.entry.key)
-            MetaData metaData = new MetaData(metaDataOrg.properties)
+            MetaData metaData = null
+            if(metaDataOrg) {
+                metaData = new MetaData(metaDataOrg.properties)
+            }
 
             if(obj?.entry?.key && !obj.entry.key.empty && metaData?.secretKey && !metaData.secretKey.empty && obj.entry.key == metaData.secretKey){
                 obj.entry.key = newPathKey
@@ -123,6 +126,23 @@ class VaultService {
                 entry = new ZipEntry(newPathKey + "/filename.txt")
                 zos.putNextEntry(entry)
                 zos.write(metaData.fileName?metaData.fileName.getBytes():"".getBytes())
+                zos.closeEntry()
+            } else if(obj?.entry?.key && !obj.entry.key.empty) { //path copy
+                ZipEntry entry = new ZipEntry(newPathKey + "/key.txt")
+                zos.putNextEntry(entry)
+                zos.write(obj.entry.key.getBytes())
+                zos.closeEntry()
+                entry = new ZipEntry(newPathKey + "/username.txt")
+                zos.putNextEntry(entry)
+                zos.write(obj.entry.userName?obj.entry.userName.getBytes():"".getBytes())
+                zos.closeEntry()
+                entry = new ZipEntry(newPathKey + "/password.txt")
+                zos.putNextEntry(entry)
+                zos.write(obj.entry.pwd?obj.entry.pwd.getBytes():"".getBytes())
+                zos.closeEntry()
+                entry = new ZipEntry(newPathKey + "/binarydata")
+                zos.putNextEntry(entry)
+                zos.write(obj.entry.binaryData?:"".getBytes())
                 zos.closeEntry()
             }
         }
