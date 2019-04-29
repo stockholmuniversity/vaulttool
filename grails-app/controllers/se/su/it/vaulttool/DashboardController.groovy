@@ -28,8 +28,6 @@ class DashboardController {
     }
 
     def loadRootPaths(){
-        def paths =  vaultRestService.getPaths(session.token)
-
         def secrets = vaultRestService.listSecrets(session.token, "")
 
         def rootNodes = []
@@ -43,10 +41,21 @@ class DashboardController {
         secrets.each {secret ->
 
             if(secret.endsWith("/")){
-                node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), admin: isAdmin, type: 'pathNode', 'children': true, 'icon': 'fa fa-folder']
+                node = ['id'        : secret.replace("/",""),
+                        'text'      : secret.replace("/",""),
+                        admin       : isAdmin,
+                        type        : 'pathNode',
+                        'children'  : true,
+                        'icon'      : 'fa fa-folder']
                 nodes.add(node)
             }  else {
-                node =  ['id': 'leaf_' + secret, 'text': secret, admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': secret]]
+                node =  ['id'       : 'leaf_' + secret, 
+                         'text'     : secret,
+                         admin      : isAdmin,
+                         type       : 'leafNode',
+                         'children' : false,
+                         'icon'     :'fa fa-lock',
+                         'a_attr'   :['data-secretkey': secret]]
                 leafs.add(node)
             }
             rootNodes = nodes + leafs
