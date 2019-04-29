@@ -19,27 +19,15 @@ class DashboardController {
 
         String selectedPath = params?.selectedPath?:""
         session.selectedPath = selectedPath
-        def paths = vaultRestService.getPaths(session.token)
-        List<Map<String, MetaData>> secretMetaData = []
-        def secrets = vaultRestService.listSecrets(session.token, selectedPath)
-
-        secrets.removeAll {it.endsWith("/") || it == 'dummykeydontuse'}
-            if(secrets) {
-            secrets.each {String secret ->
-                secretMetaData << [secret: secret, metadata: MetaData.findBySecretKey(selectedPath+secret)]
-            }
-        }
         def capabilities = vaultRestService.getCapabilities(session.token, selectedPath)
 
         if(request.xhr){
-            return render(template: 'overview', model: [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData])
+            return render(template: 'overview', model: [selectedPath: selectedPath, capabilities: capabilities])
         }
-        [selectedPath: selectedPath, capabilities: capabilities, paths: paths, secrets: secretMetaData]
+        [selectedPath: selectedPath, capabilities: capabilities]
     }
 
     def loadRootPaths(){
-        def paths =  vaultRestService.getPaths(session.token)
-
         def secrets = vaultRestService.listSecrets(session.token, "")
 
         def rootNodes = []
@@ -53,10 +41,21 @@ class DashboardController {
         secrets.each {secret ->
 
             if(secret.endsWith("/")){
-                node = ['id': secret.replace("/",""), 'text': secret.replace("/",""), admin: isAdmin, type: 'pathNode', 'children': true, 'icon': 'fa fa-folder']
+                node = ['id'        : secret.replace("/",""),
+                        'text'      : secret.replace("/",""),
+                        admin       : isAdmin,
+                        type        : 'pathNode',
+                        'children'  : true,
+                        'icon'      : 'fa fa-folder']
                 nodes.add(node)
             }  else {
-                node =  ['id': 'leaf_' + secret, 'text': secret, admin: isAdmin, type: 'leafNode', 'children': false, 'icon':'fa fa-lock', 'a_attr':['data-secretkey': secret]]
+                node =  ['id'       : 'leaf_' + secret, 
+                         'text'     : secret,
+                         admin      : isAdmin,
+                         type       : 'leafNode',
+                         'children' : false,
+                         'icon'     :'fa fa-lock',
+                         'a_attr'   :['data-secretkey': secret]]
                 leafs.add(node)
             }
             rootNodes = nodes + leafs
