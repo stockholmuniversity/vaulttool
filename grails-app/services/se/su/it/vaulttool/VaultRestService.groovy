@@ -1,8 +1,6 @@
 package se.su.it.vaulttool
 
-import groovy.json.JsonSlurper
 import groovyx.net.http.AsyncHTTPBuilder
-import groovyx.net.http.HTTPBuilder
 
 class VaultRestService {
     static final public VAULTTOOLUSERSPATHNAME      = "vaulttoolusers"
