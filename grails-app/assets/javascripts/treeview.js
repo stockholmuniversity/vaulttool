@@ -300,7 +300,15 @@ $(document).ready(function(){
     //Handle the display of active node except leaf
     $('#navTree').on('after_open.jstree', function(e, data){
         removeWholeRowClasses();
-        addWholeRowClasses(data.node);
+        if(sessionStorage.forceRowClass){
+            //Get correct selected path after creating secret
+            var node = $("#navTree").jstree(true).get_node(sessionStorage.forceRowClass, true)[0];
+            addWholeRowClasses(node);
+            sessionStorage.removeItem('forceRowClass');
+        } else {
+            addWholeRowClasses(data.node);
+        }
+
     });
 
     //Handle the display of active node except leaf
@@ -314,6 +322,7 @@ $(document).ready(function(){
     $('#navTree').on('select_node.jstree', function(e, data){
         data.instance.toggle_node(data.node);
 
+        console.log('select_node');
         removeWholeRowClasses();
         var $navTree = $("#navTree");
         $navTree.find('div.jstree-wholerow-leaf').removeClass('jstree-wholerow-leaf');
