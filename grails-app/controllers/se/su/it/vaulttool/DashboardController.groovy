@@ -103,34 +103,6 @@ class DashboardController {
         return render (childNodes as JSON)
     }
 
-    def deletePath(String path){
-        String pathToDelete = params['path'] as String
-        
-        if(pathToDelete.empty){
-            redirect(actionName: "index")
-            return
-        }
-
-        Map<String, String> result = vaultService.deletePath(session.token, pathToDelete)
-        return render (result as JSON)
-    }
-
-    def copyPastePath() {
-        String path = params['path'] as String
-        String destination = params['destination'] as String
-
-        if(path.empty){
-            redirect(actionName: "index")
-            return
-        }
-
-        Byte[] zipByteArray = vaultService.copyPath(session.token, path)
-        Map<String, String> result = vaultService.pastePath(session.token, destination, zipByteArray)
-
-        return render (result as JSON)
-
-    }
-
     def overWriteCheck(){
         String fromPath = params.fromPath ? params.fromPath as String : ''
         String toPath = params.toPath ? params.toPath as String : ''
