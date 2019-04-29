@@ -8,17 +8,10 @@
     <div class="card-body">
         <div class="row bottom-margin-large">
             <div class="col-sm-2">
-                %{--<label for="selectedPath"><strong>Path</strong></label>--}%
                 <h5>Path</h5>
-
             </div>
             <div class="col-sm-4">
-                <h5><span id="selectedPath_new">${(selectedPath) ?: 'Root/' }</span></h5>
-                <form id="selectPathForm" name="selectPathForm">
-                <g:hiddenField name="selectedPath" value="${selectedPath}"/>
-                    %{--<g:select class="form-control" id="selectedPath" name="selectedPath" from="${paths}" value="${selectedPath}" noSelection="${['':'Root']}"/>--}%
-                </form>
-       
+                <h5><span id="selectedPathTitle">${(selectedPath) ?: 'Root/' }</span></h5>
             </div>
             <div class="col-sm-6">
                 Your capabilities on this path : <em>${capabilities.join(", ")}</em>
@@ -51,32 +44,3 @@
     </div>
 </div>
 
-<div class="card">
-    <div class="card-header">
-        <h3>Secrets</h3>
-    </div>
-    <div class="card-body top-padding-none bottom-padding-none cardBodyItemsListPadding">
-        <g:if test="${secrets.empty}">
-            <div class="left-padding-xsmall top-padding-xsmall bottom-padding-xsmall">No secrets added</div>
-        </g:if>
-        <g:else>
-            <g:form action="index">
-                <g:each in="${secrets}" var="secret" status="i">
-
-                    <div class="row pointer">
-                        <div class="col-sm-12 ${(i < secrets.size() - 1) ? 'itemListBorder':''} right-padding-none left-padding-none bottom-padding-none top-padding-none">
-                            <g:link class="secretsListLink" data-key="${selectedPath}${secret.secret}">
-                                <span>
-                                    <strong>${secret.secret}</strong><br />
-                                    ${secret.metadata?.title?:""}
-                                </span>
-
-                            </g:link>
-                        </div>
-                    </div>
-                </g:each>
-            </g:form>
-        </g:else>
-
-    </div>
-</div>

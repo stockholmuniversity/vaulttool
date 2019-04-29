@@ -226,40 +226,6 @@ $(document).ready(function(){
             $selLink.addClass('jstree-clicked');
         }
    }
-   //Triggered after the root node is loaded for the first time
-   $('#navTree').on('loaded.jstree', function(e){
-       var node = e.target.children[0].childNodes[0];
-       addWholeRowClasses(node);
-   });
-
-    $('#navTree').on("click.jstree", function (event) {
-
-        //Toggle folder icon when clicking on the arrow
-        var node =  $('#navTree').jstree(true).get_node(event.target.parentNode.id);
-
-        if(node.id !== 'root'){
-            if($('#' + node.id).hasClass('jstree-open') || $('#' + node.id).hasClass('jstree-loading')){
-                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder-open');
-            } else if($('#' + node.id).hasClass('jstree-closed')) {
-                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder');
-            }
-            removeWholeRowClasses();
-        } else {
-            window.location.href = '/';
-        }
-
-        //Clear user info menu since then user has left admin and navigated to a secret
-        if($('#navTree').jstree(true).is_leaf(node)){
-            var buttons = $('.activeAdminBtn');
-            $.each(buttons, function(index,val){
-                $(val).removeClass('activeAdminBtn');
-            });
-        }
-        
-        //Set the path in view
-        navigatePaths(node);
-     
-    });
 
     function navigatePaths(node){
         utilityModule.hideMessage();
@@ -296,6 +262,40 @@ $(document).ready(function(){
         }
 
     }
+
+    //Triggered after the root node is loaded for the first time
+    $('#navTree').on('loaded.jstree', function(e){
+        var node = e.target.children[0].childNodes[0];
+        addWholeRowClasses(node);
+    });
+
+    $('#navTree').on("click.jstree", function (event) {
+
+        //Toggle folder icon when clicking on the arrow
+        var node =  $('#navTree').jstree(true).get_node(event.target.parentNode.id);
+
+        if(node.id !== 'root'){
+            if($('#' + node.id).hasClass('jstree-open') || $('#' + node.id).hasClass('jstree-loading')){
+                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder-open');
+            } else if($('#' + node.id).hasClass('jstree-closed')) {
+                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder');
+            }
+            removeWholeRowClasses();
+        } else {
+            window.location.href = '/';
+        }
+
+        //Clear user info menu since then user has left admin and navigated to a secret
+        if($('#navTree').jstree(true).is_leaf(node)){
+            var buttons = $('.activeAdminBtn');
+            $.each(buttons, function(index,val){
+                $(val).removeClass('activeAdminBtn');
+            });
+        }
+
+        //Set the path in view
+        navigatePaths(node);
+    });
 
     //Handle the display of active node except leaf
     $('#navTree').on('after_open.jstree', function(e, data){
