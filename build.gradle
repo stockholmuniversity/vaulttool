@@ -61,6 +61,9 @@ dependencies {
     compile "org.apache.commons:commons-email:1.4"
     compile 'com.bertramlabs.plugins:sass-asset-pipeline:2.14.9'
     compile 'org.grails.plugins:build-test-data:3.3.1'
+    compile group: 'org.springframework', name: 'spring-aspects'
+    compile group: 'org.aspectj', name: 'aspectjweaver'
+    
     runtime "com.bertramlabs.plugins:asset-pipeline-grails:2.14.9"
     console "org.grails:grails-console"
     profile "org.grails.profiles:web"
