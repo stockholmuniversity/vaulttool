@@ -170,13 +170,15 @@ $(document).ready(function(){
     });
 
 
-    function createPathAndSecret(selectedPath, path, secret){
+    function createPathAndSecret(selectedPath, path, secret) {
         $.ajax({
             type: "POST",
             url: "/dashboard/createSecret",
-            data: { selectedPath    : selectedPath,
-                    path            : path,
-                    secret          : secret},
+            data: {
+                selectedPath: selectedPath,
+                path: path,
+                secret: secret
+            },
             success: function (data) {
                 $('#dashboard').html(data);
                 var key = $('#key').val();
@@ -188,13 +190,18 @@ $(document).ready(function(){
                 var selected = $("#navTree").jstree(true).get_selected();
 
                 //Needs to be set otherwise jstree.after_open will take the node supplied by the event
-                sessionStorage.setItem('forceRowClass',selected);
+                sessionStorage.setItem('forceRowClass', selected);
 
                 $("#navTree").jstree(true).deselect_node(selected);
                 $("#navTree").jstree(true).refresh_node(node);
 
+                var isOpen = $("#navTree").jstree(true).is_open(node);
+                if(!isOpen) {
+                    $("#navTree").jstree(true).open_node(node);
+                }
+                $("#navTree").jstree(true).select_node(key.replace(/\//g,'_'));
             },
-            error: function(data) {
+            error: function (data) {
                 utilityModule.showMessage('error', data.responseText);
                 console.log(data.responseText);
             }
