@@ -168,9 +168,32 @@ $(document).ready(function(){
         });
 
     });
-
-
+   
     function createPathAndSecret(selectedPath, path, secret) {
+        var $tree       =  $("#navTree");
+        var pt          = (path) ? path.split('/'):"";
+        var parentId    = selectedPath.replace(/\//g,"_").replace(/_$/,"");
+
+        if(pt.length > 0){
+            var nodeId = parentId;
+            $.each(pt, function(i, val){
+                var nId = nodeId += '_' + val;
+                var ptNode = {  id      : nId,
+                                text    : val,
+                                icon    : 'fa fa-folder'};
+                parentId = $tree.jstree(true).create_node(parentId, ptNode , 0, false, true);
+                nodeId = parentId;
+            });
+        }
+        var leafId = 'leaf_' + parentId + '_' + secret;
+        var duplicateNode = $tree.jstree(true).get_node(leafId);
+        if(!duplicateNode){
+            var leafNode = {id      : leafId,
+                            text    : secret,
+                            icon    : 'fa fa-lock'};
+            var createdLeafNode = $tree.jstree(true).create_node(parentId, leafNode , 0, false, true);
+        }
+
         $.ajax({
             type: "POST",
             url: "/dashboard/createSecret",
@@ -178,47 +201,26 @@ $(document).ready(function(){
                 selectedPath: selectedPath,
                 path: path,
                 secret: secret
-            },
-            success: function (data) {
+            }, success: function (data) {
                 $('#dashboard').html(data);
                 var key = $('#key').val();
                 utilityModule.showMessage('info', 'Successfully created secret ' + key);
 
-                //Deselect active node and then refresh to prevent active node from closing since jstree.select_node is fired on refresh.
-                // (jstree makes node active again after refresh)
-                var node = selectedPath.split("/")[0];
-                var selected = $("#navTree").jstree(true).get_selected();
+                var selectedNodes = $("#navTree").jstree(true).get_selected();
+                $.each(selectedNodes, function(i, val){
+                    $("#navTree").jstree(true).deselect_node(val);
+                });
 
-                //Needs to be set otherwise jstree.after_open will take the node supplied by the event
-                sessionStorage.setItem('forceRowClass', selected);
+                $tree.jstree(true).select_node(createdLeafNode);
 
-                $("#navTree").jstree(true).deselect_node(selected);
-                $("#navTree").jstree(true).refresh_node(node);
-
-                var isOpen = $("#navTree").jstree(true).is_open(node);
-                if(!isOpen) {
-                    $("#navTree").jstree(true).open_node(node);
-                }
-                $("#navTree").jstree(true).select_node(key.replace(/\//g,'_'));
-            },
-            error: function (data) {
+            }, error: function(data){
                 utilityModule.showMessage('error', data.responseText);
                 console.log(data.responseText);
             }
-
         });
     }
 
     function createOnlyPath(selectedPath, path){
-
-        //TODO:Maybe create node first then make ajax call (Node exists in memory and can be set to )...
-        // var node = selectedPath + path;
-        // console.log(node);
-        // var sel = $("#navTree").jstree(true).get_selected();
-        // console.log(sel);
-        // sel = $("#navTree").jstree(true).create_node(sel, path, 0 , false, true);
-        // console.log(sel);
-
         $.ajax({
             type: "POST",
             url: "/dashboard/createPath",
