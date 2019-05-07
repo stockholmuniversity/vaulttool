@@ -164,6 +164,7 @@ $(document).ready(function(){
    }
 
    function handlePaths(){
+        utilityModule.hideMessage();
         var fromPath = (sessionStorage.fromPath) ? sessionStorage.fromPath:'';
         var toPath = (sessionStorage.toPath) ? sessionStorage.toPath:'';
         var deletePath = (sessionStorage.deletePath) ? sessionStorage.deletePath:'';
@@ -184,7 +185,23 @@ $(document).ready(function(){
                    if(children.length > 0){
                        $navTree.jstree(true).delete_node(children);
                    }
+                   var parent = $navTree.jstree(true).get_parent(fromNode.id);
+                   $navTree.jstree(true).select_node(parent);
+                   $navTree.jstree(true).open_node(parent);
                    $navTree.jstree(true).delete_node(fromNode.id);
+
+                   $.ajax({
+                       type: 'POST',
+                       url: "/dashboard/index",
+                       data: {selectedPath: parent.replace(/_/g,'/') + '/'},
+                       success: function(data){
+                           $("#dashboard").html(data);
+                       },
+                       error: function(){
+
+                       }
+                   })
+
                }
 
                if(fromPath && toPath){
@@ -263,6 +280,85 @@ $(document).ready(function(){
 
     }
 
+    function nodeInMemory(id, text, icon, type){
+        return {id  : id,
+                text: text,
+                icon: icon,
+                type: type};
+    }
+
+    function createPathAndSecret(selectedPath, path, secret) {
+        var $tree       = $("#navTree");
+        var pt          = (path) ? path.split('/'):"";
+        var parentId    = selectedPath.replace(/\//g,"_").replace(/_$/,"");
+
+        if(pt.length > 0){
+
+            var nodeId = parentId;
+
+            $.each(pt, function(i, val){
+                var nId = nodeId += '_' + val;
+                var ptNode = nodeInMemory(nId,val,'fa fa-folder', 'pathNode');
+                parentId = $tree.jstree(true).create_node(parentId, ptNode , 0, false, true);
+                nodeId = parentId;
+            });
+        }
+
+        var leafId = 'leaf_' + parentId + '_' + secret;
+        var duplicateNode = $tree.jstree(true).get_node(leafId);
+
+        if(!duplicateNode){
+            var leafNode = nodeInMemory(leafId, secret, 'fa fa-lock', 'leafNode');
+            var createdLeafNode = $tree.jstree(true).create_node(parentId, leafNode , 0, false, true);
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "/dashboard/createSecret",
+            data: {
+                selectedPath: selectedPath,
+                path: path,
+                secret: secret
+            }, success: function (data) {
+                $('#dashboard').html(data);
+                var key = $('#key').val();
+                utilityModule.showMessage('info', 'Successfully created secret ' + key);
+
+                var selectedNodes = $("#navTree").jstree(true).get_selected();
+                $.each(selectedNodes, function(i, val){
+                    $("#navTree").jstree(true).deselect_node(val);
+                });
+
+                $tree.jstree(true).select_node(createdLeafNode);
+
+            }, error: function(data){
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
+            }
+        });
+    }
+
+    function createOnlyPath(selectedPath, path){
+        $.ajax({
+            type: "POST",
+            url: "/dashboard/createPath",
+            data: { selectedPath    : selectedPath,
+                path            : path},
+            success: function (data) {
+                utilityModule.showMessage('info', data.success);
+                console.log(data.success);
+            },
+            error: function(data) {
+                utilityModule.showMessage('error', data.responseText);
+                console.log(data.responseText);
+            },
+            complete: function(){
+                $("#navTree").jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
+            }
+        })
+    }
+
+
     //Triggered after the root node is loaded for the first time
     $('#navTree').on('loaded.jstree', function(e){
         var node = e.target.children[0].childNodes[0];
@@ -340,7 +436,28 @@ $(document).ready(function(){
        
     });
 
-    
+    $(document).off('click', "#createSecretSubmitBtn");
+    $(document).on('click', "#createSecretSubmitBtn", function(event){
+        event.preventDefault();
+        utilityModule.hideMessage();
+
+        var selectedPath = $('[name="selectedPath"]').val();
+        var path = $('#path').val();
+        var secret = $('#secret').val();
+
+        if(path.endsWith("/")) {
+            path = path.substr(0, path.length -1);
+        }
+
+        if((path && secret) || (!path && secret)) {
+            createPathAndSecret(selectedPath, path, secret);
+        } else if(path && !secret) {
+            createOnlyPath(selectedPath, path);
+        }  else {
+            utilityModule.showMessage('error', 'No path or secret supplied.');
+            console.log("No path or secret supplied");
+        }
+    });
 
 });
 
