@@ -169,51 +169,37 @@ $(document).ready(function(){
         var toPath = (sessionStorage.toPath) ? sessionStorage.toPath:'';
         var deletePath = (sessionStorage.deletePath) ? sessionStorage.deletePath:'';
 
-       $.ajax({
-           type    : "POST",
-           url     : "/dashboard/handlePaths",
-           data    : {  fromPath    :   fromPath,
-                        toPath      :   toPath,
-                        deletePath  :   deletePath},
-           success: function (data) {
-               var $navTree    =  $("#navTree");
+        callServer({fromPath:fromPath, toPath:toPath, deletePath:deletePath}, 'handlePaths')
+                .done(function(data){
+                    var $navTree    =  $("#navTree");
 
-               if(deletePath || (fromPath && !toPath)) {
-                   var fromNode =   $navTree.jstree(true).get_node(fromPath.replace(/\//g,'_'));
-                   var children = fromNode.children;
-                   
-                   if(children.length > 0){
-                       $navTree.jstree(true).delete_node(children);
-                   }
-                   var parent = $navTree.jstree(true).get_parent(fromNode.id);
-                   $navTree.jstree(true).select_node(parent);
-                   $navTree.jstree(true).open_node(parent);
-                   $navTree.jstree(true).delete_node(fromNode.id);
+                    if(deletePath || (fromPath && !toPath)) {
+                        var fromNode = $navTree.jstree(true).get_node(fromPath.replace(/\//g,'_'));
+                        var children = fromNode.children;
 
-                   $.ajax({
-                       type: 'POST',
-                       url: "/dashboard/index",
-                       data: {selectedPath: parent.replace(/_/g,'/') + '/'},
-                       success: function(data){
-                           $("#dashboard").html(data);
-                       },
-                       error: function(){
+                        if(children.length > 0){
+                            $navTree.jstree(true).delete_node(children);
+                        }
+                        var parent = $navTree.jstree(true).get_parent(fromNode.id);
+                        $navTree.jstree(true).select_node(parent);
+                        $navTree.jstree(true).open_node(parent);
+                        $navTree.jstree(true).delete_node(fromNode.id);
 
-                       }
-                   })
 
-               }
+                        callServer({selectedPath: parent.replace(/_/g,'/') + '/'}, 'index')
+                                .done(function(data){
+                                    $("#dashboard").html(data);
+                                });
+                    }
 
-               if(fromPath && toPath){
-                  $navTree.jstree(true).load_node(toPath.replace(/\//g,'_'));
-                  $navTree.jstree(true).open_node(toPath.replace(/\//g,'_'));
-               }
-           },
-           error: function(data) {
-               console.log(data.message);
-           }
-       });
-
+                    if(fromPath && toPath){
+                        $navTree.jstree(true).load_node(toPath.replace(/\//g,'_'));
+                        $navTree.jstree(true).open_node(toPath.replace(/\//g,'_'));
+                    }
+                }).fail(function(data){
+                    //TODO: Show message to user?
+                    console.log(data.message);
+                });
    }
 
    function removeWholeRowClasses(){
@@ -250,36 +236,32 @@ $(document).ready(function(){
         if(node.type === 'pathNode' || !$('#navTree').jstree(true).is_leaf(node)){
             var selectedPath = node.id.replace(/_/g,"/") + "/";
 
-            $.ajax({
-                type: 'POST',
-                url: "/dashboard/index",
-                data: {selectedPath: selectedPath},
-                success: function(data){
-                    $("#dashboard").html(data);
-                },
-                error: function(){
-
-                }
-            })
+            callServer({selectedPath: selectedPath}, 'index')
+                    .done(function(data){
+                        $("#dashboard").html(data);
+                    });
         } else {
             var key = node.id.substring(5).replace(/_/g, "/");
 
-            $.ajax({
-                type: "POST",
-                url: "/dashboard/secret",
-                data: { key : key},
-                success: function (data) {
-                    $('#dashboard').html(data);
-                },
-                error: function(data) {
-                    utilityModule.showMessage('error', data.responseText);
-                    console.log(data.responseText);
-                }
-            });
+            callServer({key : key}, 'secret')
+                    .done(function(data){
+                        $('#dashboard').html(data);
+                    }).fail(function(data){
+                        utilityModule.showMessage('error', data.responseText);
+                        console.log(data.responseText);
+                    });
         }
 
     }
 
+    function callServer(data, url){
+        return $.ajax({
+            type: "POST",
+            url: "/dashboard/" + url,
+            data: data
+        })
+    }
+    
     function nodeInMemory(id, text, icon, type){
         return {id  : id,
                 text: text,
@@ -312,50 +294,36 @@ $(document).ready(function(){
             var createdLeafNode = $tree.jstree(true).create_node(parentId, leafNode , 0, false, true);
         }
 
-        $.ajax({
-            type: "POST",
-            url: "/dashboard/createSecret",
-            data: {
-                selectedPath: selectedPath,
-                path: path,
-                secret: secret
-            }, success: function (data) {
-                $('#dashboard').html(data);
-                var key = $('#key').val();
-                utilityModule.showMessage('info', 'Successfully created secret ' + key);
+        callServer({selectedPath: selectedPath, path: path, secret: secret}, 'createSecret')
+                .done(function(data){
+                    $('#dashboard').html(data);
+                    var key = $('#key').val();
+                    utilityModule.showMessage('info', 'Successfully created secret ' + key);
 
-                var selectedNodes = $("#navTree").jstree(true).get_selected();
-                $.each(selectedNodes, function(i, val){
-                    $("#navTree").jstree(true).deselect_node(val);
+                    var selectedNodes = $("#navTree").jstree(true).get_selected();
+                    $.each(selectedNodes, function(i, val){
+                        $("#navTree").jstree(true).deselect_node(val);
+                    });
+                    $tree.jstree(true).select_node(createdLeafNode);
+
+                }).fail(function(data){
+                    utilityModule.showMessage('error', data.responseText);
+                    console.log(data.responseText);
                 });
-
-                $tree.jstree(true).select_node(createdLeafNode);
-
-            }, error: function(data){
-                utilityModule.showMessage('error', data.responseText);
-                console.log(data.responseText);
-            }
-        });
     }
 
     function createOnlyPath(selectedPath, path){
-        $.ajax({
-            type: "POST",
-            url: "/dashboard/createPath",
-            data: { selectedPath    : selectedPath,
-                path            : path},
-            success: function (data) {
-                utilityModule.showMessage('info', data.success);
-                console.log(data.success);
-            },
-            error: function(data) {
-                utilityModule.showMessage('error', data.responseText);
-                console.log(data.responseText);
-            },
-            complete: function(){
-                $("#navTree").jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
-            }
-        })
+        callServer({selectedPath:selectedPath, path:path}, 'createPath')
+                .done(function(data){
+                    utilityModule.showMessage('info', data.success);
+                    console.log(data.success);
+                })
+                .fail(function(data){
+                    utilityModule.showMessage('error', data.responseText);
+                    console.log(data.responseText);
+                }).always(function(){
+                    $("#navTree").jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
+                });
     }
 
 
