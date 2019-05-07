@@ -263,10 +263,11 @@ $(document).ready(function(){
 
     }
 
-    function nodeInMemory(id, text, icon){
+    function nodeInMemory(id, text, icon, type){
         return {id  : id,
-            text: text,
-            icon: icon};
+                text: text,
+                icon: icon,
+                type: type};
     }
 
     function createPathAndSecret(selectedPath, path, secret) {
@@ -280,7 +281,7 @@ $(document).ready(function(){
 
             $.each(pt, function(i, val){
                 var nId = nodeId += '_' + val;
-                var ptNode = nodeInMemory(nId,val,'fa fa-folder');
+                var ptNode = nodeInMemory(nId,val,'fa fa-folder', 'pathNode');
                 parentId = $tree.jstree(true).create_node(parentId, ptNode , 0, false, true);
                 nodeId = parentId;
             });
@@ -290,7 +291,7 @@ $(document).ready(function(){
         var duplicateNode = $tree.jstree(true).get_node(leafId);
 
         if(!duplicateNode){
-            var leafNode = nodeInMemory(leafId, secret, 'fa fa-lock');
+            var leafNode = nodeInMemory(leafId, secret, 'fa fa-lock', 'leafNode');
             var createdLeafNode = $tree.jstree(true).create_node(parentId, leafNode , 0, false, true);
         }
 
