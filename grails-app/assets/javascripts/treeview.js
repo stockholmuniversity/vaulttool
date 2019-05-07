@@ -164,6 +164,7 @@ $(document).ready(function(){
    }
 
    function handlePaths(){
+        utilityModule.hideMessage();
         var fromPath = (sessionStorage.fromPath) ? sessionStorage.fromPath:'';
         var toPath = (sessionStorage.toPath) ? sessionStorage.toPath:'';
         var deletePath = (sessionStorage.deletePath) ? sessionStorage.deletePath:'';
@@ -184,7 +185,23 @@ $(document).ready(function(){
                    if(children.length > 0){
                        $navTree.jstree(true).delete_node(children);
                    }
+                   var parent = $navTree.jstree(true).get_parent(fromNode.id);
+                   $navTree.jstree(true).select_node(parent);
+                   $navTree.jstree(true).open_node(parent);
                    $navTree.jstree(true).delete_node(fromNode.id);
+
+                   $.ajax({
+                       type: 'POST',
+                       url: "/dashboard/index",
+                       data: {selectedPath: parent.replace(/_/g,'/') + '/'},
+                       success: function(data){
+                           $("#dashboard").html(data);
+                       },
+                       error: function(){
+
+                       }
+                   })
+
                }
 
                if(fromPath && toPath){
