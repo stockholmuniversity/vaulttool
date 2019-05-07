@@ -168,29 +168,35 @@ $(document).ready(function(){
         });
 
     });
-   
+
+    function nodeInMemory(id, text, icon){
+        return {id  : id,
+                text: text,
+                icon: icon};
+    }
+
     function createPathAndSecret(selectedPath, path, secret) {
-        var $tree       =  $("#navTree");
+        var $tree       = $("#navTree");
         var pt          = (path) ? path.split('/'):"";
         var parentId    = selectedPath.replace(/\//g,"_").replace(/_$/,"");
 
         if(pt.length > 0){
+
             var nodeId = parentId;
+
             $.each(pt, function(i, val){
                 var nId = nodeId += '_' + val;
-                var ptNode = {  id      : nId,
-                                text    : val,
-                                icon    : 'fa fa-folder'};
+                var ptNode = nodeInMemory(nId,val,'fa fa-folder');
                 parentId = $tree.jstree(true).create_node(parentId, ptNode , 0, false, true);
                 nodeId = parentId;
             });
         }
+
         var leafId = 'leaf_' + parentId + '_' + secret;
         var duplicateNode = $tree.jstree(true).get_node(leafId);
+
         if(!duplicateNode){
-            var leafNode = {id      : leafId,
-                            text    : secret,
-                            icon    : 'fa fa-lock'};
+            var leafNode = nodeInMemory(leafId, secret, 'fa fa-lock');
             var createdLeafNode = $tree.jstree(true).create_node(parentId, leafNode , 0, false, true);
         }
 
