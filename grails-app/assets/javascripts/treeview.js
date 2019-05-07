@@ -322,7 +322,6 @@ $(document).ready(function(){
     $('#navTree').on('select_node.jstree', function(e, data){
         data.instance.toggle_node(data.node);
 
-        console.log('select_node');
         removeWholeRowClasses();
         var $navTree = $("#navTree");
         $navTree.find('div.jstree-wholerow-leaf').removeClass('jstree-wholerow-leaf');
