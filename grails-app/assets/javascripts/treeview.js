@@ -404,6 +404,15 @@ $(document).ready(function(){
        
     });
 
+    $('#navTree').on('load_node.jstree', function(e, data){
+        //Force wholerow styling on root node after delete secret
+        if(data.node.id === "#"){
+            var node = $("#navTree").jstree(true).get_node('root', true);
+            $(node[0].children[0]).addClass("jstree-wholerow-leaf");
+            $(node[0].children[2]).addClass("jstree-clicked-leaf");
+        }
+    });
+
     $(document).off('click', "#createSecretSubmitBtn");
     $(document).on('click', "#createSecretSubmitBtn", function(event){
         event.preventDefault();
