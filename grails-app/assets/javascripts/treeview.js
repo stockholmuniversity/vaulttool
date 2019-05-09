@@ -373,6 +373,9 @@ $(document).ready(function(){
             addWholeRowClasses(data.node);
         }
 
+        if(data.node.type !== 'rootNode'){
+            data.instance.set_icon(data.node.id,'fa fa-folder-open');
+        }
     });
 
     //Handle the display of active node except leaf
