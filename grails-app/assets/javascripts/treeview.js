@@ -273,17 +273,44 @@ $(document).ready(function(){
         var $tree       = $("#navTree");
         var pt          = (path) ? path.split('/'):"";
         var parentId    = selectedPath.replace(/\//g,"_").replace(/_$/,"");
+        var fullPath    = selectedPath;
 
-        if(pt.length > 0){
+        if(path){
+            if(secret){
+                fullPath = 'leaf/' + fullPath + path + '/' + secret
+            } else {
+                fullPath += path
+            }
+        } else if(secret){
+            fullPath = 'leaf/' + fullPath + secret
+        }
+        var msg = 'Failed when trying to create secret ' + fullPath.replace('leaf/',"") + ' . Error was: Secret already exist';
+        fullPath = fullPath.replace(/\//g,"_");
 
-            var nodeId = parentId;
+        var exists = $tree.jstree(true).get_node(fullPath);
+        if(exists){
+            utilityModule.showMessage('error', msg);
+            return;
+        }
 
-            $.each(pt, function(i, val){
-                var nId = nodeId += '_' + val;
-                var ptNode = nodeInMemory(nId,val,'fa fa-folder', 'pathNode');
-                parentId = $tree.jstree(true).create_node(parentId, ptNode , 0, false, true);
-                nodeId = parentId;
-            });
+        var pathString = selectedPath + path;
+        var existsPath =  $tree.jstree(true).get_node(pathString.replace(/\//g, "_"));
+        
+        if(!existsPath){
+            if(pt.length > 0){
+
+                var nodeId = parentId;
+
+                $.each(pt, function(i, val){
+                    var nId     = nodeId += '_' + val;
+                    var ptNode  = nodeInMemory(nId, val,'fa fa-folder', 'pathNode');
+                    parentId    = $tree.jstree(true).create_node(parentId, ptNode , 0, false, true);
+                    nodeId      = parentId;
+                });
+            }
+
+        } else {
+            parentId = pathString.replace(/\//g, "_")
         }
 
         var leafId = 'leaf_' + parentId + '_' + secret;
@@ -293,7 +320,7 @@ $(document).ready(function(){
             var leafNode = nodeInMemory(leafId, secret, 'fa fa-lock', 'leafNode');
             var createdLeafNode = $tree.jstree(true).create_node(parentId, leafNode , 0, false, true);
         }
-
+        
         callServer({selectedPath: selectedPath, path: path, secret: secret}, 'createSecret')
                 .done(function(data){
                     $('#dashboard').html(data);
@@ -307,6 +334,7 @@ $(document).ready(function(){
                     $tree.jstree(true).select_node(createdLeafNode);
 
                 }).fail(function(data){
+                    //$("#navTree").jstree(true).refresh();
                     utilityModule.showMessage('error', data.responseText);
                     console.log(data.responseText);
                 });
