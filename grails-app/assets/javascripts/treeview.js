@@ -1,6 +1,7 @@
 $(document).ready(function(){
+    var $tree = $('#navTree');
 
-    $('#navTree').jstree({
+    $tree.jstree({
         'core': {
             'check_callback': true,
             'data': {
@@ -171,19 +172,19 @@ $(document).ready(function(){
 
         callServer({fromPath:fromPath, toPath:toPath, deletePath:deletePath}, 'handlePaths')
                 .done(function(data){
-                    var $navTree    =  $("#navTree");
+
 
                     if(deletePath || (fromPath && !toPath)) {
-                        var fromNode = $navTree.jstree(true).get_node(fromPath.replace(/\//g,'_'));
+                        var fromNode = $tree.jstree(true).get_node(fromPath.replace(/\//g,'_'));
                         var children = fromNode.children;
 
                         if(children.length > 0){
-                            $navTree.jstree(true).delete_node(children);
+                            $tree.jstree(true).delete_node(children);
                         }
                         var parent = $navTree.jstree(true).get_parent(fromNode.id);
-                        $navTree.jstree(true).select_node(parent);
-                        $navTree.jstree(true).open_node(parent);
-                        $navTree.jstree(true).delete_node(fromNode.id);
+                        $tree.jstree(true).select_node(parent);
+                        $tree.jstree(true).open_node(parent);
+                        $tree.jstree(true).delete_node(fromNode.id);
 
 
                         callServer({selectedPath: parent.replace(/_/g,'/') + '/'}, 'index')
@@ -193,8 +194,8 @@ $(document).ready(function(){
                     }
 
                     if(fromPath && toPath){
-                        $navTree.jstree(true).load_node(toPath.replace(/\//g,'_'));
-                        $navTree.jstree(true).open_node(toPath.replace(/\//g,'_'));
+                        $tree.jstree(true).load_node(toPath.replace(/\//g,'_'));
+                        $tree.jstree(true).open_node(toPath.replace(/\//g,'_'));
                     }
                 }).fail(function(data){
                     //TODO: Show message to user?
@@ -203,9 +204,8 @@ $(document).ready(function(){
    }
 
    function removeWholeRowClasses(){
-        var $navTree    = $("#navTree");
-        var el1         = $navTree.find('div.jstree-wholerow-clicked');
-        var el2         = $navTree.find('a.jstree-clicked');
+        var el1         = $tree.find('div.jstree-wholerow-clicked');
+        var el2         = $tree.find('a.jstree-clicked');
 
         $.each(el1, function(index, val){
            $(val).removeClass('jstree-wholerow-clicked');
@@ -233,7 +233,7 @@ $(document).ready(function(){
     function navigatePaths(node){
         utilityModule.hideMessage();
         
-        if(node.type === 'pathNode' || !$('#navTree').jstree(true).is_leaf(node)){
+        if(node.type === 'pathNode' || !$tree.jstree(true).is_leaf(node)){
             var selectedPath = node.id.replace(/_/g,"/") + "/";
 
             callServer({selectedPath: selectedPath}, 'index')
@@ -270,7 +270,6 @@ $(document).ready(function(){
     }
 
     function createPathAndSecret(selectedPath, path, secret) {
-        var $tree       = $("#navTree");
         var pt          = (path) ? path.split('/'):"";
         var parentId    = selectedPath.replace(/\//g,"_").replace(/_$/,"");
         var selPath     = selectedPath;
@@ -324,9 +323,9 @@ $(document).ready(function(){
                     var key = $('#key').val();
                     utilityModule.showMessage('info', 'Successfully created secret ' + key);
 
-                    var selectedNodes = $("#navTree").jstree(true).get_selected();
+                    var selectedNodes = $tree.jstree(true).get_selected();
                     $.each(selectedNodes, function(i, val){
-                        $("#navTree").jstree(true).deselect_node(val);
+                        $tree.jstree(true).deselect_node(val);
                     });
                     $tree.jstree(true).select_node(createdLeafNode);
 
@@ -347,27 +346,27 @@ $(document).ready(function(){
                     utilityModule.showMessage('error', data.responseText);
                     console.log(data.responseText);
                 }).always(function(){
-                    $("#navTree").jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
+                    $tree.jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
                 });
     }
 
 
     //Triggered after the root node is loaded for the first time
-    $('#navTree').on('loaded.jstree', function(e){
+    $tree.on('loaded.jstree', function(e){
         var node = e.target.children[0].childNodes[0];
         addWholeRowClasses(node);
     });
 
-    $('#navTree').on("click.jstree", function (event) {
+    $tree.on("click.jstree", function (event) {
 
         //Toggle folder icon when clicking on the arrow
-        var node =  $('#navTree').jstree(true).get_node(event.target.parentNode.id);
+        var node =  $tree.jstree(true).get_node(event.target.parentNode.id);
 
         if(node.id !== 'root'){
             if($('#' + node.id).hasClass('jstree-open') || $('#' + node.id).hasClass('jstree-loading')){
-                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder-open');
+                $tree.jstree(true).set_icon(node.id, 'fa fa-folder-open');
             } else if($('#' + node.id).hasClass('jstree-closed')) {
-                $("#navTree").jstree(true).set_icon(node.id, 'fa fa-folder');
+                $tree.jstree(true).set_icon(node.id, 'fa fa-folder');
             }
             removeWholeRowClasses();
         } else {
@@ -375,7 +374,7 @@ $(document).ready(function(){
         }
 
         //Clear user info menu since then user has left admin and navigated to a secret
-        if($('#navTree').jstree(true).is_leaf(node)){
+        if($tree.jstree(true).is_leaf(node)){
             var buttons = $('.activeAdminBtn');
             $.each(buttons, function(index,val){
                 $(val).removeClass('activeAdminBtn');
@@ -387,11 +386,11 @@ $(document).ready(function(){
     });
 
     //Handle the display of active node except leaf
-    $('#navTree').on('after_open.jstree', function(e, data){
+    $tree.on('after_open.jstree', function(e, data){
         removeWholeRowClasses();
         if(sessionStorage.forceRowClass){
             //Get correct selected path after creating secret
-            var node = $("#navTree").jstree(true).get_node(sessionStorage.forceRowClass, true)[0];
+            var node = $tree.jstree(true).get_node(sessionStorage.forceRowClass, true)[0];
             addWholeRowClasses(node);
             sessionStorage.removeItem('forceRowClass');
         } else {
@@ -404,20 +403,19 @@ $(document).ready(function(){
     });
 
     //Handle the display of active node except leaf
-    $('#navTree').on('after_close.jstree', function(e, data){
+    $tree.on('after_close.jstree', function(e, data){
         removeWholeRowClasses();
         addWholeRowClasses(data.node);
     });
 
     
     //Expand and collapse path with left click on node
-    $('#navTree').on('select_node.jstree', function(e, data){
+    $tree.on('select_node.jstree', function(e, data){
         data.instance.toggle_node(data.node);
 
         removeWholeRowClasses();
-        var $navTree = $("#navTree");
-        $navTree.find('div.jstree-wholerow-leaf').removeClass('jstree-wholerow-leaf');
-        $navTree.find('a.jstree-clicked-leaf').removeClass('jstree-clicked-leaf');
+        $tree.find('div.jstree-wholerow-leaf').removeClass('jstree-wholerow-leaf');
+        $tree.find('a.jstree-clicked-leaf').removeClass('jstree-clicked-leaf');
 
         
         if(!data.instance.is_leaf(data.node) && data.node.type !== 'rootNode'){
@@ -432,10 +430,10 @@ $(document).ready(function(){
        
     });
 
-    $('#navTree').on('load_node.jstree', function(e, data){
+    $tree.on('load_node.jstree', function(e, data){
         //Force wholerow styling on root node after delete secret
         if(data.node.id === "#"){
-            var node = $("#navTree").jstree(true).get_node('root', true);
+            var node = $tree.jstree(true).get_node('root', true);
             $(node[0].children[0]).addClass("jstree-wholerow-leaf");
             $(node[0].children[2]).addClass("jstree-clicked-leaf");
         }
