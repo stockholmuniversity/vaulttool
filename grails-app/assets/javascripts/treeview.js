@@ -274,6 +274,9 @@ $(document).ready(function(){
         var pt          = (path) ? path.split('/'):"";
         var parentId    = selectedPath.replace(/\//g,"_").replace(/_$/,"");
         var fullPath    = selectedPath;
+        var pathString  = selectedPath + path;
+        var msg         = "";
+        var exists      = false;
 
         if(path){
             if(secret){
@@ -284,19 +287,17 @@ $(document).ready(function(){
         } else if(secret){
             fullPath = 'leaf/' + fullPath + secret
         }
-        var msg = 'Failed when trying to create secret ' + fullPath.replace('leaf/',"") + ' . Error was: Secret already exist';
+        msg = 'Failed when trying to create secret ' + fullPath.replace('leaf/',"") + ' . Error was: Secret already exist';
         fullPath = fullPath.replace(/\//g,"_");
 
-        var exists = $tree.jstree(true).get_node(fullPath);
+        exists = $tree.jstree(true).get_node(fullPath);
         if(exists){
             utilityModule.showMessage('error', msg);
             return;
         }
 
-        var pathString = selectedPath + path;
-        var existsPath =  $tree.jstree(true).get_node(pathString.replace(/\//g, "_"));
-        
-        if(!existsPath){
+        exists = $tree.jstree(true).get_node(pathString.replace(/\//g, "_"));
+        if(!exists){
             if(pt.length > 0){
 
                 var nodeId = parentId;
@@ -314,9 +315,8 @@ $(document).ready(function(){
         }
 
         var leafId = 'leaf_' + parentId + '_' + secret;
-        var duplicateNode = $tree.jstree(true).get_node(leafId);
-
-        if(!duplicateNode){
+        exists = $tree.jstree(true).get_node(leafId);
+        if(!exists){
             var leafNode = nodeInMemory(leafId, secret, 'fa fa-lock', 'leafNode');
             var createdLeafNode = $tree.jstree(true).create_node(parentId, leafNode , 0, false, true);
         }
