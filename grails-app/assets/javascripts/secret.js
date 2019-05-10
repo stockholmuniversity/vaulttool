@@ -556,17 +556,9 @@ $(document).ready(function(){
             url: "/dashboard/delete",
             data: { key : key},
             success: function (data) {
-                $('#dashboard').html(data);
                 utilityModule.showMessage('info', 'Successfully deleted secret ' + key);
-
-                //Deselect active node and then refresh to prevent active node from closing since jstree.select_node is fired on refresh.
-                // (jstree makes node active again after refresh)
-                var node = key.split("/")[0];
-                var selected = $("#navTree").jstree(true).get_selected();
-
-                $("#navTree").jstree(true).deselect_node(selected);
-                $("#navTree").jstree(true).refresh_node(node);
-
+                $('#dashboard').html(data);
+                $("#navTree").jstree(true).refresh();
             },
             error: function(data) {
                 utilityModule.showMessage('error', data.responseText);
@@ -576,6 +568,6 @@ $(document).ready(function(){
     }
 
 
-    
+
 
 });

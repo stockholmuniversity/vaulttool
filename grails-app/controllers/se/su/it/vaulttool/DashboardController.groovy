@@ -85,7 +85,7 @@ class DashboardController {
                         'type'      :   'pathNode',
                         'children'  :   !(sc.size() == 1 && sc.contains('dummykeydontuse')),
                         'icon'      :   'fa fa-folder',
-                        'a_attr'    :   ['class': 'path-no-children']]
+                        'a_attr'    :   (sc.size() == 1 && sc.contains('dummykeydontuse')) ? ['class': 'path-no-children']:'']
              }  else {
                 node =  ['id'       :   'leaf_' + params['id'] + '_' + secret.replace("/",""),
                          parent     :   params['id'],
