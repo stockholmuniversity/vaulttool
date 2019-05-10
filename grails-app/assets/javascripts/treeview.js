@@ -83,11 +83,7 @@ $(document).ready(function(){
         }
 
         if(node.type !== 'leafNode' && node.type !== 'rootNode'){
-            if(sessionStorage.enablePaste){
-                items.item3._disabled = false;
-            } else {
-                items.item3._disabled = true;
-            }
+            items.item3._disabled = (!sessionStorage.enablePaste)
         }
 
         //TODO:The cut function should be disabled for now. We need to check the capabilities of the user on the recipient path when cutting and pasting.
@@ -181,7 +177,7 @@ $(document).ready(function(){
                         if(children.length > 0){
                             $tree.jstree(true).delete_node(children);
                         }
-                        var parent = $navTree.jstree(true).get_parent(fromNode.id);
+                        var parent = $tree.jstree(true).get_parent(fromNode.id);
                         $tree.jstree(true).select_node(parent);
                         $tree.jstree(true).open_node(parent);
                         $tree.jstree(true).delete_node(fromNode.id);
