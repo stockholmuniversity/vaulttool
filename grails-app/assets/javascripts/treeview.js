@@ -70,7 +70,14 @@ $(document).ready(function(){
                         sessionStorage.removeItem('deletePath');
                         sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
 
-                        showModal();
+                        var body = "<div class='bottom-margin-medium'>"
+                                + "Vill du ta bort " +"<strong>" + sessionStorage.fromPath +"</strong>"+ "?"
+                                + "</div>"
+                                + "<div class='bottom-margin-medium'>"
+                                + sessionStorage.fromPath + " samt alla paths och alla secrets under " + sessionStorage.fromPath + " kommer att tas bort."
+                                +"</div>"
+                                + "<div>" + "Vill du fortsätta?" + "</div>";
+                        showModal(body, handlePaths);
                     }
             }
         };
@@ -92,30 +99,25 @@ $(document).ready(function(){
         return items;
     }
 
-   function showModal(){
+   function showModal(body, callbackFunction){
+       utilityModule.modalDialog({
+           icon: 'exclamation-triangle',
+           title: 'Delete path',
+           body:  body,
+           buttons : [
+               {
+                   title: 'Avbryt',
+                   type: 'primary',
+                   click: null
+               },
+               {
+                   title: 'Ja',
+                   type: 'default',
+                   click: callbackFunction
+               }
+           ]
 
-         utilityModule.modalDialog({
-             icon: 'exclamation-triangle',
-             title: 'Delete path',
-             body:  "<div class='bottom-margin-medium'>" + "Vill du ta bort " +"<strong>" + sessionStorage.fromPath +"</strong>"+ "?" + "</div>" +
-                    "<div class='bottom-margin-medium'>" + sessionStorage.fromPath + " samt alla paths och alla secrets under " + sessionStorage.fromPath + " kommer att tas bort." +"</div>"+
-                    "<div>" + "Vill du fortsätta?" + "</div>",
-             buttons : [
-                 {
-                     title: 'Avbryt',
-                     type: 'primary',
-                     click: null
-                 },
-                 {
-                     title: 'Ja',
-                     type: 'default',
-                     click: function(){
-                         handlePaths();}
-                 }
-             ]
-
-         });
-
+       });
    }
 
    function overWriteCheck(){
@@ -128,30 +130,12 @@ $(document).ready(function(){
            data: {fromPath : fromPath,
            toPath : toPath},
            success: function(data){
-               console.log(data);
                if(data === 'danger'){
-
-                   utilityModule.modalDialog({
-                       icon: 'exclamation-triangle',
-                       title: 'Copy path',
-                       body:  "<div class='bottom-margin-medium'>" + "Det finns redan en path med samma namn. "  + "Secrets under denna path kan komma att skrivas över." + "</div>" +
-                       "<div>" + "Vill du fortsätta?" + "</div>",
-                       buttons : [
-                           {
-                               title: 'Avbryt',
-                               type: 'primary',
-                               click: null
-                           },
-                           {
-                               title: 'Ja',
-                               type: 'default',
-                               click: function(){
-                                   handlePaths();}
-                           }
-                       ]
-
-                   });
-
+                   var body = "<div class='bottom-margin-medium'>"
+                           + "Det finns redan en path med samma namn. " + "Secrets under denna path kan komma att skrivas över."
+                           + "</div>"
+                           + "<div>" + "Vill du fortsätta?" + "</div>";
+                   showModal(body, handlePaths);
                } else {
                    handlePaths();
                }
