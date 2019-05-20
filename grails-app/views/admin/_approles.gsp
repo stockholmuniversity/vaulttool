@@ -1,6 +1,6 @@
     <div class="card bottom-margin-large">
         <div class="card-header">
-            <h3>Application Roles Administration</h3>
+            <h3>Create new role</h3>
         </div>
         <div class="card-body">
             <form id="createApproleForm" name="createApproleForm">
@@ -9,7 +9,7 @@
                         <label for="name"><strong>Role</strong></label>
                     </div>
                     <div class="col-md-10">
-                        <input class="allowonly7bit form-control" type="text" id="name" name="name" value="" placeholder="Application role name (entitlement)"/>
+                        <input class="allowonly7bit form-control" type="text" id="name" name="name" value="" placeholder="Role name"/>
                     </div>
                 </div>
                 <div class="row bottom-margin-small">
@@ -18,13 +18,40 @@
 
                      </div>
                     <div class="col-md-10">
-                        <g:select class="form-control" from="${policies*.policy}"  multiple="multiple" id="policies" name="policies"/>
-                        <span class="text-muted small">Select one or more policies</span>
+                        <div class="row">
+                            <div id="selectedPolicies" class="col-12">
+                                
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div id="policiesContainer" class="col-12 d-none">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div id="selectablePolicies" class="row">
+                                            <g:each in="${policies*.policy}" var="policy">
+                                                <div id="policy_${policy}" class="col-3 pointer" data-policy="${policy}">
+                                                    <span style="color: rgba(0,47,95,0.8)">
+                                                        <strong>${policy}</strong>
+                                                    </span>
+                                                </div>
+                                            </g:each>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <g:hiddenField name="policies"/>
+                                <span id="addPolicyLink" style="color: rgba(0,47,95,0.8);" class="pointer">
+                                    <span class="fa fa-plus"></span> <strong id="policyLinkLabel">Add policies</strong>
+                                </span>
+                            </div>
+                        </div>
                     </div>
+                    
                 </div>
 
                 <div class="pull-right">
-                    <button id="createUpdateApproleButton" class="btn btn-primary" name="createUpdateApproleButton" value="Create/Update Role">Create/Update Role</button>
+                    <button id="createUpdateApproleButton" class="btn btn-primary" name="createUpdateApproleButton" value="Create/Update Role">Create</button>
                 </div>
             </form>
         </div>

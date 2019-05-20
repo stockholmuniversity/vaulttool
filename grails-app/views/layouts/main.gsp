@@ -21,6 +21,7 @@
     <asset:javascript src="treeview.js"/>
     <asset:javascript src="secret.js"/>
     <asset:javascript src="utility.js"/>
+    <asset:javascript src="admin.js"/>
 
     <g:layoutHead/>
 </head>
