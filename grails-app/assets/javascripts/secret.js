@@ -446,30 +446,6 @@ $(document).ready(function(){
         });
 
     });
-    
-
-    $(document).off('click', '#createUpdateApproleButton');
-    $(document).on('click', '#createUpdateApproleButton', function(event){
-        event.preventDefault();
-        utilityModule.hideMessage();
-
-        var appRoleName = $('#name').val();
-
-        $.ajax({
-            type: "POST",
-            url: "/admin/createApprole",
-            data : $("#createApproleForm").serialize(),
-            success: function (data) {
-                $('#dashboard').html(data);
-                utilityModule.showMessage('info','Successfully created approle ' + appRoleName);
-            },
-            error: function(data) {
-                utilityModule.showMessage('error', data.responseText);
-                console.log(data.responseText);
-            }
-        });
-
-    });
 
     $(document).off('click', '.deleteApproleLink');
     $(document).on('click', '.deleteApproleLink', function(event){
