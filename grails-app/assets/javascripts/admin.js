@@ -6,15 +6,19 @@ var adminModule = (function ($) {
     function initVariables($container){
         $body = $('body');
 
-
         $body.on('click', '#addPolicyLink', function(){
             if($("#policiesContainer").hasClass('d-none')){
                 utilityModule.hideMessage();
+                
                 $("#policiesContainer").removeClass('d-none').addClass('d-block');
                 $("#policyLinkLabel").html("Hide policies");
+                $("#addPolicyLink").find("span").removeClass('fa-plus');
+                $("#addPolicyLink").find("span").addClass('fa-times');
             } else {
                 $("#policiesContainer").removeClass('d-block').addClass('d-none');
                 $("#policyLinkLabel").html("Add policies");
+                $("#addPolicyLink").find("span").removeClass('fa-times');
+                $("#addPolicyLink").find("span").addClass('fa-plus');
             }
             
         });
