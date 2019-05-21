@@ -447,27 +447,6 @@ $(document).ready(function(){
 
     });
 
-    $(document).off('click', '.deleteApproleLink');
-    $(document).on('click', '.deleteApproleLink', function(event){
-        event.preventDefault();
-        utilityModule.hideMessage();
-
-        var approle = $(this).data('approle');
-        $.ajax({
-            type: "POST",
-            url: "/admin/deleteApprole",
-            data : {approle:approle},
-            success: function (data) {
-                $('#dashboard').html(data);
-                utilityModule.showMessage('info','Successfully deleted approle ' + approle);
-            },
-            error: function(data) {
-                utilityModule.showMessage('error', data.responseText);
-                console.log(data.responseText);
-            }
-        });
-
-    });
 
     $(document).off('click', '#backToIndexLink');
     $(document).on('click', '#backToIndexLink', function(event){

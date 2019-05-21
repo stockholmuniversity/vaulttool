@@ -123,6 +123,30 @@ var adminModule = (function ($) {
         });
     }
 
+    function deleteApprole(){
+        $(document).off('click', '.deleteApproleLink');
+        $(document).on('click', '.deleteApproleLink', function(event){
+            event.preventDefault();
+            utilityModule.hideMessage();
+
+            var approle = $(this).data('approle');
+            $.ajax({
+                type: "POST",
+                url: "/admin/deleteApprole",
+                data : {approle:approle},
+                success: function (data) {
+                    $('#dashboard').html(data);
+                    utilityModule.showMessage('info','Successfully deleted approle ' + approle);
+                },
+                error: function(data) {
+                    utilityModule.showMessage('error', data.responseText);
+                    console.log(data.responseText);
+                }
+            });
+
+        });
+    }
+
 
     function callServer(data, url){
          return $.ajax({
@@ -133,10 +157,11 @@ var adminModule = (function ($) {
     }
 
     initModule = function($container){
-       initVariables($container);
-       addPolicyToSelectedPolicies();
+        initVariables($container);
+        addPolicyToSelectedPolicies();
        removePoliciesFromSelectedPolicies();
        createPolicy();
+       deleteApprole();
     };
 
     return {
