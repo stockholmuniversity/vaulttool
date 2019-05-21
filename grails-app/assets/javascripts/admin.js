@@ -26,9 +26,7 @@ var adminModule = (function ($) {
 
     }
 
-    function initEventHandlers() {
-
-
+    function addPolicyToSelectedPolicies(){
         $body.on('click', '[id^="policy_"]', function(){
             //TODO: Styling should be made into css classes...
 
@@ -43,7 +41,7 @@ var adminModule = (function ($) {
                 currentPolicies += policyName
             }
             $policies.val(currentPolicies);
-            
+
             var $policy = $("<span>" + policyName + "</span>");
             var $icon   = $("<span></span>").addClass('fa fa-times pointer');
             $icon.css({color: 'rgba(0, 47, 95, 1.0)'});
@@ -60,8 +58,11 @@ var adminModule = (function ($) {
             $(policyToRemove).remove();
         });
 
+    }
+
+    function removePoliciesFromSelectedPolicies(){
         $body.on('click', '[id^="selectedPolicy_"]', function(){
-            
+
             var selectedPolicy = $(this).data('selectedpolicy');
             var policyToRemove = "#selectedPolicy_" + selectedPolicy;
             var $policies      = $("[name='policies']");
@@ -75,7 +76,7 @@ var adminModule = (function ($) {
                 }
             } else {
                 policiesValues = policiesValues.replace(selectedPolicy, "");
-}
+            }
             $policies.val(policiesValues);
             $(policyToRemove).remove();
 
@@ -95,7 +96,9 @@ var adminModule = (function ($) {
                 $("#selectedPolicies").removeClass('bottom-margin-medium');
             }
         });
+    }
 
+    function createPolicy() {
         $body.on('click', '#createUpdateApproleButton', function(event){
             event.preventDefault();
             utilityModule.hideMessage();
@@ -131,7 +134,9 @@ var adminModule = (function ($) {
 
     initModule = function($container){
        initVariables($container);
-       initEventHandlers();
+       addPolicyToSelectedPolicies();
+       removePoliciesFromSelectedPolicies();
+       createPolicy();
     };
 
     return {
