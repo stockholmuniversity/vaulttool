@@ -32,6 +32,10 @@ a{
   background-color: $main-colour;
   color: $opposite-colour;
 
+  &.button-danger-small{
+    padding: 0 3px 0 2px;
+  }
+
   &:hover {
     background-color: $main-colour-2;
   }
