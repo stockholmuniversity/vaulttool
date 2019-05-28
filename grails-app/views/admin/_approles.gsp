@@ -75,7 +75,7 @@
                         <span class="cardBodyListItem">${approle.policies.join(", ")}</span>
                     </div>
 
-                    <div id="approlePolicyContainer_${approle.appRole}" class="col-12 col-lg-9 d-none top-padding-small bottom-padding-small" style="background-color: rgba(0,0,0,0.06);">
+                    <div id="approlePolicyContainer_${approle.appRole}" class="col-12 col-lg-9 d-none top-padding-small bottom-padding-small" style="border: 1px solid #eee;">
                          <div class="bottom-margin-medium">
                             <span id="selectedPolicies_${approle.appRole}">
                                 <g:each in="${approle.policies}" var="policy">
