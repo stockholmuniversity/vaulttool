@@ -76,8 +76,7 @@
                     </div>
 
                     <div id="approlePolicyContainer_${approle.appRole}" class="col-12 col-lg-9 d-none top-padding-small bottom-padding-small" style="background-color: rgba(0,0,0,0.06);">
-
-                        <div class="bottom-margin-medium">
+                         <div class="bottom-margin-medium">
                             <span id="selectedPolicies_${approle.appRole}">
                                 <g:each in="${approle.policies}" var="policy">
                                     <span  id="editableApproleSelectedPolicy_${policy}_${approle.appRole}" class="bottom-margin-xsmall" data-edappselpolicy="${policy}" data-edappselapprole="${approle.appRole}" style="background: rgba(172, 222, 230, 0.6); padding: 5px; color: rgb(0, 47, 95); display: inline-block">
@@ -86,7 +85,6 @@
                                     </span>&nbsp;
                                 </g:each>
                             </span>
-                            <g:hiddenField name="editableApprolePolicies_${approle.appRole}" value="${approle.policies.join(',')}"/>
                             <span style="color: rgba(0,47,95,0.8);" class="pointer editableApprolePolicyLink" data-approle="${approle.appRole}">
                                 <span class="fa fa-plus"></span> <strong id="approlePoliciesLinkLabel_${approle.appRole}">Add policies</strong>
                             </span>
@@ -107,11 +105,12 @@
                         </div>
                         <div>
                             <div class="pull-left">
-                                <g:link class="btn btn-danger">Delete</g:link>
+                                <g:link class="btn btn-danger deleteApproleLink" params='[approle: "${approle.appRole}"]' data-approle="${approle.appRole}">Delete</g:link>
                             </div>
                             <div class="pull-right">
-                                <g:link class="btn btn-primary cancelEditApproleLink" data-approle="${approle.appRole}">Cancel</g:link>
-                                <g:link class="btn btn-primary">Save</g:link>
+                                <g:link class="btn btn-primary right-margin-xsmall cancelEditApproleLink" data-approle="${approle.appRole}">Cancel</g:link>
+                                <g:hiddenField name="editableApprolePolicies_${approle.appRole}" value="${approle.policies.join(',')}"/>
+                                <button id="updateApproleButton" name="updateApproleButton" class="btn btn-primary" data-approle="${approle.appRole}">Save</button>
                             </div>
                             <div class="clearfix"></div>
                         </div>
@@ -121,86 +120,6 @@
             </g:each>
         </div>
     </div>
-
-    *****************
-
-
-    %{--<div class="card bottom-margin-large">
-        <div class="card-header">
-            <h3>
-             Roles
-            </h3>
-        </div>
-        <div class="card-body top-padding-none bottom-padding-none --}%%{--cardBodyItemsListPadding--}%%{--">
-            <g:each in="${approles}" var="approle" status="i">
-                <div class="${(i < approles.size() - 1) ? 'itemListBorder':''}">
-                    <div class="row  top-padding-xsmall bottom-padding-xsmall">
-                        <div class="col-lg-11 col-md-10 col-sm-9 col-9">
-                            <div class="row">
-                                <div class="col-md-3">
-                                    <strong class="cardBodyListItem">${approle.appRole}</strong>
-                                </div>
-                                <div class="col-md-9">
-                                    <div id="editablePolicyListItemView_${approle.appRole}">
-                                        <span class="cardBodyListItem">${approle.policies.join(", ")}</span>
-                                    </div>
-                                    <div id="editablePolicyListItemEdit_${approle.appRole}" class="d-none">
-                                        <g:each in="${approle.policies}" var="policy">
-                                            <span id="editablePolicy_${policy}" data-policy="${policy}" style="background: rgba(172, 222, 230, 0.6); padding: 5px; color: rgb(0, 47, 95);">
-                                                ${policy}
-                                                <span class="fa fa-times pointer" style="color: rgb(0, 47, 95);"></span>
-                                            </span>
-                                            &nbsp;
-                                        </g:each>
-                                        <g:hiddenField name="editablePolicies"/>
-                                        <span id="editPolicyLink" style="color: rgba(0,47,95,0.8);" class="pointer">
-                                            <span class="fa fa-plus"></span> <strong id="editablePolicyLinkLabel">Add policies</strong>
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-lg-1 col-md-2 col-sm-3 col-3">
-                            <g:link class="btn btn-primary button-danger-small pull-right editApproleLink" params='[approle: "${approle.appRole}"]' data-approle="${approle.appRole}">Edit</g:link>
-                            <g:link class="btn btn-danger button-danger-small pull-right deleteApproleLink" params='[approle: "${approle.appRole}"]' data-approle="${approle.appRole}">Delete</g:link>--}%%{--
-                        </div>
-                    </div>
-
-                    <div class="row top-padding-xsmall bottom-padding-xsmall">
-                        <div class="col-lg-11 col-md-10 col-sm-9 col-9">
-                            <div class="row">
-                                <div class="col-md-3"></div>
-                                <div class="col-md-9">
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <span>dkslaökd</span>
-                                        </div>
-                                    </div>
-
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="col-lg-1 col-md-2 col-sm-3 col-3"></div>
-                    </div>
-                    <div id="deleteRole_${approle.appRole}" class="row d-none bottom-padding-xsmall">
-                        <div class="col-md-3">babababababa</div>
-                        <div class="col-md-9">
-                            <g:link class="btn btn-danger button-danger-small deleteApproleLink" params='[approle: "${approle.appRole}"]' data-approle="${approle.appRole}">Delete</g:link>
-
-                            <g:link class="btn btn-primary button-danger-small deleteApproleLink" params='[approle: "${approle.appRole}"]' data-approle="${approle.appRole}">Cancel</g:link>
-                            
-
-                        </div>
-                        <div class="clearfix"></div>
-                    </div>
-
-                </div>
-
-            </g:each>
-        </div>
-    </div>--}%
 
     <div class="card bottom-margin-large">
         <div class="card-header">

@@ -3,6 +3,8 @@ var adminModule = (function ($) {
 
     var initModule, $body;
 
+
+    //TODO: All the code needs some serious refactoring and "DRYING"
     function initVariables($container){
         $body = $('body');
 
@@ -72,12 +74,14 @@ var adminModule = (function ($) {
                 currentPolicies += policyName
             }
             $policies.val(currentPolicies);
-
+            console.log($policies.val());
+            
             var $policy = $("<span>" + policyName + "</span>");
             var $icon   = $("<span></span>").addClass('fa fa-times pointer');
             $icon.css({color: 'rgba(0, 47, 95, 1.0)'});
             $policy.append(" ").append($icon);
             $policy.attr('id', 'editableApproleSelectedPolicy_' + policyName + "_" + appRole);
+            $policy.attr('data-status', 'unsaved');
             $policy.data('edappselpolicy', policyName);
             $policy.data('edappselapprole', appRole);
             $policy.css({background: 'rgba(172, 222, 230, 0.6)', padding: '5px', color: 'rgba(0, 47 ,95 ,1.0)', display: 'inline-block'});
@@ -189,6 +193,31 @@ var adminModule = (function ($) {
         });
     }
 
+    function updateApprole(){
+        $body.on('click', '#updateApproleButton', function(event){
+            event.preventDefault();
+            utilityModule.hideMessage();
+
+            var appRoleName     = $(this).data('approle');
+            var $policies       =  $("#editableApprolePolicies_" + appRoleName);
+            var policiesValues  = $policies.val();
+
+            callServer({name: appRoleName, policies: policiesValues }, 'createApprole')
+                    .done(function(data){
+                        $('#dashboard').html(data);
+                        utilityModule.showMessage('info','Successfully created approle ' + appRoleName);
+                        $policies.val("");
+
+                    })
+                    .fail(function(data){
+                        utilityModule.showMessage('error', data.responseText);
+                        console.log(data.responseText);
+                        $policies.val("");
+                    })
+
+        })
+    }
+
     function deleteApprole(){
         $(document).off('click', '.deleteApproleLink');
         $(document).on('click', '.deleteApproleLink', function(event){
@@ -258,6 +287,43 @@ var adminModule = (function ($) {
             var $approlePolicyContainer     = $("#approlePolicyContainer_" + approle);
             var $policiesContainer          = $("#policiesContainer_" + approle);
             var $approlePoliciesLinkLabel   = $("#approlePoliciesLinkLabel_" + approle);
+            
+            var $selectedPoliciesContainer = $("#selectedPolicies_" + approle);
+            var policiesToRemove =  $selectedPoliciesContainer.find("span[data-status='unsaved']");
+            var $selectedPolicies = $("[name='editableApprolePolicies_" + approle +"']");
+            var selectedPoliciesValues = $selectedPolicies.val();
+
+            $.each(policiesToRemove, function(i, val){
+                var policy = $(val).data('edappselpolicy');
+
+                if(/,/g.test(selectedPoliciesValues)){
+                    if(selectedPoliciesValues.substr(-(policy.length))){
+                        selectedPoliciesValues = selectedPoliciesValues.replace(',' + policy, "");
+                    } else {
+                        selectedPoliciesValues = selectedPoliciesValues.replace(policy + ',', "");
+                    }
+                } else {
+                    selectedPoliciesValues = selectedPoliciesValues.replace(policy, "");
+                }
+                $selectedPolicies.val(selectedPoliciesValues);
+                $(val).remove();
+
+                var $policy         = $("<div></div>");
+                var $policySpan     = $("<span></span>");
+                var $policyStrong   = $("<strong></strong>");
+
+                $policy.attr('id', 'editableApproleSelectablePolicy_'+ policy);
+                $policy.data('policy', policy);
+                $policy.data('approle', approle);
+                $policy.addClass('col-3 pointer');
+                $policySpan.css({color: 'rgba(0, 47, 95, 0.8)'});
+                $policyStrong.append(policy);
+                $policySpan.append($policyStrong);
+                $policy.append($policySpan);
+
+                $("#selectablePolicies_" + approle).append($policy);
+
+            });
 
             if($approlePolicyContainer.hasClass('d-block')){
                 $approlePolicyContainer.removeClass('d-block').addClass('d-none');
@@ -265,7 +331,8 @@ var adminModule = (function ($) {
                 $approleView.removeClass('d-none').addClass('d-block');
                 $policiesContainer.removeClass('d-block').addClass('d-none');
                 $approlePoliciesLinkLabel.html("Add policies");
-                $approlePoliciesLinkLabel.closest("span").find('.fa-times').removeClass('fa-times').addClass('fa-plus')
+                $approlePoliciesLinkLabel.closest("span").find('.fa-times').removeClass('fa-times').addClass('fa-plus');
+
             }
         });
     }
@@ -287,6 +354,7 @@ var adminModule = (function ($) {
         editApprole();
         cancelEditApprole();
         editApproleItemPolicies();
+        updateApprole();
     };
 
     return {
