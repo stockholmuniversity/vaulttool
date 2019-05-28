@@ -62,9 +62,9 @@
         <div class="card-header">
             <h3>Roles</h3>
         </div>
-        <div class="card-body">
+        <div class="card-body top-padding-none bottom-padding-none">
             <g:each in="${approles}" var="approle" status="i">
-                <div class="row bottom-padding-xsmall top-padding-xsmall" style="border-bottom: 1px solid #eeeeee;">
+                <div class="row bottom-padding-xsmall top-padding-xsmall ${(i < approles.size() - 1) ? 'itemListBorder appRoleBorder':''}">
                     <div class="col-9 col-lg-3">
                         <strong class="cardBodyListItem">${approle.appRole}</strong>
                     </div>
