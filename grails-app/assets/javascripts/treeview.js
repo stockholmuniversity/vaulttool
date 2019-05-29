@@ -411,6 +411,7 @@ $(document).ready(function(){
     });
 
     $tree.on('load_node.jstree', function(e, data){
+        console.log("load node");
         //Force wholerow styling on root node after delete secret
         if(data.node.id === "#"){
             var node = $tree.jstree(true).get_node('root', true);
@@ -428,7 +429,7 @@ $(document).ready(function(){
         var path = $('#path').val();
         var secret = $('#secret').val();
 
-        if(path.endsWith("/")) {
+        if(path.endsWith("/")) { //TODO: Not sure endswith works in IE...
             path = path.substr(0, path.length -1);
         }
 
