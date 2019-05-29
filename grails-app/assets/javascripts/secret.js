@@ -221,23 +221,47 @@ $(document).ready(function(){
 
     $(document).off('click', ".secretsListLink");
     $(document).on('click', ".secretsListLink", function(event){
+
+        //TODO: Code needs refactoring and DRYING
         event.preventDefault();
         utilityModule.hideMessage();
 
         var key = $(this).data('key');
 
-        $.ajax({
-            type: "POST",
-            url: "/dashboard/secret",
-            data: { key : key},
-            success: function (data) {
-                $('#dashboard').html(data);
-            },
-            error: function(data) {
-                utilityModule.showMessage('error', data.responseText);
-                console.log(data.responseText);
-            }
-        });
+        if(key.includes('dummykeydontuse')){
+            key = key.substr(0, key.indexOf('dummykeydontuse'));
+
+            console.log(key);
+            $.ajax({
+                type: "POST",
+                url: "/dashboard/index",
+                data: { selectedPath : key},
+                success: function (data) {
+                    $('#dashboard').html(data);
+                    $('#selectedPathTitle').html(key);
+                },
+                error: function(data) {
+                    utilityModule.showMessage('error', data.responseText);
+                    console.log(data.responseText);
+                }, complete: function(){
+
+                }
+            });
+        } else {
+            $.ajax({
+                type: "POST",
+                url: "/dashboard/secret",
+                data: { key : key},
+                success: function (data) {
+                    $('#dashboard').html(data);
+                },
+                error: function(data) {
+                    utilityModule.showMessage('error', data.responseText);
+                    console.log(data.responseText);
+                }
+            });
+        }
+
     });
 
     $(document).off('click', '#sudoButton');
