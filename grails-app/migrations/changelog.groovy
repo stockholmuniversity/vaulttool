@@ -77,4 +77,12 @@ databaseChangeLog = {
             }
         }
     }
+
+    changeSet(author: "jqvar", id: "201905291231") {
+        addColumn(tableName: "meta_data") {
+            column(name: "last_access", type: "BIGINT") {
+                constraints(nullable: true)
+            }
+        }
+    }
 }
