@@ -247,6 +247,7 @@ class DashboardController {
         metaData.title          = params?.title?:""
         metaData.description    = params?.description?:""
         metaData.updatedBy      = session.eppn?:null
+        metaData.lastAccess     = System.currentTimeMillis()
 
         Entry entry = resp.entry
         entry.key           = key
@@ -335,6 +336,7 @@ class DashboardController {
         metaData.description = ""
         metaData.fileName = ""
         metaData.updatedBy = session.eppn
+        metaData.lastAccess = System.currentTimeMillis()
         metaData.save(flush: true)
         flash.message = "Successfully created secret ${key}"
         return redirect(action: "secret", params: [key: key])
@@ -417,6 +419,8 @@ class DashboardController {
         } else {
             MetaData metaData = MetaData.findBySecretKey(key)
             metaData.fileName = f.originalFilename
+            metaData.updatedBy      = session.eppn
+            metaData.lastAccess     = System.currentTimeMillis()
             metaData.save(flush: true)
             flash.message = "Successfully uploaded file to secret ${key}"
         }
@@ -506,6 +510,7 @@ class DashboardController {
         metaData.secretKey      = key
         metaData.fileName       = ""
         metaData.updatedBy      = session.eppn
+        metaData.lastAccess     = System.currentTimeMillis()
 
         Entry entry = resp.entry
         entry.key           = key

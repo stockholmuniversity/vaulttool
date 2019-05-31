@@ -8,6 +8,7 @@ class MetaData {
     String description
     String fileName
     String updatedBy
+    Long lastAccess
 
     static mapping = {
         description(type: 'text')
@@ -19,6 +20,6 @@ class MetaData {
         description(nullable:true)
         fileName(nullable:true)
         updatedBy(nullable:true)
-
+        lastAccess(nullable:true)
     }
 }
