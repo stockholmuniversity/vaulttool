@@ -326,7 +326,11 @@ $(document).ready(function(){
                     utilityModule.showMessage('error', data.responseText);
                     console.log(data.responseText);
                 }).always(function(){
-                    $tree.jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
+                    if(selectedPath){
+                        $tree.jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
+                    } else {
+                        window.location.href = '/';
+                    }
                 });
     }
 
@@ -411,7 +415,6 @@ $(document).ready(function(){
     });
 
     $tree.on('load_node.jstree', function(e, data){
-        console.log("load node");
         //Force wholerow styling on root node after delete secret
         if(data.node.id === "#"){
             var node = $tree.jstree(true).get_node('root', true);
