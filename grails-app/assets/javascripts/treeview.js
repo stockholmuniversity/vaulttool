@@ -329,7 +329,8 @@ $(document).ready(function(){
                     if(selectedPath){
                         $tree.jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
                     } else {
-                        window.location.href = '/';
+                        $tree.jstree(true).refresh();
+                        //window.location.href = '/';
                     }
                 });
     }
