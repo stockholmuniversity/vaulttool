@@ -37,13 +37,11 @@ class DashboardController {
         def node = null
 
         def isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
-        log.info "secrets: ${secrets}"
         
         secrets.each {secret ->
             if(secret.endsWith("/")){
                 def sc = vaultRestService.listSecrets(session.token, secret)
-                log.info "secret: ${sc}"
-
+                
                 node = ['id'        : secret.replace("/",""),
                         'text'      : secret.replace("/",""),
                         admin       : isAdmin,
