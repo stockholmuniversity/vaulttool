@@ -46,11 +46,12 @@ var adminModule = (function ($) {
 
             var $policy = $("<span>" + policyName + "</span>");
             var $icon   = $("<span></span>").addClass('fa fa-times pointer');
-            $icon.css({color: 'rgba(0, 47, 95, 1.0)'});
+
             $policy.append(" ").append($icon);
             $policy.attr('id', 'selectedPolicy_' + policyName);
             $policy.data('selectedpolicy', policyName);
-            $policy.css({background: 'rgba(172, 222, 230, 0.6)', padding: '5px', color: 'rgba(0, 47 ,95 ,1.0)'});
+            $policy.addClass('selectedAppRole');
+            $policy.css('bottom-margin-small');
 
             $("#selectedPolicies").append($policy).append(" ");
 
@@ -78,13 +79,12 @@ var adminModule = (function ($) {
             
             var $policy = $("<span>" + policyName + "</span>");
             var $icon   = $("<span></span>").addClass('fa fa-times pointer');
-            $icon.css({color: 'rgba(0, 47, 95, 1.0)'});
             $policy.append(" ").append($icon);
             $policy.attr('id', 'editableApproleSelectedPolicy_' + policyName + "_" + appRole);
             $policy.attr('data-status', 'unsaved');
             $policy.data('edappselpolicy', policyName);
             $policy.data('edappselapprole', appRole);
-            $policy.css({background: 'rgba(172, 222, 230, 0.6)', padding: '5px', color: 'rgba(0, 47 ,95 ,1.0)', display: 'inline-block'});
+            $policy.addClass('selectedAppRole');
             $policy.css('bottom-margin-xsmall');
 
             $("#selectedPolicies_" + appRole).append($policy).append(" ");
@@ -120,7 +120,7 @@ var adminModule = (function ($) {
             $policy.attr('id', 'policy_'+ selectedPolicy);
             $policy.data('policy', selectedPolicy);
             $policy.addClass('col-3 pointer');
-            $policySpan.css({color: 'rgba(0, 47, 95, 0.8)'});
+            $policySpan.addClass('selectableAppRole');
             $policyStrong.append(selectedPolicy);
             $policySpan.append($policyStrong);
             $policy.append($policySpan);
@@ -159,7 +159,7 @@ var adminModule = (function ($) {
             $policy.data('policy', selectedPolicy);
             $policy.data('approle', appRole);
             $policy.addClass('col-3 pointer');
-            $policySpan.css({color: 'rgba(0, 47, 95, 0.8)'});
+            $policySpan.addClass('selectableAppRole');
             $policyStrong.append(selectedPolicy);
             $policySpan.append($policyStrong);
             $policy.append($policySpan);
@@ -316,7 +316,7 @@ var adminModule = (function ($) {
                 $policy.data('policy', policy);
                 $policy.data('approle', approle);
                 $policy.addClass('col-3 pointer');
-                $policySpan.css({color: 'rgba(0, 47, 95, 0.8)'});
+                $policySpan.addClass('selectableAppRole');
                 $policyStrong.append(policy);
                 $policySpan.append($policyStrong);
                 $policy.append($policySpan);
