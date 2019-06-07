@@ -254,3 +254,20 @@ background: linear-gradient(to bottom,#beebff 0,#a8e4ff 100%) !important;
 .sticky-offset {
   top: 20px;
 }
+
+.selectableAppRole {
+  color: rgba(0,47,95,0.8);
+}
+.selectedAppRole {
+  background: rgba(172, 222, 230, 0.6);
+  padding: 5px;
+  color: rgba(0, 47, 95, 1.0);
+  display: inline-block;
+
+  span {
+    color: rgba(0, 47, 95, 1.0);
+  }
+}
+[id^=approlePolicyContainer_]{
+  border: 1px solid #eee;
+}

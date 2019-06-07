@@ -30,7 +30,7 @@
                                         <div id="selectablePolicies" class="row">
                                             <g:each in="${policies*.policy}" var="policy">
                                                 <div id="policy_${policy}" class="col-3 pointer" data-policy="${policy}">
-                                                    <span style="color: rgba(0,47,95,0.8)">
+                                                    <span class="selectableAppRole">
                                                         <strong>${policy}</strong>
                                                     </span>
                                                 </div>
@@ -41,13 +41,13 @@
                             </div>
                             <div class="col-12">
                                 <g:hiddenField name="policies"/>
-                                <span id="addPolicyLink" style="color: rgba(0,47,95,0.8);" class="pointer">
+                                <span id="addPolicyLink" class="pointer selectableAppRole">
                                     <span class="fa fa-plus"></span> <strong id="policyLinkLabel">Add policies</strong>
                                 </span>
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
 
                 <div class="pull-right">
@@ -75,17 +75,17 @@
                         <span class="cardBodyListItem">${approle.policies.join(", ")}</span>
                     </div>
 
-                    <div id="approlePolicyContainer_${approle.appRole}" class="col-12 col-lg-9 d-none top-padding-small bottom-padding-small" style="border: 1px solid #eee;">
+                    <div id="approlePolicyContainer_${approle.appRole}" class="col-12 col-lg-9 d-none top-padding-small bottom-padding-small" style="/*border: 1px solid #eee;*/">
                          <div class="bottom-margin-medium">
-                            <span id="selectedPolicies_${approle.appRole}">
+                            <div id="selectedPolicies_${approle.appRole}">
                                 <g:each in="${approle.policies}" var="policy">
-                                    <span  id="editableApproleSelectedPolicy_${policy}_${approle.appRole}" class="bottom-margin-xsmall" data-edappselpolicy="${policy}" data-edappselapprole="${approle.appRole}" style="background: rgba(172, 222, 230, 0.6); padding: 5px; color: rgb(0, 47, 95); display: inline-block">
+                                    <span  id="editableApproleSelectedPolicy_${policy}_${approle.appRole}" class="bottom-margin-xsmall selectedAppRole" data-edappselpolicy="${policy}" data-edappselapprole="${approle.appRole}">
                                         ${policy}
-                                        <span class="fa fa-times pointer" style="color: rgb(0, 47, 95);"></span>
+                                        <span class="fa fa-times pointer"></span>
                                     </span>&nbsp;
                                 </g:each>
-                            </span>
-                            <span style="color: rgba(0,47,95,0.8);" class="pointer editableApprolePolicyLink" data-approle="${approle.appRole}">
+                            </div>
+                            <span class="pointer editableApprolePolicyLink selectableAppRole" data-approle="${approle.appRole}">
                                 <span class="fa fa-plus"></span> <strong id="approlePoliciesLinkLabel_${approle.appRole}">Add policies</strong>
                             </span>
                         </div>
@@ -95,7 +95,7 @@
                                 <div id="selectablePolicies_${approle.appRole}" class="row">
                                     <g:each in="${policies*.policy.minus(approle.policies)}" var="policy">
                                         <div id="editableApproleSelectablePolicy_${policy}" class="col-3 pointer" data-policy="${policy}" data-approle="${approle.appRole}">
-                                            <span style="color: rgba(0,47,95,0.8)">
+                                            <span class="selectableAppRole">
                                                 <strong>${policy}</strong>
                                             </span>
                                         </div>
