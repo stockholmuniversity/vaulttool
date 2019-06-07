@@ -28,19 +28,18 @@ class DashboardController {
     }
 
     def loadRootPaths(){
-        def secrets = vaultRestService.listSecrets(session.token, "")
+        def secrets = vaultRestService.listSecrets(session.token.toString(), "")
 
-        def rootNodes = []
+        List<Map<String, Object>> rootNodes = new ArrayList<Map<String, Object>>()
+        List<Map<String, Object>> leafs = new ArrayList<Map<String, Object>>()
+        List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>()
+        Map<String, Object> node = null
 
-        def leafs = []
-        def nodes = []
-        def node = null
-
-        def isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+        Boolean isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
         
         secrets.each {secret ->
             if(secret.endsWith("/")){
-                def sc = vaultRestService.listSecrets(session.token, secret)
+                def sc = vaultRestService.listSecrets(session.token.toString(), secret)
                 
                 node = ['id'        : secret.replace("/",""),
                         'text'      : secret.replace("/",""),
@@ -70,15 +69,16 @@ class DashboardController {
 
 
     def loadChildren(){
-        def secrets = vaultRestService.listSecrets(session.token, params['id'].toString().replaceAll("_","/"))
-        def childNodes = []
+        def secrets = vaultRestService.listSecrets(session.token.toString(), params['id'].toString().replaceAll("_","/"))
 
-        def isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+        List<Map<String, Object>> childNodes = new ArrayList<Map<String, Object>>()
+
+        Boolean isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
 
         secrets.each {secret ->
-            def node = null
+            Map<String, Object> node = null
             if(secret.endsWith("/")){
-                def sc = vaultRestService.listSecrets(session.token, params['id'].toString().replaceAll("_","/") + "/" + secret)
+                def sc = vaultRestService.listSecrets(session.token.toString(), params['id'].toString().replaceAll("_","/") + "/" + secret)
 
                 node = ['id'        :   params['id'] + '_' + secret.replace("/",""),
                         parent      :   params['id'],
