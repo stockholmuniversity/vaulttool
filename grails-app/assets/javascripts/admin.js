@@ -36,6 +36,7 @@ var adminModule = (function ($) {
             var $policies       = $("[name='policies']");
             var currentPolicies = $policies.val();
             var policyToRemove  = "#policy_"+policyName;
+            var policyId        =  'selectedPolicy_' + policyName;
 
             if(currentPolicies){
                 currentPolicies += "," + policyName;
@@ -44,15 +45,8 @@ var adminModule = (function ($) {
             }
             $policies.val(currentPolicies);
 
-            var $policy = $("<span>" + policyName + "</span>");
-            var $icon   = $("<span></span>").addClass('fa fa-times pointer');
-
-            $policy.append(" ").append($icon);
-            $policy.attr('id', 'selectedPolicy_' + policyName);
+            var $policy = createSelectedPolicy(policyId, policyName);
             $policy.data('selectedpolicy', policyName);
-            $policy.addClass('selectedAppRole');
-            $policy.css('bottom-margin-small');
-
             $("#selectedPolicies").append($policy).append(" ");
 
             if($("#selectedPolicies").children('span').length === 1) {
@@ -68,6 +62,7 @@ var adminModule = (function ($) {
             var $policies       = $("[name='editableApprolePolicies_" + appRole + "']" );
             var currentPolicies = $policies.val();
             var policyToRemove  = $("#policiesContainer_" + appRole).find("#editableApproleSelectablePolicy_" + policyName);
+            var policyId        = 'editableApproleSelectedPolicy_' + policyName + "_" + appRole;
 
             if(currentPolicies){
                 currentPolicies += "," + policyName;
@@ -75,19 +70,12 @@ var adminModule = (function ($) {
                 currentPolicies += policyName
             }
             $policies.val(currentPolicies);
-            console.log($policies.val());
             
-            var $policy = $("<span>" + policyName + "</span>");
-            var $icon   = $("<span></span>").addClass('fa fa-times pointer');
-            $policy.append(" ").append($icon);
-            $policy.attr('id', 'editableApproleSelectedPolicy_' + policyName + "_" + appRole);
+            var $policy = createSelectedPolicy(policyId, policyName);
             $policy.attr('data-status', 'unsaved');
             $policy.data('edappselpolicy', policyName);
             $policy.data('edappselapprole', appRole);
-            $policy.addClass('selectedAppRole');
-            $policy.css('bottom-margin-xsmall');
-
-            $("#selectedPolicies_" + appRole).append($policy).append(" ");
+             $("#selectedPolicies_" + appRole).append($policy).append(" ");
             $(policyToRemove).remove();
 
         });
@@ -152,6 +140,21 @@ var adminModule = (function ($) {
             $policy.data('approle', appRole);
             $("#selectablePolicies_" + appRole).append($policy);
         })
+    }
+
+    function createSelectedPolicy(id, policy){
+        var $policy = $("<span></span>");
+        var $icon   = $("<span></span>");
+        
+        $icon.addClass('fa fa-times pointer');
+        $policy.append(policy);
+        $policy.append(" ").append($icon);
+        $policy.attr('id', id);
+        $policy.data('selectedpolicy', policy);
+        $policy.addClass('selectedAppRole');
+        $policy.css('bottom-margin-xsmall');
+
+        return $policy;
     }
 
     function createSelectablePolicy(id, policy) {
@@ -294,8 +297,10 @@ var adminModule = (function ($) {
             var $selectedPolicies = $("[name='editableApprolePolicies_" + approle +"']");
             var selectedPoliciesValues = $selectedPolicies.val();
 
+
             $.each(policiesToRemove, function(i, val){
-                var policy = $(val).data('edappselpolicy');
+                var policy      = $(val).data('edappselpolicy');
+                var policyId    = 'editableApproleSelectablePolicy_'+ policy;
 
                 if(/,/g.test(selectedPoliciesValues)){
                     if(selectedPoliciesValues.substr(-(policy.length))){
@@ -309,19 +314,9 @@ var adminModule = (function ($) {
                 $selectedPolicies.val(selectedPoliciesValues);
                 $(val).remove();
 
-                var $policy         = $("<div></div>");
-                var $policySpan     = $("<span></span>");
-                var $policyStrong   = $("<strong></strong>");
-
-                $policy.attr('id', 'editableApproleSelectablePolicy_'+ policy);
+                var $policy = createSelectablePolicy(policyId, policy);
                 $policy.data('policy', policy);
                 $policy.data('approle', approle);
-                $policy.addClass('col-3 pointer');
-                $policySpan.addClass('selectableAppRole');
-                $policyStrong.append(policy);
-                $policySpan.append($policyStrong);
-                $policy.append($policySpan);
-
                 $("#selectablePolicies_" + approle).append($policy);
 
             });
