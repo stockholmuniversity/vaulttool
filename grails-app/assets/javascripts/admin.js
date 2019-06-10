@@ -9,23 +9,23 @@ var adminModule = (function ($) {
         $body = $('body');
 
         $body.on('click', '#addPolicyLink', function(){
-            if($("#policiesContainer").hasClass('d-none')){
+            var $policiesContainer  = $("#policiesContainer");
+            var $policyLinkLabel    = $("#policyLinkLabel");
+            var $addPolicyLink      = $("#addPolicyLink");
+
+            if($policiesContainer.hasClass('d-none')){
                 utilityModule.hideMessage();
-                
-                $("#policiesContainer").removeClass('d-none').addClass('d-block');
-                $("#policyLinkLabel").html("Hide policies");
-                $("#addPolicyLink").find("span").removeClass('fa-plus');
-                $("#addPolicyLink").find("span").addClass('fa-times');
+
+                $policiesContainer.removeClass('d-none').addClass('d-block');
+                $policyLinkLabel.html("Hide policies");
+                $addPolicyLink.find("span").removeClass('fa-plus').addClass('fa-times');
             } else {
-                $("#policiesContainer").removeClass('d-block').addClass('d-none');
-                $("#policyLinkLabel").html("Add policies");
-                $("#addPolicyLink").find("span").removeClass('fa-times');
-                $("#addPolicyLink").find("span").addClass('fa-plus');
+                $policiesContainer.removeClass('d-block').addClass('d-none');
+                $policyLinkLabel.html("Add policies");
+                $addPolicyLink.find("span").removeClass('fa-times').addClass('fa-plus');
             }
             
         });
-
-
     }
 
     function addPolicyToSelectedPolicies(){
@@ -101,6 +101,8 @@ var adminModule = (function ($) {
             var policyToRemove = "#selectedPolicy_" + selectedPolicy;
             var $policies      = $("[name='policies']");
             var policiesValues = $policies.val();
+            var policyId       = 'policy_'+ selectedPolicy;
+            var $policy        = null;
 
             if(/,/g.test(policiesValues)){
                 if(policiesValues.substr(-(selectedPolicy.length)) === selectedPolicy){
@@ -114,16 +116,8 @@ var adminModule = (function ($) {
             $policies.val(policiesValues);
             $(policyToRemove).remove();
 
-            var $policy = $("<div></div>");
-            var $policySpan = $("<span></span>");
-            var $policyStrong = $("<strong></strong>");
-            $policy.attr('id', 'policy_'+ selectedPolicy);
+            $policy = createSelectablePolicy(policyId, selectedPolicy);
             $policy.data('policy', selectedPolicy);
-            $policy.addClass('col-3 pointer');
-            $policySpan.addClass('selectableAppRole');
-            $policyStrong.append(selectedPolicy);
-            $policySpan.append($policyStrong);
-            $policy.append($policySpan);
             $("#selectablePolicies").append($policy);
 
             if($("#selectedPolicies").children('span').length === 0) {
@@ -138,7 +132,9 @@ var adminModule = (function ($) {
             var approleSel      = "editableApprolePolicies_" + appRole;
             var $policies       = $('[name="' + approleSel +'"]');
             var policiesValues  = $policies.val();
-            
+            var policyId        = 'editableApproleSelectablePolicy_'+ selectedPolicy;
+            var $policy         = null;
+
             if(/,/g.test(policiesValues)){
                 if(policiesValues.substr(-(selectedPolicy.length)) === selectedPolicy){
                     policiesValues = policiesValues.replace(',' + selectedPolicy, "");
@@ -151,21 +147,26 @@ var adminModule = (function ($) {
             $policies.val(policiesValues);
             $(policyToRemove).remove();
 
-            var $policy         = $("<div></div>");
-            var $policySpan     = $("<span></span>");
-            var $policyStrong   = $("<strong></strong>");
-
-            $policy.attr('id', 'editableApproleSelectablePolicy_'+ selectedPolicy);
+            $policy = createSelectablePolicy(policyId, selectedPolicy);
             $policy.data('policy', selectedPolicy);
             $policy.data('approle', appRole);
-            $policy.addClass('col-3 pointer');
-            $policySpan.addClass('selectableAppRole');
-            $policyStrong.append(selectedPolicy);
-            $policySpan.append($policyStrong);
-            $policy.append($policySpan);
-
             $("#selectablePolicies_" + appRole).append($policy);
         })
+    }
+
+    function createSelectablePolicy(id, policy) {
+        var $policy         = $("<div></div>");
+        var $policySpan     = $("<span></span>");
+        var $policyStrong   = $("<strong></strong>");
+
+        $policy.attr('id', id);
+        $policy.addClass('col-3 pointer');
+        $policySpan.addClass('selectableAppRole');
+        $policyStrong.append(policy);
+        $policySpan.append($policyStrong);
+        $policy.append($policySpan);
+
+        return $policy;
     }
 
     function createPolicy() {
