@@ -30,19 +30,14 @@ var adminModule = (function ($) {
 
     function addPolicyToSelectedPolicies(){
         $body.on('click', '[id^="policy_"]', function(){
-            //TODO: Styling should be made into css classes...
-
+            
             var policyName      = $(this).data('policy');
             var $policies       = $("[name='policies']");
             var currentPolicies = $policies.val();
             var policyToRemove  = "#policy_"+policyName;
             var policyId        =  'selectedPolicy_' + policyName;
 
-            if(currentPolicies){
-                currentPolicies += "," + policyName;
-            } else {
-                currentPolicies += policyName
-            }
+            currentPolicies = addToCurrentPolicies(currentPolicies, policyName);
             $policies.val(currentPolicies);
 
             var $policy = createSelectedPolicy(policyId, policyName);
@@ -64,11 +59,7 @@ var adminModule = (function ($) {
             var policyToRemove  = $("#policiesContainer_" + appRole).find("#editableApproleSelectablePolicy_" + policyName);
             var policyId        = 'editableApproleSelectedPolicy_' + policyName + "_" + appRole;
 
-            if(currentPolicies){
-                currentPolicies += "," + policyName;
-            } else {
-                currentPolicies += policyName
-            }
+            currentPolicies = addToCurrentPolicies(currentPolicies, policyName);
             $policies.val(currentPolicies);
             
             var $policy = createSelectedPolicy(policyId, policyName);
@@ -81,6 +72,29 @@ var adminModule = (function ($) {
         });
 
     }
+    function addToCurrentPolicies(policies, policyName){
+        var currentPolicies = policies;
+        if(currentPolicies){
+            currentPolicies += "," + policyName;
+        } else {
+            currentPolicies += policyName
+        }
+        return currentPolicies;
+    }
+
+    function removeFromCurrentPolicies(policies, policyName){
+        var currentPolicies = policies;
+        if(/,/g.test(currentPolicies)){
+            if(currentPolicies.substr(-(policyName.length)) === policyName){
+                currentPolicies = currentPolicies.replace(',' + policyName, "");
+            } else {
+                currentPolicies = currentPolicies.replace(policyName + ',', "");
+            }
+        } else {
+            currentPolicies = currentPolicies.replace(policyName, "");
+        }
+        return currentPolicies;
+    }
 
     function removePoliciesFromSelectedPolicies(){
         $body.on('click', '[id^="selectedPolicy_"]', function(){
@@ -92,15 +106,7 @@ var adminModule = (function ($) {
             var policyId       = 'policy_'+ selectedPolicy;
             var $policy        = null;
 
-            if(/,/g.test(policiesValues)){
-                if(policiesValues.substr(-(selectedPolicy.length)) === selectedPolicy){
-                    policiesValues = policiesValues.replace(selectedPolicy, "");
-                } else {
-                    policiesValues = policiesValues.replace(selectedPolicy + ',', "");
-                }
-            } else {
-                policiesValues = policiesValues.replace(selectedPolicy, "");
-            }
+            policiesValues = removeFromCurrentPolicies(policiesValues, selectedPolicy);
             $policies.val(policiesValues);
             $(policyToRemove).remove();
 
@@ -123,15 +129,7 @@ var adminModule = (function ($) {
             var policyId        = 'editableApproleSelectablePolicy_'+ selectedPolicy;
             var $policy         = null;
 
-            if(/,/g.test(policiesValues)){
-                if(policiesValues.substr(-(selectedPolicy.length)) === selectedPolicy){
-                    policiesValues = policiesValues.replace(',' + selectedPolicy, "");
-                } else {
-                    policiesValues = policiesValues.replace(selectedPolicy + ',', "");
-                }
-            } else {
-                policiesValues = policiesValues.replace(selectedPolicy, "");
-            }
+            policiesValues = removeFromCurrentPolicies(policiesValues, selectedPolicy);
             $policies.val(policiesValues);
             $(policyToRemove).remove();
 
