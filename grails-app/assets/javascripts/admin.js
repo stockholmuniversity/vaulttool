@@ -72,29 +72,6 @@ var adminModule = (function ($) {
         });
 
     }
-    function addToCurrentPolicies(policies, policyName){
-        var currentPolicies = policies;
-        if(currentPolicies){
-            currentPolicies += "," + policyName;
-        } else {
-            currentPolicies += policyName
-        }
-        return currentPolicies;
-    }
-
-    function removeFromCurrentPolicies(policies, policyName){
-        var currentPolicies = policies;
-        if(/,/g.test(currentPolicies)){
-            if(currentPolicies.substr(-(policyName.length)) === policyName){
-                currentPolicies = currentPolicies.replace(',' + policyName, "");
-            } else {
-                currentPolicies = currentPolicies.replace(policyName + ',', "");
-            }
-        } else {
-            currentPolicies = currentPolicies.replace(policyName, "");
-        }
-        return currentPolicies;
-    }
 
     function removePoliciesFromSelectedPolicies(){
         $body.on('click', '[id^="selectedPolicy_"]', function(){
@@ -140,35 +117,7 @@ var adminModule = (function ($) {
         })
     }
 
-    function createSelectedPolicy(id, policy){
-        var $policy = $("<span></span>");
-        var $icon   = $("<span></span>");
-        
-        $icon.addClass('fa fa-times pointer');
-        $policy.append(policy);
-        $policy.append(" ").append($icon);
-        $policy.attr('id', id);
-        $policy.data('selectedpolicy', policy);
-        $policy.addClass('selectedAppRole');
-        $policy.css('bottom-margin-xsmall');
 
-        return $policy;
-    }
-
-    function createSelectablePolicy(id, policy) {
-        var $policy         = $("<div></div>");
-        var $policySpan     = $("<span></span>");
-        var $policyStrong   = $("<strong></strong>");
-
-        $policy.attr('id', id);
-        $policy.addClass('col-3 pointer');
-        $policySpan.addClass('selectableAppRole');
-        $policyStrong.append(policy);
-        $policySpan.append($policyStrong);
-        $policy.append($policySpan);
-
-        return $policy;
-    }
 
     function createPolicy() {
         $body.on('click', '#createUpdateApproleButton', function(event){
@@ -295,20 +244,12 @@ var adminModule = (function ($) {
             var $selectedPolicies = $("[name='editableApprolePolicies_" + approle +"']");
             var selectedPoliciesValues = $selectedPolicies.val();
 
-
+            //TODO: Need to "re-select" policies saved on cancel.
             $.each(policiesToRemove, function(i, val){
                 var policy      = $(val).data('edappselpolicy');
                 var policyId    = 'editableApproleSelectablePolicy_'+ policy;
 
-                if(/,/g.test(selectedPoliciesValues)){
-                    if(selectedPoliciesValues.substr(-(policy.length))){
-                        selectedPoliciesValues = selectedPoliciesValues.replace(',' + policy, "");
-                    } else {
-                        selectedPoliciesValues = selectedPoliciesValues.replace(policy + ',', "");
-                    }
-                } else {
-                    selectedPoliciesValues = selectedPoliciesValues.replace(policy, "");
-                }
+                selectedPoliciesValues = removeFromCurrentPolicies(selectedPoliciesValues, policy);
                 $selectedPolicies.val(selectedPoliciesValues);
                 $(val).remove();
 
@@ -329,6 +270,60 @@ var adminModule = (function ($) {
 
             }
         });
+    }
+
+    function addToCurrentPolicies(policies, policyName){
+        var currentPolicies = policies;
+        if(currentPolicies){
+            currentPolicies += "," + policyName;
+        } else {
+            currentPolicies += policyName
+        }
+        return currentPolicies;
+    }
+
+    function removeFromCurrentPolicies(policies, policyName){
+        var currentPolicies = policies;
+        if(/,/g.test(currentPolicies)){
+            if(currentPolicies.substr(-(policyName.length)) === policyName){
+                currentPolicies = currentPolicies.replace(',' + policyName, "");
+            } else {
+                currentPolicies = currentPolicies.replace(policyName + ',', "");
+            }
+        } else {
+            currentPolicies = currentPolicies.replace(policyName, "");
+        }
+        return currentPolicies;
+    }
+
+    function createSelectedPolicy(id, policy){
+        var $policy = $("<span></span>");
+        var $icon   = $("<span></span>");
+
+        $icon.addClass('fa fa-times pointer');
+        $policy.append(policy);
+        $policy.append(" ").append($icon);
+        $policy.attr('id', id);
+        $policy.data('selectedpolicy', policy);
+        $policy.addClass('selectedAppRole');
+        $policy.css('bottom-margin-xsmall');
+
+        return $policy;
+    }
+
+    function createSelectablePolicy(id, policy) {
+        var $policy         = $("<div></div>");
+        var $policySpan     = $("<span></span>");
+        var $policyStrong   = $("<strong></strong>");
+
+        $policy.attr('id', id);
+        $policy.addClass('col-3 pointer');
+        $policySpan.addClass('selectableAppRole');
+        $policyStrong.append(policy);
+        $policySpan.append($policyStrong);
+        $policy.append($policySpan);
+
+        return $policy;
     }
 
     function callServer(data, url){

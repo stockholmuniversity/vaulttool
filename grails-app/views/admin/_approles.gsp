@@ -72,6 +72,7 @@
                         <g:link class="btn btn-primary button-danger-small pull-right editApproleLink" params='[approle: "${approle.appRole}"]' data-approle="${approle.appRole}">Edit</g:link>
                     </div>
                     <div id="editablePolicyListItemView_${approle.appRole}" class="col-lg-8 order-lg-4">
+                        <g:hiddenField name="savedApprolePolicies_${approle.appRole}" value="${approle.policies.join(", ")}"/>
                         <span class="cardBodyListItem">${approle.policies.join(", ")}</span>
                     </div>
 
