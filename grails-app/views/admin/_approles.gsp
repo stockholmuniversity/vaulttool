@@ -95,7 +95,7 @@
                             <div class="card-body">
                                 <div id="selectablePolicies_${approle.appRole}" class="row">
                                     <g:each in="${policies*.policy.minus(approle.policies)}" var="policy">
-                                        <div id="editableApproleSelectablePolicy_${policy}" class="col-3 pointer" data-policy="${policy}" data-approle="${approle.appRole}">
+                                        <div id="editableApproleSelectablePolicy_${policy}_${approle.appRole}" class="col-3 pointer" data-policy="${policy}" data-approle="${approle.appRole}">
                                             <span class="selectableAppRole">
                                                 <strong>${policy}</strong>
                                             </span>

@@ -56,7 +56,7 @@ var adminModule = (function ($) {
             var appRole         = $(this).data('approle');
             var $policies       = $("[name='editableApprolePolicies_" + appRole + "']" );
             var currentPolicies = $policies.val();
-            var policyToRemove  = $("#policiesContainer_" + appRole).find("#editableApproleSelectablePolicy_" + policyName);
+            var policyToRemove  = $("#policiesContainer_" + appRole).find("#editableApproleSelectablePolicy_" + policyName + "_" + appRole);
             var policyId        = 'editableApproleSelectedPolicy_' + policyName + "_" + appRole;
 
             currentPolicies = addToCurrentPolicies(currentPolicies, policyName);
@@ -64,9 +64,9 @@ var adminModule = (function ($) {
             
             var $policy = createSelectedPolicy(policyId, policyName);
             $policy.attr('data-status', 'unsaved');
-            $policy.data('edappselpolicy', policyName);
-            $policy.data('edappselapprole', appRole);
-             $("#selectedPolicies_" + appRole).append($policy).append(" ");
+            $policy.attr('data-edappselpolicy', policyName);
+            $policy.attr('data-edappselapprole', appRole);
+            $("#selectedPolicies_" + appRole).append($policy).append(" ");
             $(policyToRemove).remove();
 
         });
@@ -103,7 +103,7 @@ var adminModule = (function ($) {
             var approleSel      = "editableApprolePolicies_" + appRole;
             var $policies       = $('[name="' + approleSel +'"]');
             var policiesValues  = $policies.val();
-            var policyId        = 'editableApproleSelectablePolicy_'+ selectedPolicy;
+            var policyId        = 'editableApproleSelectablePolicy_'+ selectedPolicy + "_" + appRole;
             var $policy         = null;
 
             policiesValues = removeFromCurrentPolicies(policiesValues, selectedPolicy);
@@ -238,16 +238,32 @@ var adminModule = (function ($) {
             var $approlePolicyContainer     = $("#approlePolicyContainer_" + approle);
             var $policiesContainer          = $("#policiesContainer_" + approle);
             var $approlePoliciesLinkLabel   = $("#approlePoliciesLinkLabel_" + approle);
-            
+            var savedApprolePolicies        = $("[name='savedApprolePolicies_" + approle + "']").val();
+
             var $selectedPoliciesContainer = $("#selectedPolicies_" + approle);
-            var policiesToRemove =  $selectedPoliciesContainer.find("span[data-status='unsaved']");
+            var policiesToRemove =  $selectedPoliciesContainer.find("span[data-status='unsaved']");  //Undrar varför det är null?
             var $selectedPolicies = $("[name='editableApprolePolicies_" + approle +"']");
             var selectedPoliciesValues = $selectedPolicies.val();
 
-            //TODO: Need to "re-select" policies saved on cancel.
+            $selectedPoliciesContainer.html("");
+
+            $.each(savedApprolePolicies.split(','), function(i, val){
+                var policyName      = val.trim();
+                var policyId        = "editableApproleSelectedPolicy_" + policyName + "_" + approle;
+                var $policy         = createSelectedPolicy(policyId, policyName);
+                var policyToRemove  = "#editableApproleSelectablePolicy_" + policyName + "_" + approle;
+
+                $policy.attr('data-edappselpolicy', policyName);
+                $policy.attr('data-edappselapprole', approle);
+                $selectedPoliciesContainer.append($policy).append(" ");
+                $(policyToRemove).remove();
+
+            });
+
+
             $.each(policiesToRemove, function(i, val){
                 var policy      = $(val).data('edappselpolicy');
-                var policyId    = 'editableApproleSelectablePolicy_'+ policy;
+                var policyId    = 'editableApproleSelectablePolicy_'+ policy + "_" + approle;
 
                 selectedPoliciesValues = removeFromCurrentPolicies(selectedPoliciesValues, policy);
                 $selectedPolicies.val(selectedPoliciesValues);
