@@ -72,6 +72,7 @@
                         <g:link class="btn btn-primary button-danger-small pull-right editApproleLink" params='[approle: "${approle.appRole}"]' data-approle="${approle.appRole}">Edit</g:link>
                     </div>
                     <div id="editablePolicyListItemView_${approle.appRole}" class="col-lg-8 order-lg-4">
+                        <g:hiddenField name="savedApprolePolicies_${approle.appRole}" value="${approle.policies.join(", ")}"/>
                         <span class="cardBodyListItem">${approle.policies.join(", ")}</span>
                     </div>
 
@@ -94,7 +95,7 @@
                             <div class="card-body">
                                 <div id="selectablePolicies_${approle.appRole}" class="row">
                                     <g:each in="${policies*.policy.minus(approle.policies)}" var="policy">
-                                        <div id="editableApproleSelectablePolicy_${policy}" class="col-3 pointer" data-policy="${policy}" data-approle="${approle.appRole}">
+                                        <div id="editableApproleSelectablePolicy_${policy}_${approle.appRole}" class="col-3 pointer" data-policy="${policy}" data-approle="${approle.appRole}">
                                             <span class="selectableAppRole">
                                                 <strong>${policy}</strong>
                                             </span>
