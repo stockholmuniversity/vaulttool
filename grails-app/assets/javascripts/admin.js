@@ -228,20 +228,17 @@ var adminModule = (function ($) {
             utilityModule.hideMessage();
 
             var approle = $(this).data('approle');
-            $.ajax({
-                type: "POST",
-                url: "/admin/deleteApprole",
-                data : {approle:approle},
-                success: function (data) {
-                    $('#dashboard').html(data);
-                    utilityModule.showMessage('info','Successfully deleted approle ' + approle);
-                },
-                error: function(data) {
-                    utilityModule.showMessage('error', data.responseText);
-                    console.log(data.responseText);
-                }
-            });
-    }
+
+            callServer({approle:approle}, 'deleteApprole')
+                    .done(function(data){
+                        $('#dashboard').html(data);
+                        utilityModule.showMessage('info','Successfully deleted approle ' + approle);
+                    })
+                    .fail(function(data){
+                        utilityModule.showMessage('error', data.responseText);
+                        console.log(data.responseText);
+                    })
+            }
 
     function editApprole(ev){
             ev.preventDefault();
