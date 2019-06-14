@@ -283,13 +283,11 @@ var adminModule = (function ($) {
             var $approlePolicyContainer     = $("#approlePolicyContainer_" + approle);
             var $policiesContainer          = $("#policiesContainer_" + approle);
             var $approlePoliciesLinkLabel   = $("#approlePoliciesLinkLabel_" + approle);
-            var savedApprolePolicies        = $("[name='savedApprolePolicies_" + approle + "']").val();
-
+            var savedApprolePolicies        = $("[name='savedApprolePolicies_" + approle + "']").val(); //
             var $selectedPoliciesContainer  = $("#selectedPolicies_" + approle);
             var policiesToRemove            = $selectedPoliciesContainer.find("span[data-status='unsaved']");
             var $selectedPolicies           = $("[name='editableApprolePolicies_" + approle +"']");
-            var selectedPoliciesValues      = $selectedPolicies.val();
-
+            
             $selectedPoliciesContainer.html("");
 
             $.each(savedApprolePolicies.split(','), function(i, val){
@@ -310,8 +308,7 @@ var adminModule = (function ($) {
                 var policy      = $(val).data('edappselpolicy');
                 var policyId    = 'editableApproleSelectablePolicy_'+ policy + "_" + approle;
 
-                selectedPoliciesValues = removeFromCurrentPolicies(selectedPoliciesValues, policy);
-                $selectedPolicies.val(selectedPoliciesValues);
+                $selectedPolicies.val(savedApprolePolicies);
                 $(val).remove();
 
                 var $policy = createSelectablePolicy(policyId, policy);
