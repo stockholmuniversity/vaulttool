@@ -7,121 +7,178 @@ var adminModule = (function ($) {
     //TODO: All the code needs some serious refactoring and "DRYING"
     function initVariables($container){
         $body = $('body');
+        bindEventHandlers();
+    }
 
-        $body.on('click', '#addPolicyLink', function(){
-            var $policiesContainer  = $("#policiesContainer");
-            var $policyLinkLabel    = $("#policyLinkLabel");
-            var $addPolicyLink      = $("#addPolicyLink");
-
-            if($policiesContainer.hasClass('d-none')){
-                utilityModule.hideMessage();
-
-                $policiesContainer.removeClass('d-none').addClass('d-block');
-                $policyLinkLabel.html("Hide policies");
-                $addPolicyLink.find("span").removeClass('fa-plus').addClass('fa-times');
-            } else {
-                $policiesContainer.removeClass('d-block').addClass('d-none');
-                $policyLinkLabel.html("Add policies");
-                $addPolicyLink.find("span").removeClass('fa-times').addClass('fa-plus');
+    function initEventHandlers(){
+        return [
+            {
+                $el: '#addPolicyLink',
+                event: 'click',
+                handler: toggleAddPoliciesLink
+            },
+            {
+                $el: '[id^="policy_"]',
+                event: 'click',
+                handler: addToSelectedPoliciesForNewApprole
+            },
+            {
+                $el: '[id^="editableApproleSelectablePolicy_"]',
+                event: 'click',
+                handler: addToSelectedPoliciesForExistingApprole
+            },
+            {
+                $el: '[id^="selectedPolicy_"]',
+                event: 'click',
+                handler: removeFromSelectedPoliciesForNewApprole
+            },
+            {
+                $el: '[id^="editableApproleSelectedPolicy_"]',
+                event: 'click',
+                handler: removeFromSelectedPoliciesForExistingApprole
+            },
+            {
+                $el: '#createUpdateApproleButton',
+                event: 'click',
+                handler: createPolicy
+            },
+            {
+                $el: '#updateApproleButton',
+                event: 'click',
+                handler: updateApprole
+            },
+            {
+                $el: '.deleteApproleLink',
+                event: 'click',
+                handler: deleteApprole
+            },
+            {
+                $el: '.editApproleLink',
+                event: 'click',
+                handler: editApprole
+            },
+            {
+                $el: '.editableApprolePolicyLink',
+                event: 'click',
+                handler: editApproleItemPolicies
+            },
+            {
+                $el: '.cancelEditApproleLink',
+                event: 'click',
+                handler: cancelEditApprole
             }
-            
+
+        ]
+    }
+
+    function bindEventHandlers(){
+        var events = initEventHandlers();
+        $.each(events, function(i, e){
+            $body.on(e.event, e.$el, e.handler);
         });
     }
 
-    function addPolicyToSelectedPolicies(){
-        $body.on('click', '[id^="policy_"]', function(){
-            
-            var policyName      = $(this).data('policy');
-            var $policies       = $("[name='policies']");
-            var currentPolicies = $policies.val();
-            var policyToRemove  = "#policy_"+policyName;
-            var policyId        =  'selectedPolicy_' + policyName;
+    function toggleAddPoliciesLink(){
+        var $policiesContainer  = $("#policiesContainer");
+        var $policyLinkLabel    = $("#policyLinkLabel");
+        var $addPolicyLink      = $("#addPolicyLink");
 
-            currentPolicies = addToCurrentPolicies(currentPolicies, policyName);
-            $policies.val(currentPolicies);
+        if($policiesContainer.hasClass('d-none')){
+            utilityModule.hideMessage();
 
-            var $policy = createSelectedPolicy(policyId, policyName);
-            $policy.data('selectedpolicy', policyName);
-            $("#selectedPolicies").append($policy).append(" ");
-
-            if($("#selectedPolicies").children('span').length === 1) {
-                $("#selectedPolicies").addClass('bottom-margin-medium');
-            }
-            $(policyToRemove).remove();
-        });
-
-        
-        $body.on('click', '[id^="editableApproleSelectablePolicy_"]', function(){
-            var policyName      = $(this).data('policy');
-            var appRole         = $(this).data('approle');
-            var $policies       = $("[name='editableApprolePolicies_" + appRole + "']" );
-            var currentPolicies = $policies.val();
-            var policyToRemove  = $("#policiesContainer_" + appRole).find("#editableApproleSelectablePolicy_" + policyName + "_" + appRole);
-            var policyId        = 'editableApproleSelectedPolicy_' + policyName + "_" + appRole;
-
-            currentPolicies = addToCurrentPolicies(currentPolicies, policyName);
-            $policies.val(currentPolicies);
-            
-            var $policy = createSelectedPolicy(policyId, policyName);
-            $policy.attr('data-status', 'unsaved');
-            $policy.attr('data-edappselpolicy', policyName);
-            $policy.attr('data-edappselapprole', appRole);
-            $("#selectedPolicies_" + appRole).append($policy).append(" ");
-            $(policyToRemove).remove();
-
-        });
-
+            $policiesContainer.removeClass('d-none').addClass('d-block');
+            $policyLinkLabel.html("Hide policies");
+            $addPolicyLink.find("span").removeClass('fa-plus').addClass('fa-times');
+        } else {
+            $policiesContainer.removeClass('d-block').addClass('d-none');
+            $policyLinkLabel.html("Add policies");
+            $addPolicyLink.find("span").removeClass('fa-times').addClass('fa-plus');
+        }
     }
 
-    function removePoliciesFromSelectedPolicies(){
-        $body.on('click', '[id^="selectedPolicy_"]', function(){
+    function addToSelectedPoliciesForNewApprole(){
+        var policyName      = $(this).data('policy');
+        var $policies       = $("[name='policies']");
+        var currentPolicies = $policies.val();
+        var policyToRemove  = "#policy_"+policyName;
+        var policyId        =  'selectedPolicy_' + policyName;
 
-            var selectedPolicy = $(this).data('selectedpolicy');
-            var policyToRemove = "#selectedPolicy_" + selectedPolicy;
-            var $policies      = $("[name='policies']");
-            var policiesValues = $policies.val();
-            var policyId       = 'policy_'+ selectedPolicy;
-            var $policy        = null;
+        currentPolicies = addToCurrentPolicies(currentPolicies, policyName);
+        $policies.val(currentPolicies);
 
-            policiesValues = removeFromCurrentPolicies(policiesValues, selectedPolicy);
-            $policies.val(policiesValues);
-            $(policyToRemove).remove();
+        var $policy = createSelectedPolicy(policyId, policyName);
+        $policy.data('selectedpolicy', policyName);
+        $("#selectedPolicies").append($policy).append(" ");
 
-            $policy = createSelectablePolicy(policyId, selectedPolicy);
-            $policy.data('policy', selectedPolicy);
-            $("#selectablePolicies").append($policy);
+        if($("#selectedPolicies").children('span').length === 1) {
+            $("#selectedPolicies").addClass('bottom-margin-medium');
+        }
+        $(policyToRemove).remove();
+    }
 
-            if($("#selectedPolicies").children('span').length === 0) {
-                $("#selectedPolicies").removeClass('bottom-margin-medium');
-            }
-        });
+    function addToSelectedPoliciesForExistingApprole(){
+        var policyName      = $(this).data('policy');
+        var appRole         = $(this).data('approle');
+        var $policies       = $("[name='editableApprolePolicies_" + appRole + "']" );
+        var currentPolicies = $policies.val();
+        var policyToRemove  = $("#policiesContainer_" + appRole).find("#editableApproleSelectablePolicy_" + policyName + "_" + appRole);
+        var policyId        = 'editableApproleSelectedPolicy_' + policyName + "_" + appRole;
 
-        $body.on('click','[id^="editableApproleSelectedPolicy_"]', function(){
-            var selectedPolicy  = $(this).data('edappselpolicy');
-            var appRole         = $(this).data('edappselapprole');
-            var policyToRemove  = "#editableApproleSelectedPolicy_" + selectedPolicy + "_" + appRole;
-            var approleSel      = "editableApprolePolicies_" + appRole;
-            var $policies       = $('[name="' + approleSel +'"]');
-            var policiesValues  = $policies.val();
-            var policyId        = 'editableApproleSelectablePolicy_'+ selectedPolicy + "_" + appRole;
-            var $policy         = null;
+        currentPolicies = addToCurrentPolicies(currentPolicies, policyName);
+        $policies.val(currentPolicies);
 
-            policiesValues = removeFromCurrentPolicies(policiesValues, selectedPolicy);
-            $policies.val(policiesValues);
-            $(policyToRemove).remove();
-
-            $policy = createSelectablePolicy(policyId, selectedPolicy);
-            $policy.data('policy', selectedPolicy);
-            $policy.data('approle', appRole);
-            $("#selectablePolicies_" + appRole).append($policy);
-        })
+        var $policy = createSelectedPolicy(policyId, policyName);
+        $policy.attr('data-status', 'unsaved');
+        $policy.attr('data-edappselpolicy', policyName);
+        $policy.attr('data-edappselapprole', appRole);
+        $("#selectedPolicies_" + appRole).append($policy).append(" ");
+        $(policyToRemove).remove();
     }
 
 
+    function removeFromSelectedPoliciesForNewApprole(){
+        var selectedPolicy = $(this).data('selectedpolicy');
+        var policyToRemove = "#selectedPolicy_" + selectedPolicy;
+        var $policies      = $("[name='policies']");
+        var policiesValues = $policies.val();
+        var policyId       = 'policy_'+ selectedPolicy;
+        var $policy        = null;
 
-    function createPolicy() {
-        $body.on('click', '#createUpdateApproleButton', function(event){
-            event.preventDefault();
+        policiesValues = removeFromCurrentPolicies(policiesValues, selectedPolicy);
+        $policies.val(policiesValues);
+        $(policyToRemove).remove();
+
+        $policy = createSelectablePolicy(policyId, selectedPolicy);
+        $policy.data('policy', selectedPolicy);
+        $("#selectablePolicies").append($policy);
+
+        if($("#selectedPolicies").children('span').length === 0) {
+            $("#selectedPolicies").removeClass('bottom-margin-medium');
+        }
+    }
+
+    function removeFromSelectedPoliciesForExistingApprole(){
+        var selectedPolicy  = $(this).data('edappselpolicy');
+        var appRole         = $(this).data('edappselapprole');
+        var policyToRemove  = "#editableApproleSelectedPolicy_" + selectedPolicy + "_" + appRole;
+        var approleSel      = "editableApprolePolicies_" + appRole;
+        var $policies       = $('[name="' + approleSel +'"]');
+        var policiesValues  = $policies.val();
+        var policyId        = 'editableApproleSelectablePolicy_'+ selectedPolicy + "_" + appRole;
+        var $policy         = null;
+
+        policiesValues = removeFromCurrentPolicies(policiesValues, selectedPolicy);
+        $policies.val(policiesValues);
+        $(policyToRemove).remove();
+
+        $policy = createSelectablePolicy(policyId, selectedPolicy);
+        $policy.data('policy', selectedPolicy);
+        $policy.data('approle', appRole);
+        $("#selectablePolicies_" + appRole).append($policy);
+    }
+
+    function createPolicy(ev) {
+            ev.preventDefault();
             utilityModule.hideMessage();
 
             var appRoleName = $('#name').val();
@@ -141,12 +198,11 @@ var adminModule = (function ($) {
                         $policies.val("");
                     })
 
-        });
+
     }
 
-    function updateApprole(){
-        $body.on('click', '#updateApproleButton', function(event){
-            event.preventDefault();
+    function updateApprole(ev){
+            ev.preventDefault();
             utilityModule.hideMessage();
 
             var appRoleName     = $(this).data('approle');
@@ -165,37 +221,27 @@ var adminModule = (function ($) {
                         console.log(data.responseText);
                         $policies.val("");
                     })
-
-        })
     }
 
-    function deleteApprole(){
-        $(document).off('click', '.deleteApproleLink');
-        $(document).on('click', '.deleteApproleLink', function(event){
-            event.preventDefault();
+    function deleteApprole(ev){
+            ev.preventDefault();
             utilityModule.hideMessage();
 
             var approle = $(this).data('approle');
-            $.ajax({
-                type: "POST",
-                url: "/admin/deleteApprole",
-                data : {approle:approle},
-                success: function (data) {
-                    $('#dashboard').html(data);
-                    utilityModule.showMessage('info','Successfully deleted approle ' + approle);
-                },
-                error: function(data) {
-                    utilityModule.showMessage('error', data.responseText);
-                    console.log(data.responseText);
-                }
-            });
 
-        });
-    }
+            callServer({approle:approle}, 'deleteApprole')
+                    .done(function(data){
+                        $('#dashboard').html(data);
+                        utilityModule.showMessage('info','Successfully deleted approle ' + approle);
+                    })
+                    .fail(function(data){
+                        utilityModule.showMessage('error', data.responseText);
+                        console.log(data.responseText);
+                    })
+            }
 
-    function editApprole(){
-        $body.on('click', '.editApproleLink', function(event){
-            event.preventDefault();
+    function editApprole(ev){
+            ev.preventDefault();
             utilityModule.hideMessage();
             var approle = $(this).data('approle');
             var $approleView = $("#editablePolicyListItemView_" + approle);
@@ -206,12 +252,10 @@ var adminModule = (function ($) {
                 $approlePolicyContainer.removeClass('d-none').addClass('d-block');
                 $approleEditLink.removeClass('d-block').addClass('d-none');
                 $approleView.removeClass('d-block').addClass('d-none');
-            } 
-        });
+            }
     }
 
     function editApproleItemPolicies(){
-        $body.on('click', '.editableApprolePolicyLink', function(){
             var approle = $(this).data('approle');
             var $policiesContainer = $("#policiesContainer_" + approle);
             var $approlePoliciesLinkLabel = $("#approlePoliciesLinkLabel_" + approle);
@@ -225,12 +269,10 @@ var adminModule = (function ($) {
                 $approlePoliciesLinkLabel.html("Add policies");
                 $(this).find("span").removeClass('fa-times').addClass('fa-plus');
             }
-        });
     }
 
-    function cancelEditApprole(){
-        $body.on('click', '.cancelEditApproleLink', function(event){
-            event.preventDefault();
+    function cancelEditApprole(ev){
+            ev.preventDefault();
             utilityModule.hideMessage();
             var approle                     = $(this).data('approle');
             var $approleView                = $("#editablePolicyListItemView_" + approle);
@@ -238,13 +280,11 @@ var adminModule = (function ($) {
             var $approlePolicyContainer     = $("#approlePolicyContainer_" + approle);
             var $policiesContainer          = $("#policiesContainer_" + approle);
             var $approlePoliciesLinkLabel   = $("#approlePoliciesLinkLabel_" + approle);
-            var savedApprolePolicies        = $("[name='savedApprolePolicies_" + approle + "']").val();
-
-            var $selectedPoliciesContainer = $("#selectedPolicies_" + approle);
-            var policiesToRemove =  $selectedPoliciesContainer.find("span[data-status='unsaved']");  //Undrar varför det är null?
-            var $selectedPolicies = $("[name='editableApprolePolicies_" + approle +"']");
-            var selectedPoliciesValues = $selectedPolicies.val();
-
+            var savedApprolePolicies        = $("[name='savedApprolePolicies_" + approle + "']").val(); //
+            var $selectedPoliciesContainer  = $("#selectedPolicies_" + approle);
+            var policiesToRemove            = $selectedPoliciesContainer.find("span[data-status='unsaved']");
+            var $selectedPolicies           = $("[name='editableApprolePolicies_" + approle +"']");
+            
             $selectedPoliciesContainer.html("");
 
             $.each(savedApprolePolicies.split(','), function(i, val){
@@ -265,8 +305,7 @@ var adminModule = (function ($) {
                 var policy      = $(val).data('edappselpolicy');
                 var policyId    = 'editableApproleSelectablePolicy_'+ policy + "_" + approle;
 
-                selectedPoliciesValues = removeFromCurrentPolicies(selectedPoliciesValues, policy);
-                $selectedPolicies.val(selectedPoliciesValues);
+                $selectedPolicies.val(savedApprolePolicies);
                 $(val).remove();
 
                 var $policy = createSelectablePolicy(policyId, policy);
@@ -285,7 +324,6 @@ var adminModule = (function ($) {
                 $approlePoliciesLinkLabel.closest("span").find('.fa-times').removeClass('fa-times').addClass('fa-plus');
 
             }
-        });
     }
 
     function addToCurrentPolicies(policies, policyName){
@@ -352,14 +390,6 @@ var adminModule = (function ($) {
 
     initModule = function($container){
         initVariables($container);
-        addPolicyToSelectedPolicies();
-        removePoliciesFromSelectedPolicies();
-        createPolicy();
-        deleteApprole();
-        editApprole();
-        cancelEditApprole();
-        editApproleItemPolicies();
-        updateApprole();
     };
 
     return {
