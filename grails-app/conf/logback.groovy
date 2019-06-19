@@ -21,11 +21,6 @@ if(Environment.isDevelopmentMode() || Environment.currentEnvironment == Environm
     println("### Finished setting up logback for development/test mode ###")
 } else {
     println("### Setting up logback for production mode ###")
-    appender('SYSLOG', SyslogAppender) {
-        syslogHost = "127.0.0.1"
-        facility = "USER"
-        suffixPattern = "vaulttool: %-5level [%thread] %logger{0} - %msg"
-    }
     appender('TIME_BASED_FILE', RollingFileAppender) {
         file = "/local/vaulttool/logs/vaulttool.log"
         rollingPolicy(TimeBasedRollingPolicy) {
@@ -36,12 +31,18 @@ if(Environment.isDevelopmentMode() || Environment.currentEnvironment == Environm
             pattern = "%d %level %logger - %msg%n"
         }
     }
+    appender('SYSLOG', SyslogAppender) {
+        syslogHost = "127.0.0.1"
+        facility = "USER"
+        throwableExcluded = true
+        suffixPattern = "vaulttool: %level [%thread] %logger - %msg%n%xException"
+    }
 
     root(ERROR, ['TIME_BASED_FILE', 'SYSLOG'])
-    logger("org.grails.web.errors", DEBUG, ['TIME_BASED_FILE'], false)
-    logger("grails", INFO, ['TIME_BASED_FILE'], false)
-    logger("se.su.it.vaulttool", INFO, ['TIME_BASED_FILE'], false)
-    logger("groovyx.net.http.ParserRegistry", ERROR, ['TIME_BASED_FILE'], false)
+    logger("org.grails.web.errors", DEBUG, ['TIME_BASED_FILE', 'SYSLOG'], false)
+    logger("grails", INFO, ['TIME_BASED_FILE', 'SYSLOG'], false)
+    logger("se.su.it.vaulttool", INFO, ['TIME_BASED_FILE', 'SYSLOG'], false)
+    logger("groovyx.net.http.ParserRegistry", ERROR, ['TIME_BASED_FILE', 'SYSLOG'], false)
     println("### Finished setting up logback for production mode ###")
 }
 
