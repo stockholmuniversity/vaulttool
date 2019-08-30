@@ -36,7 +36,7 @@ $(document).ready(function(){
                 'icon'  : 'fa fa-scissors',
                 'action': function(){
                     sessionStorage.setItem('deletePath', 'true');
-                    sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
+                    sessionStorage.setItem('fromPath', node.id.replace(/‰/g,'/'));
                     sessionStorage.setItem('enablePaste','true');
 
                 }
@@ -46,7 +46,7 @@ $(document).ready(function(){
                 'icon'  : 'fa fa-files-o',
                 'action': function(){
                     sessionStorage.removeItem('deletePath');
-                    sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
+                    sessionStorage.setItem('fromPath', node.id.replace(/‰/g,'/'));
 
                     sessionStorage.setItem('enablePaste','true');
                 }
@@ -55,7 +55,7 @@ $(document).ready(function(){
                 'label' : 'Paste Path',
                 'icon'  : 'fa fa-clipboard',
                 'action': function(){
-                    sessionStorage.setItem('toPath', node.id.replace(/_/g,'/'));
+                    sessionStorage.setItem('toPath', node.id.replace(/‰/g,'/'));
 
                     overWriteCheck();
                     sessionStorage.removeItem('enablePaste');
@@ -68,7 +68,7 @@ $(document).ready(function(){
                     'action' : function(){
                         sessionStorage.removeItem('toPath');
                         sessionStorage.removeItem('deletePath');
-                        sessionStorage.setItem('fromPath', node.id.replace(/_/g,'/'));
+                        sessionStorage.setItem('fromPath', node.id.replace(/‰/g,'/'));
 
                         var body = "<div class='bottom-margin-medium'>"
                                 + "Vill du ta bort " +"<strong>" + sessionStorage.fromPath +"</strong>"+ "?"
@@ -153,9 +153,8 @@ $(document).ready(function(){
         callServer({fromPath:fromPath, toPath:toPath, deletePath:deletePath}, 'handlePaths')
                 .done(function(data){
 
-
                     if(deletePath || (fromPath && !toPath)) {
-                        var fromNode = $tree.jstree(true).get_node(fromPath.replace(/\//g,'_'));
+                        var fromNode = $tree.jstree(true).get_node(fromPath.replace(/\//g,'‰'));
                         var children = fromNode.children;
 
                         if(children.length > 0){
@@ -166,17 +165,21 @@ $(document).ready(function(){
                         $tree.jstree(true).open_node(parent);
                         $tree.jstree(true).delete_node(fromNode.id);
 
-
-                        callServer({selectedPath: parent.replace(/_/g,'/') + '/'}, 'index')
+                        callServer({selectedPath: parent.replace(/‰/g,'/') + '/'}, 'index')
                                 .done(function(data){
                                     $("#dashboard").html(data);
                                 });
                     }
 
                     if(fromPath && toPath){
-                        $tree.jstree(true).load_node(toPath.replace(/\//g,'_'));
-                        $tree.jstree(true).open_node(toPath.replace(/\//g,'_'));
+                        $tree.jstree(true).load_node(toPath.replace(/\//g,'‰'));
+                        $tree.jstree(true).open_node(toPath.replace(/\//g,'‰'));
                     }
+
+                    sessionStorage.removeItem('fromPath');
+                    sessionStorage.removeItem('toPath');
+                    sessionStorage.removeItem('deletePath');
+
                 }).fail(function(data){
                     //TODO: Show message to user?
                     console.log(data.message);
@@ -214,14 +217,14 @@ $(document).ready(function(){
         utilityModule.hideMessage();
         
         if(node.type === 'pathNode' || !$tree.jstree(true).is_leaf(node)){
-            var selectedPath = node.id.replace(/_/g,"/") + "/";
+            var selectedPath = node.id.replace(/‰/g,"/") + "/";
 
             callServer({selectedPath: selectedPath}, 'index')
                     .done(function(data){
                         $("#dashboard").html(data);
                     });
         } else {
-            var key = node.id.substring(5).replace(/_/g, "/");
+            var key = node.id.substring(5).replace(/‰/g, "/");
 
             callServer({key : key}, 'secret')
                     .done(function(data){
@@ -251,7 +254,7 @@ $(document).ready(function(){
 
     function createPathAndSecret(selectedPath, path, secret) {
         var pt          = (path) ? path.split('/'):"";
-        var parentId    = selectedPath.replace(/\//g,"_").replace(/_$/,"");
+        var parentId    = selectedPath.replace(/\//g,"‰").replace(/‰$/,"");
         var selPath     = selectedPath;
         var fullPath    = selectedPath + path;
         var msg         = "";
@@ -264,7 +267,7 @@ $(document).ready(function(){
         }
         
         msg = 'Failed when trying to create secret ' + selPath.replace('leaf/',"") + ' . Error was: Secret already exist';
-        selPath = selPath.replace(/\//g,"_");
+        selPath = selPath.replace(/\//g,"‰");
 
         exists = $tree.jstree(true).get_node(selPath);
         if(exists){
@@ -272,14 +275,14 @@ $(document).ready(function(){
             return;
         }
 
-        exists = $tree.jstree(true).get_node(fullPath.replace(/\//g, "_"));
+        exists = $tree.jstree(true).get_node(fullPath.replace(/\//g, "‰"));
         if(!exists){
             if(pt.length > 0){
 
                 var nodeId = parentId;
 
                 $.each(pt, function(i, val){
-                    var nId     = nodeId += '_' + val;
+                    var nId     = nodeId += '‰' + val;
                     var ptNode  = nodeInMemory(nId, val,'fa fa-folder', 'pathNode');
                     parentId    = $tree.jstree(true).create_node(parentId, ptNode , 0, false, true);
                     nodeId      = parentId;
@@ -287,10 +290,10 @@ $(document).ready(function(){
             }
 
         } else {
-            parentId = fullPath.replace(/\//g, "_")
+            parentId = fullPath.replace(/\//g, "‰")
         }
 
-        var leafId = 'leaf_' + parentId + '_' + secret;
+        var leafId = 'leaf‰' + parentId + '‰' + secret;
         exists = $tree.jstree(true).get_node(leafId);
         if(!exists){
             var leafNode = nodeInMemory(leafId, secret, 'fa fa-lock', 'leafNode');
@@ -327,7 +330,7 @@ $(document).ready(function(){
                     console.log(data.responseText);
                 }).always(function(){
                     if(selectedPath){
-                        $tree.jstree(true).refresh_node(selectedPath.replace(/\//g,'_').replace(/_$/,''));
+                        $tree.jstree(true).refresh_node(selectedPath.replace(/\//g,'‰').replace(/‰$/,''));
                     } else {
                         $tree.jstree(true).refresh();
                         //window.location.href = '/';
