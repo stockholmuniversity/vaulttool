@@ -12,7 +12,7 @@ String projectName = 'vaulttool'
 
 String artifacts = 'vaulttool,war'
 String suaPackage = 'sua-vaulttool'
-String host = 'vault-dev-app01.it.su.se'
+List<String> hosts = ['vault-dev-app01.it.su.se', 'vault-dev-app02.it.su.se']
 
 node('agent') {
 
@@ -61,14 +61,16 @@ node('agent') {
             suGetKerberosCredentials()
 
             String aptFile = '/etc/apt/sources.list.d/vaulttoolJenkins.list'
-            String sshCommand = 'ssh -o ConnectTimeout=5 -o GSSAPIAuthentication=yes -o GSSAPIKeyExchange=yes -lroot ' + host
+            hosts.each { String host ->
+                String sshCommand = 'ssh -o ConnectTimeout=5 -o GSSAPIAuthentication=yes -o GSSAPIKeyExchange=yes -lroot ' + host
 
-            sh sshCommand + " \"echo 'deb [arch=amd64] http://linux-sua.it.su.se/xenial/sua-v2 dev main' > ${aptFile}\""
-            sh sshCommand + " apt-get update"
-            sh sshCommand + " apt-get install --yes --force-yes -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' " + suaPackage
-            sh sshCommand + " pkill -9 java"
-            sh sshCommand + " systemctl restart " + suaPackage + ".service"
-            sh sshCommand + " rm " + aptFile + " && apt-get update"
+                sh sshCommand + " \"echo 'deb [arch=amd64] http://linux-sua.it.su.se/xenial/sua-v2 dev main' > ${aptFile}\""
+                sh sshCommand + " apt-get update"
+                sh sshCommand + " apt-get install --yes --force-yes -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' " + suaPackage
+                sh sshCommand + " pkill -9 java"
+                sh sshCommand + " systemctl restart " + suaPackage + ".service"
+                sh sshCommand + " rm " + aptFile + " && apt-get update"
+            }
         }
     }
 }
