@@ -50,7 +50,12 @@ class Application extends GrailsAutoConfiguration implements EnvironmentAware{
 
     @Override
     void setEnvironment(Environment environment) {
-        File externalConfigFile = new File("/local/vaulttool/conf/application.yml")
+        Properties systemProps = System.properties
+        String local = "/local"
+        if(systemProps.get("vaulttool.localfilepath") && !systemProps.get("vaulttool.localfilepath").isEmpty()) {
+            local = systemProps.get("vaulttool.localfilepath")
+        }
+        File externalConfigFile = new File("${local}/vaulttool/conf/application.yml")
         if (externalConfigFile.exists()) {
             Resource resourceConfig = new FileSystemResource(externalConfigFile.absolutePath)
             YamlPropertiesFactoryBean ypfb = new YamlPropertiesFactoryBean()

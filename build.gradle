@@ -78,6 +78,7 @@ dependencies {
 }
 
 bootRun {
+    systemProperties = System.properties
     jvmArgs = ['-Dspring.output.ansi.enabled=always']
 }
 
