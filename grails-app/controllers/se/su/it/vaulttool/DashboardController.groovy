@@ -50,7 +50,7 @@ class DashboardController {
                         'a_attr'    :  (sc.size() == 1 && sc.contains('dummykeydontuse')) ? ['class': 'path-no-children']:'']
                 nodes.add(node)
             }  else {
-                node =  ['id'       : 'leaf_' + secret,
+                node =  ['id'       : 'leaf‰' + secret,
                          'text'     : secret,
                          admin      : isAdmin,
                          type       : 'leafNode',
@@ -69,7 +69,7 @@ class DashboardController {
 
 
     def loadChildren(){
-        def secrets = vaultRestService.listSecrets(session.token.toString(), params['id'].toString().replaceAll("_","/"))
+        def secrets = vaultRestService.listSecrets(session.token.toString(), params['id'].toString().replaceAll("‰","/"))
 
         List<Map<String, Object>> childNodes = new ArrayList<Map<String, Object>>()
 
@@ -78,9 +78,9 @@ class DashboardController {
         secrets.each {secret ->
             Map<String, Object> node = null
             if(secret.endsWith("/")){
-                def sc = vaultRestService.listSecrets(session.token.toString(), params['id'].toString().replaceAll("_","/") + "/" + secret)
+                def sc = vaultRestService.listSecrets(session.token.toString(), params['id'].toString().replaceAll("‰","/") + "/" + secret)
 
-                node = ['id'        :   params['id'] + '_' + secret.replace("/",""),
+                node = ['id'        :   params['id'] + '‰' + secret.replace("/",""),
                         parent      :   params['id'],
                         'text'      :   secret.replace("/",""),
                         admin       :   isAdmin,
@@ -89,7 +89,7 @@ class DashboardController {
                         'icon'      :   'fa fa-folder',
                         'a_attr'    :   (sc.size() == 1 && sc.contains('dummykeydontuse')) ? ['class': 'path-no-children']:'']
              }  else {
-                node =  ['id'       :   'leaf_' + params['id'] + '_' + secret.replace("/",""),
+                node =  ['id'       :   'leaf‰' + params['id'] + '‰' + secret.replace("/",""),
                          parent     :   params['id'],
                          'text'     :   secret.replace("/",""),
                          admin      :   isAdmin,
@@ -97,7 +97,7 @@ class DashboardController {
                          'children' :   false,
                          'icon'     :   'fa fa-lock',
                          'state'    :   ['hidden': (secret == 'dummykeydontuse')],
-                         'a_attr'   :   ['data-secretkey': params['id'].toString().replaceAll("_","/") +'/' + secret ]]
+                         'a_attr'   :   ['data-secretkey': params['id'].toString().replaceAll("‰","/") +'/' + secret ]]
             }
 
             childNodes.add(node)
