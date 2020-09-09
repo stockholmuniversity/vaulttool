@@ -24,7 +24,7 @@
                     <label for="path"><strong>New subpath</strong> <br />(optional)</label>
                 </div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control allowonly7bitpath" id="path" name="path" value="" placeholder="Subpath name"/>
+                    <input type="text" class="form-control allowonly7bitpath" maxlength="150" id="path" name="path" value="" placeholder="Subpath name"/>
                 </div>
             </div>
 
@@ -33,7 +33,7 @@
                     <label for="secret"><strong>New secret</strong><br />(optional)</label>
                 </div>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control allowonly7bit" name="secret" id="secret" value="" placeholder="Secret name"/>
+                    <input type="text" class="form-control allowonly7bit" name="secret" maxlength="150" id="secret" value="" placeholder="Secret name"/>
                 </div>
             </div>
             <div class="pull-right">
