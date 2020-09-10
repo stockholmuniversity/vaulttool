@@ -435,6 +435,12 @@ $(document).ready(function(){
         var selectedPath = $('[name="selectedPath"]').val();
         var path = $('#path').val();
         var secret = $('#secret').val();
+        var combinedLength = (selectedPath?selectedPath.length:0) + (path?path.length:0) + (secret?secret.length:0)
+
+        if(combinedLength > 255) {
+            alert("Error creating key! Combined length of current-path, sub-path and key exceeds limit of 255 characters! Current combined length is (" + combinedLength + ")")
+            return;
+        }
 
         if(path.endsWith("/")) { //TODO: Not sure endswith works in IE...
             path = path.substr(0, path.length -1);
