@@ -55,7 +55,7 @@ dependencies {
     compile "org.hibernate:hibernate-ehcache:5.1.5.Final"
     compile "org.codehaus.groovy.modules.http-builder:http-builder:0.7.2"
     compile "se.su.it.tomcat:tomcat-header-encoding-valve:2.3"
-    compile "mysql:mysql-connector-java:5.1.46"
+    compile "mysql:mysql-connector-java:8.0.22"
     compile "org.liquibase:liquibase-core:3.5.5"
     compile "org.grails.plugins:database-migration:3.0.3"
     compile "org.apache.commons:commons-email:1.4"
