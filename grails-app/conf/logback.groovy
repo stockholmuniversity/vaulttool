@@ -29,7 +29,7 @@ if(Environment.isDevelopmentMode() || Environment.currentEnvironment == Environm
     appender('TIME_BASED_FILE', RollingFileAppender) {
         file = "${local}/vaulttool/logs/vaulttool.log"
         rollingPolicy(TimeBasedRollingPolicy) {
-            fileNamePattern = "/vaulttool/logs/vaulttool.log.%d{yyyy-MM-dd}"
+            fileNamePattern = "${local}/vaulttool/logs/vaulttool.log.%d{yyyy-MM-dd}"
             maxHistory = 365
         }
         encoder(PatternLayoutEncoder) {
