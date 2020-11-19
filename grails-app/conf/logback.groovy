@@ -20,11 +20,16 @@ if(Environment.isDevelopmentMode() || Environment.currentEnvironment == Environm
     logger("se.su.it.vaulttool", DEBUG, ['STDOUT'], false)
     println("### Finished setting up logback for development/test mode ###")
 } else {
+    Properties systemProps = System.properties
+    String local = "/local"
+    if(systemProps.get("vaulttool.localfilepath") && !systemProps.get("vaulttool.localfilepath").isEmpty()) {
+        local = systemProps.get("vaulttool.localfilepath")
+    }
     println("### Setting up logback for production mode ###")
     appender('TIME_BASED_FILE', RollingFileAppender) {
-        file = "/local/vaulttool/logs/vaulttool.log"
+        file = "${local}/vaulttool/logs/vaulttool.log"
         rollingPolicy(TimeBasedRollingPolicy) {
-            fileNamePattern = "/local/vaulttool/logs/vaulttool.log.%d{yyyy-MM-dd}"
+            fileNamePattern = "${local}/vaulttool/logs/vaulttool.log.%d{yyyy-MM-dd}"
             maxHistory = 365
         }
         encoder(PatternLayoutEncoder) {
