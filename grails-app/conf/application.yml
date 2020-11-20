@@ -114,6 +114,7 @@ environments:
         dataSource:
             pooled: true
             url: "jdbc:mysql://localhost/yourDB"
+            dialect: "org.hibernate.dialect.MySQL8Dialect"
             driverClassName: "com.mysql.cj.jdbc.Driver"
             username: "yourUser"
             password: "yourPassword"
@@ -125,6 +126,7 @@ environments:
         dataSource:
             pooled: true
             url: "jdbc:mysql://localhost/yourDB"
+            dialect: "org.hibernate.dialect.MySQL8Dialect"
             driverClassName: "com.mysql.cj.jdbc.Driver"
             username: "yourUser"
             password: "yourPassword"
