@@ -24,9 +24,9 @@ class Application extends GrailsAutoConfiguration implements EnvironmentAware{
         println "### Start setting up Tomcat AJP on port 8009 and encoding attributes to UTF-8 ###"
         TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory()
         tomcat.addAdditionalTomcatConnectors(createSslConnector())
-        HeaderEncodingValve headerEncodingValve = new HeaderEncodingValve()
-        headerEncodingValve.setPattern('^.*$')
-        tomcat.addContextValves(headerEncodingValve)
+        //HeaderEncodingValve headerEncodingValve = new HeaderEncodingValve()
+        //headerEncodingValve.setPattern('^.*$')
+        //tomcat.addContextValves(headerEncodingValve)
         println "### Finished setting up Tomcat AJP on port 8009 and encoding attributes to UTF-8 ###"
         return tomcat
     }
