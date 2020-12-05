@@ -1,6 +1,8 @@
 package se.su.it.vaulttool
 
 import groovyx.net.http.AsyncHTTPBuilder
+import org.apache.http.client.utils.URIBuilder
+import org.springframework.web.util.UriUtils
 
 class VaultRestService {
     static final public VAULTTOOLUSERSPATHNAME      = "vaulttoolusers"
@@ -42,7 +44,8 @@ class VaultRestService {
         try {
             getRestClient().request(internalMethod, mediaType) {
                 headers."X-Vault-Token" = token//"78600c52-5062-1d55-7e50-6b88c8865e79"
-                uri.path = restPath
+                URIBuilder uriBuilder = new URIBuilder(UriUtils.encodePath(grailsApplication.config.vault.url + restPath, "UTF-8"))
+                uri = uriBuilder.build()
                 if (query) {
                     uri.query = query
                 }
