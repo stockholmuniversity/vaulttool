@@ -29,13 +29,13 @@ suNodeWithNexusCredentials {
                 ])
             }
 
-            stage('SonarQube analysis')
+            /*stage('SonarQube analysis')
             {
                 withSonarQubeEnv('sonarqube')
                 {
                     sh './gradlew --info sonarqube'
                 }
-            }
+            }*/
 
             stage("Build")
             {
