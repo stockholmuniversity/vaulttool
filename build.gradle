@@ -13,7 +13,6 @@ buildscript {
         classpath "org.grails.plugins:hibernate5:7.0.4"
         classpath 'org.grails.plugins:database-migration:3.1.0'
         classpath 'com.bertramlabs.plugins:sass-asset-pipeline:3.2.4'
-        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.6.2"
     }
 }
 
