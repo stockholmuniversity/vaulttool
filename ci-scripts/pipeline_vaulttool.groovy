@@ -29,17 +29,14 @@ suNodeWithNexusCredentials {
                 ])
             }
 
-            /*stage('SonarQube analysis')
-            {
-                withSonarQubeEnv('sonarqube')
-                {
-                    sh './gradlew --info sonarqube'
-                }
-            }*/
-
             stage("Build")
             {
-                sh "./gradlew bootWar"
+                if(env.branch != "master") {
+                    sh "./gradlew bootWar"
+                } else {
+                    sh "./gradlew bootRepackage"
+                }
+
             }
 
             stage("Deploy to Nexus")
