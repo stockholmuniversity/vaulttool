@@ -1,11 +1,13 @@
 package se.su.it.vaulttool
 
+import grails.gorm.transactions.Transactional
 import org.springframework.web.multipart.MultipartFile
 
 import java.util.zip.ZipEntry
 import java.util.zip.ZipInputStream
 import java.util.zip.ZipOutputStream
 
+@Transactional
 class AdminController {
     def vaultRestService
 
