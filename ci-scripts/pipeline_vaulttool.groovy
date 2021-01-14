@@ -39,7 +39,7 @@ suNodeWithNexusCredentials {
 
             stage("Build")
             {
-                sh "./gradlew bootRepackage"
+                sh "./gradlew bootWar"
             }
 
             stage("Deploy to Nexus")
