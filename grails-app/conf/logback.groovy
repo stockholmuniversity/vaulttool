@@ -44,7 +44,7 @@ if(Environment.isDevelopmentMode() || Environment.currentEnvironment == Environm
         suffixPattern = "vaulttool: %level [%thread] %logger - %msg%n%xException"
     }
 
-    root(ERROR, ['TIME_BASED_FILE', 'SYSLOG'])
+    root(DEBUG, ['TIME_BASED_FILE', 'SYSLOG'])
     logger("org.grails.web.errors", DEBUG, ['TIME_BASED_FILE', 'SYSLOG'], false)
     logger("grails", INFO, ['TIME_BASED_FILE', 'SYSLOG'], false)
     logger("se.su.it.vaulttool", INFO, ['TIME_BASED_FILE', 'SYSLOG'], false)
