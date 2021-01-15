@@ -44,12 +44,13 @@ if(Environment.isDevelopmentMode() || Environment.currentEnvironment == Environm
         suffixPattern = "vaulttool: %level [%thread] %logger - %msg%n%xException"
     }
 
-    root(DEBUG, ['TIME_BASED_FILE', 'SYSLOG'])
+    root(ERROR, ['TIME_BASED_FILE', 'SYSLOG'])
     logger("org.grails.web.errors", DEBUG, ['TIME_BASED_FILE', 'SYSLOG'], false)
     logger("grails", INFO, ['TIME_BASED_FILE', 'SYSLOG'], false)
     logger("se.su.it.vaulttool", INFO, ['TIME_BASED_FILE', 'SYSLOG'], false)
     logger("groovyx.net.http.ParserRegistry", ERROR, ['TIME_BASED_FILE', 'SYSLOG'], false)
     logger("org.hibernate.orm.deprecation", ERROR, ['TIME_BASED_FILE', 'SYSLOG'], false)
+    logger("org.apache.coyote.ajp.AjpProcessor", DEBUG, ['TIME_BASED_FILE', 'SYSLOG'], false)
     println("### Finished setting up logback for production mode ###")
 }
 
