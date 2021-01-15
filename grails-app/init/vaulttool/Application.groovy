@@ -43,8 +43,7 @@ class Application extends GrailsAutoConfiguration implements EnvironmentAware{
             ajpConnector.setProperty("address", "127.0.0.1")
             ajpConnector.setProperty("enableLookups", "false")
             ajpConnector.URIEncoding = "UTF-8"
-            //ajpConnector.setProperty("address","0.0.0.0");
-            ajpConnector.setProperty("allowedRequestAttributesPattern",".*");
+            ajpConnector.setProperty("allowedRequestAttributesPattern",".*")
             ((AbstractAjpProtocol) ajpConnector.getProtocolHandler()).setSecretRequired(false)
             return ajpConnector
         } catch (Throwable ex) {

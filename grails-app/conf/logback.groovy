@@ -50,7 +50,6 @@ if(Environment.isDevelopmentMode() || Environment.currentEnvironment == Environm
     logger("se.su.it.vaulttool", INFO, ['TIME_BASED_FILE', 'SYSLOG'], false)
     logger("groovyx.net.http.ParserRegistry", ERROR, ['TIME_BASED_FILE', 'SYSLOG'], false)
     logger("org.hibernate.orm.deprecation", ERROR, ['TIME_BASED_FILE', 'SYSLOG'], false)
-    logger("org.apache.coyote.ajp.AjpProcessor", DEBUG, ['TIME_BASED_FILE', 'SYSLOG'], false)
     println("### Finished setting up logback for production mode ###")
 }
 
