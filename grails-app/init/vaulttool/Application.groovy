@@ -3,9 +3,10 @@ package vaulttool
 import grails.boot.GrailsApp
 import grails.boot.config.GrailsAutoConfiguration
 import org.apache.catalina.connector.Connector
+import org.apache.coyote.ajp.AbstractAjpProtocol
 import org.springframework.beans.factory.config.YamlPropertiesFactoryBean
-import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory
-import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory
+import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory
+import org.springframework.boot.web.servlet.server.ServletWebServerFactory
 import org.springframework.context.EnvironmentAware
 import org.springframework.context.annotation.Bean
 import org.springframework.core.env.Environment
@@ -20,9 +21,9 @@ class Application extends GrailsAutoConfiguration implements EnvironmentAware{
     }
 
     @Bean
-    public EmbeddedServletContainerFactory servletContainer() {
+    public ServletWebServerFactory servletContainer() {
         println "### Start setting up Tomcat AJP on port 8009 and encoding attributes to UTF-8 ###"
-        TomcatEmbeddedServletContainerFactory tomcat = new TomcatEmbeddedServletContainerFactory()
+        TomcatServletWebServerFactory tomcat = new TomcatServletWebServerFactory()
         tomcat.addAdditionalTomcatConnectors(createSslConnector())
         HeaderEncodingValve headerEncodingValve = new HeaderEncodingValve()
         headerEncodingValve.setPattern('^.*$')
@@ -42,6 +43,8 @@ class Application extends GrailsAutoConfiguration implements EnvironmentAware{
             ajpConnector.setProperty("address", "127.0.0.1")
             ajpConnector.setProperty("enableLookups", "false")
             ajpConnector.URIEncoding = "UTF-8"
+            ajpConnector.setProperty("allowedRequestAttributesPattern",".*")
+            ((AbstractAjpProtocol) ajpConnector.getProtocolHandler()).setSecretRequired(false)
             return ajpConnector
         } catch (Throwable ex) {
             throw new IllegalStateException("Failed setting up AJP Connector", ex)

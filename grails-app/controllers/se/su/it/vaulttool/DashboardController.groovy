@@ -1,8 +1,10 @@
 package se.su.it.vaulttool
 
 import grails.converters.JSON
+import grails.gorm.transactions.Transactional
 import org.springframework.web.multipart.MultipartFile
 
+@Transactional
 class DashboardController {
     def vaultRestService
     def vaultService
