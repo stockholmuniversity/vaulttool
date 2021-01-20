@@ -1,7 +1,9 @@
 package se.su.it.vaulttool.schedule
 
+import ch.qos.logback.classic.LoggerContext
 import grails.core.GrailsApplication
 import org.apache.log4j.Logger
+import org.slf4j.LoggerFactory
 import se.su.it.vaulttool.VaultRestService
 
 import java.util.concurrent.Executors
@@ -12,7 +14,8 @@ import static java.util.concurrent.TimeUnit.MINUTES
 class TokenRenewer {
     GrailsApplication grailsApplication
     VaultRestService vaultRestService
-    private static final Logger log = Logger.getLogger(TokenRenewer.class.getName())
+    private static final LoggerContext loggerContext = (LoggerContext) LoggerFactory.getILoggerFactory()
+    private static final ch.qos.logback.classic.Logger log = loggerContext.getLogger("se.su.it.vaulttool.schedule.TokenRenewer")
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1)
 
     void runTokenRenewer() {
