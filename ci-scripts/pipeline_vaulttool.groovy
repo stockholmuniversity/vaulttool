@@ -31,12 +31,7 @@ suNodeWithNexusCredentials {
 
             stage("Build")
             {
-                if(env.branch != "master") {
-                    sh "./gradlew bootWar"
-                } else {
-                    sh "./gradlew bootRepackage"
-                }
-
+                sh "./gradlew bootWar"
             }
 
             stage("Deploy to Nexus")
