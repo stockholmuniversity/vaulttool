@@ -211,6 +211,7 @@ class DashboardController {
         return render (template: 'secret', model: [secret: resp.entry, metadata: metaData])
     }
 
+    @Transactional
     def updateSecret() {
         String key = params?.key?:null
         if(!key) {
@@ -289,6 +290,7 @@ class DashboardController {
         return render (result as JSON)
     }
 
+    @Transactional
     def createSecret() {
         String key = params?.selectedPath?:""
         String path = params?.path?:""
@@ -346,6 +348,7 @@ class DashboardController {
         return redirect(action: "secret", params: [key: key])
     }
 
+    @Transactional
     def delete() {
         String key = params?.key?:null
         if(!key) {
@@ -375,6 +378,7 @@ class DashboardController {
         redirect(actionName: "index")
     }
 
+    @Transactional
     def upload() {
         String key = params?.key?:null
         if(!key) {
@@ -463,6 +467,7 @@ class DashboardController {
         response.outputStream << entry.binaryData
     }
 
+    @Transactional
     def deleteFile() {
         String key = params?.key?:null
         if(!key) {
