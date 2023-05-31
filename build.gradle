@@ -89,7 +89,7 @@ dependencies {
     implementation "org.grails.plugins:gsp"
     //console "org.grails:grails-console"
     implementation "io.micronaut:micronaut-inject-groovy"
-    implementation "org.codehaus.groovy.modules.http-builder:http-builder:0.7.1"
+    implementation "org.codehaus.groovy.modules.http-builder:http-builder:0.7.2"
     implementation "se.su.it.tomcat:tomcat-header-encoding-valve:2.3"
     implementation 'mysql:mysql-connector-java:8.0.22'
     implementation 'org.liquibase:liquibase-core:3.6.3'
