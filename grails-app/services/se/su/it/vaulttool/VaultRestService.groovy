@@ -18,7 +18,7 @@ class VaultRestService {
 
             http = new AsyncHTTPBuilder(
                 poolSize : 20,
-                uri : grailsApplication.config.vault.url)
+                uri : grailsApplication.config.getProperty("vault.url", String.class))
         }
         return http
     }
@@ -44,7 +44,7 @@ class VaultRestService {
         try {
             getRestClient().request(internalMethod, mediaType) {
                 headers."X-Vault-Token" = token//"78600c52-5062-1d55-7e50-6b88c8865e79"
-                URIBuilder uriBuilder = new URIBuilder(UriUtils.encodePath(grailsApplication.config.vault.url + restPath, "UTF-8"))
+                URIBuilder uriBuilder = new URIBuilder(UriUtils.encodePath(grailsApplication.config.getProperty("vault.url", String.class) + restPath, "UTF-8"))
                 uri = uriBuilder.build()
                 if (query) {
                     uri.query = query
@@ -141,7 +141,7 @@ class VaultRestService {
         List<String> secrets = []
         Map query = ["list":true]
 
-        Map response = getJsonByUrlAndType(grailsApplication.config.vault.vaulttoken, "/v1/secret/${VAULTTOOLSECRETSPATHNAME}/${path}", query)
+        Map response = getJsonByUrlAndType(grailsApplication.config.getProperty("vault.vaulttoken", String.class), "/v1/secret/${VAULTTOOLSECRETSPATHNAME}/${path}", query)
 
         response?.data?.keys?.each {
             String tmpPath = path

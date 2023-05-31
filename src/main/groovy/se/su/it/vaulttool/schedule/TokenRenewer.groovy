@@ -24,7 +24,7 @@ class TokenRenewer {
         final Runnable renewChecker = new Runnable() {
             void run() {
                 try {
-                    vaultRestService.checkAndRenewToken(grailsApplication.config.vault.vaulttoken)
+                    vaultRestService.checkAndRenewToken(grailsApplication.config.getProperty("vault.vaulttoken", String.class))
                 } catch (Exception ex) {
                     log.error("Exception when doing renew check. Message was: ${ex.message}")
                 } finally {

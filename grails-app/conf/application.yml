@@ -106,7 +106,13 @@ hibernate:
         use_second_level_cache: true
         use_query_cache: false
         region.factory_class: org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory
-
+environments:
+    development:
+        logging:
+            config: classpath:logback-development.xml
+    production:
+        logging:
+            config: classpath:logback-prod.xml
 dataSource:
     pooled: true
     url: "jdbc:mysql://localhost/yourDB"
