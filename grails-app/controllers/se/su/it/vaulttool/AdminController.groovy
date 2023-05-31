@@ -60,6 +60,7 @@ class AdminController {
         [secrets: secretUsers.sort{it.secret}]
     }
 
+    @Transactional
     def createUser() {
         String eppn = params.eppn?:""
         String sms  = params.sms?:""
@@ -434,6 +435,7 @@ class AdminController {
         response.setStatus(500)
     }
 
+    @Transactional
     def importZip() {
         MultipartFile f = request.getFile('importZipInputFileId')
         if (f.empty) {
