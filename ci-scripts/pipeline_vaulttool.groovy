@@ -28,6 +28,10 @@ suNodeWithNexusCredentials {
                     projectName : projectName,
                 ])
             }
+            
+            stage('Test') {
+                sh './gradlew test'
+            }
 
             stage("Build")
             {
