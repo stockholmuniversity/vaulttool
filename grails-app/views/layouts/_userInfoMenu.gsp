@@ -31,7 +31,7 @@
                 </g:link>
             </div>
         
-        <g:if test="${session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup}">
+        <g:if test="${session.group == 'sysadmin' || session.group == grailsApplication.config.getProperty("vault.sysadmdevgroup", String.class)}">
             <div class="btn-group-vertical btn-block btn-group">
 
                 <g:link name="admin" class="btn btn-default btn-sm btn-block">

@@ -16,7 +16,7 @@ class BootStrap {
     }
 
     def initializeVault() {
-        vaultRestService.enableApproleAuth(grailsApplication.config.vault.vaulttoken)
+        vaultRestService.enableApproleAuth(grailsApplication.config.getProperty("vault.vaulttoken", String.class))
         //vaultRestService.putDefaultVaultToolPolicy(grailsApplication.config.vault.vaulttoken)
     }
 }

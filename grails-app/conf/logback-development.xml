@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d %level [%thread] %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="info">
+        <appender-ref ref="STDOUT" />
+    </root>
+
+    <logger name="groovyx.net.http.ParserRegistry" level="error" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="se.su.it.vaulttool" level="debug" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+
+    <logger name="org.hibernate.orm.deprecation" level="error" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+</configuration>

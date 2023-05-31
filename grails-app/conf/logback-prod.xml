@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="TIME_BASED_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${catalina.home}/logs/vaulttool.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${catalina.home}/logs/vaulttool.log.%i.%d{yyyy-MM-dd}</fileNamePattern>
+            <timeBasedFileNamingAndTriggeringPolicy
+                    class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+            <maxHistory>365</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d %level [%thread] %logger - %msg%n</pattern>
+            <outputPatternAsHeader>true</outputPatternAsHeader>
+        </encoder>
+    </appender>
+
+    <appender name="SYSLOG" class="ch.qos.logback.classic.net.SyslogAppender">
+        <syslogHost>127.0.0.1</syslogHost>
+        <facility>USER</facility>
+        <throwableExcluded>true</throwableExcluded>
+        <suffixPattern>vaulttool: %level [%thread] %logger - %msg%n%xException</suffixPattern>
+    </appender>
+
+    <root level="error">
+        <appender-ref ref="TIME_BASED_FILE" />
+        <appender-ref ref="SYSLOG" />
+    </root>
+
+    <logger name="org.grails.web.errors" level="debug" additivity="false">
+        <appender-ref ref="TIME_BASED_FILE" />
+        <appender-ref ref="SYSLOG" />
+    </logger>
+
+    <logger name="grails" level="info" additivity="false">
+        <appender-ref ref="TIME_BASED_FILE" />
+        <appender-ref ref="SYSLOG" />
+    </logger>
+
+    <logger name="se.su.it.vaulttool" level="info" additivity="false">
+        <appender-ref ref="TIME_BASED_FILE" />
+        <appender-ref ref="SYSLOG" />
+    </logger>
+
+    <logger name="groovyx.net.http.ParserRegistry" level="error" additivity="false">
+        <appender-ref ref="TIME_BASED_FILE" />
+        <appender-ref ref="SYSLOG" />
+    </logger>
+
+    <logger name="org.hibernate.orm.deprecation" level="error" additivity="false">
+        <appender-ref ref="TIME_BASED_FILE" />
+        <appender-ref ref="SYSLOG" />
+    </logger>
+
+    <logger name="groovyx.net.http.ParserRegistry" level="error" additivity="false">
+        <appender-ref ref="TIME_BASED_FILE" />
+        <appender-ref ref="SYSLOG" />
+    </logger>
+
+    <logger name="org.hibernate.orm.deprecation" level="error" additivity="false">
+        <appender-ref ref="TIME_BASED_FILE" />
+        <appender-ref ref="SYSLOG" />
+    </logger>
+
+    <logger name="org.grails.config.NavigableMap" level="error" additivity="false">
+        <appender-ref ref="TIME_BASED_FILE" />
+        <appender-ref ref="SYSLOG" />
+    </logger>
+</configuration>

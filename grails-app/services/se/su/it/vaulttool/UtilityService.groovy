@@ -9,7 +9,7 @@ class UtilityService {
 
     private synchronized HTTPBuilder getRestClient() {
         if (!http) {
-            http = new HTTPBuilder(grailsApplication.config.smsservice.endPoint)
+            http = new HTTPBuilder(grailsApplication.config.getProperty("smsservice.endPoint", String.class))
         }
         return http
     }
@@ -79,7 +79,7 @@ class UtilityService {
     }
 
     def sendSms(Sms sms) {
-        String resource = grailsApplication.config.smsservice.resource
+        String resource = grailsApplication.config.getProperty("smsservice.resource", String.class)
         Map response = postJsonByUrlAndType(resource, sms.asMap(), null)
     }
 

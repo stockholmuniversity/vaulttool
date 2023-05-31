@@ -37,7 +37,7 @@ class DashboardController {
         List<Map<String, Object>> nodes = new ArrayList<Map<String, Object>>()
         Map<String, Object> node = null
 
-        Boolean isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+        Boolean isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.getProperty("vault.sysadmdevgroup", String.class)
         
         secrets.each {secret ->
             if(secret.endsWith("/")){
@@ -75,7 +75,7 @@ class DashboardController {
 
         List<Map<String, Object>> childNodes = new ArrayList<Map<String, Object>>()
 
-        Boolean isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.vault.sysadmdevgroup
+        Boolean isAdmin = session.group == 'sysadmin' || session.group == grailsApplication.config.getProperty("vault.sysadmdevgroup", String.class)
 
         secrets.each {secret ->
             Map<String, Object> node = null

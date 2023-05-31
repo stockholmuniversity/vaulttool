@@ -11,8 +11,8 @@ class ApplicationSettingsInterceptor {
     }
 
     boolean before() {
-        String logoUrl = grailsApplication.config.vaulttool.logoUrl
-        String applicationName = grailsApplication.config.vaulttool.applicationName
+        String logoUrl = grailsApplication.config.getProperty("vaulttool.logoUrl", String.class)
+        String applicationName = grailsApplication.config.getProperty("vaulttool.applicationName", String.class)
 
         if(logoUrl && !logoUrl.empty) {
             session.logoUrl = logoUrl

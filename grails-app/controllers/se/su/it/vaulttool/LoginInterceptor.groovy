@@ -85,9 +85,9 @@ class LoginInterceptor {
             return false
         }
         if(!session.secondauth && !session.secondauthkey && request.getAttribute("REMOTE_USER")) {
-            User user = vaultRestService.getUserSecret(grailsApplication.config.vault.vaulttoken,session.eppn)
-            String rootEppn = grailsApplication.config.vault.rooteppn?:null
-            String rootSmsNumber = grailsApplication.config.vault.rootsms?:null
+            User user = vaultRestService.getUserSecret(grailsApplication.config.getProperty("vault.vaulttoken", String.class),session.eppn)
+            String rootEppn = grailsApplication.config.getProperty("vault.rooteppn", String.class)?:null
+            String rootSmsNumber = grailsApplication.config.getProperty("vault.rootsms", String.class)?:null
             if ((user && user.smsNumber && user.smsNumber.length() > 2) || (rootEppn && rootSmsNumber && rootSmsNumber.length() > 2 && rootEppn == session.eppn)) {
                 session.secondauthkey = generator((('A'..'Z') + ('0'..'9')).join(), 5)
                 String message = """This is the verification code to enter at Vaulttool.\n${session.secondauthkey}\n\nHave a nice day!"""
@@ -106,16 +106,16 @@ class LoginInterceptor {
         }
         if(!session.token) {
             //vaultRestService.enableApproleAuth(grailsApplication.config.vault.vaulttoken)
-            if(session.group == "sysadmin" || session.group == grailsApplication.config.vault.sysadmdevgroup) {
-                session.token = grailsApplication.config.vault.vaulttoken
+            if(session.group == "sysadmin" || session.group == grailsApplication.config.getProperty("vault.sysadmdevgroup", String.class)) {
+                session.token = grailsApplication.config.getProperty("vault.vaulttoken", String.class)
             } else {
-                String entitlementToken = vaultRestService.getEntitlementToken(grailsApplication.config.vault.vaulttoken, session.group)
+                String entitlementToken = vaultRestService.getEntitlementToken(grailsApplication.config.getProperty("vault.vaulttoken", String.class), session.group)
                 if (entitlementToken) {
                     session.token = entitlementToken
                 }
             }
         }
-        if(controllerName == "admin" && (session.group != "sysadmin" && session.group != grailsApplication.config.vault.sysadmdevgroup)) {
+        if(controllerName == "admin" && (session.group != "sysadmin" && session.group != grailsApplication.config.getProperty("vault.sysadmdevgroup", String.class))) {
             redirect(controller: "public", action: "index")
             return false
         }
