@@ -144,7 +144,7 @@ bootRun {
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
-bootWar {
+war {
     enabled = true
     archiveName 'vaulttool.war'
     classifier ''
