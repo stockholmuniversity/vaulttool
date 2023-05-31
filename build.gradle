@@ -87,8 +87,8 @@ dependencies {
     implementation "org.hibernate:hibernate-core:5.6.11.Final"
     implementation "org.hibernate:hibernate-ehcache:5.6.11.Final"
     implementation "org.grails.plugins:gsp"
-    console "org.grails:grails-console"
-    compileOnly "io.micronaut:micronaut-inject-groovy"
+    //console "org.grails:grails-console"
+    implementation "io.micronaut:micronaut-inject-groovy"
     implementation "org.codehaus.groovy.modules.http-builder:http-builder:0.7.2"
     implementation "se.su.it.tomcat:tomcat-header-encoding-valve:2.3"
     implementation 'mysql:mysql-connector-java:8.0.22'
