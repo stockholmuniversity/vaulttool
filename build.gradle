@@ -103,6 +103,7 @@ dependencies {
     } else {
         runtimeOnly "com.bertramlabs.plugins:sass-asset-pipeline:3.4.7"
     }
+    implementation "com.bertramlabs.plugins:asset-pipeline-grails:3.4.7"
     implementation 'org.grails.plugins:build-test-data:4.0.0'
     implementation group: 'org.springframework', name: 'spring-aspects'
     implementation group: 'org.aspectj', name: 'aspectjweaver'
