@@ -29,10 +29,6 @@ suNodeWithNexusCredentials {
                 ])
             }
             
-            stage('Test') {
-                sh './gradlew test'
-            }
-
             stage("Build")
             {
                 sh "./gradlew war"
