@@ -127,7 +127,7 @@ if $darwin; then
 fi
 
 #Debugging
-GRADLE_OPTS="$GRADLE_OPTS \"--stacktrace\" \"--info\" \"--scan\""
+GRADLE_OPTS="$GRADLE_OPTS \"--debug\""
 
 # For Cygwin or MSYS, switch paths to Windows format before running java
 if [ "$cygwin" = "true" -o "$msys" = "true" ] ; then
