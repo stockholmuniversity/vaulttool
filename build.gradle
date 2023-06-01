@@ -145,12 +145,6 @@ bootRun {
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
-war {
-    enabled = true
-    archiveName 'vaulttool.war'
-    classifier ''
-}
-
 tasks.withType(GroovyCompile) {
     configure(groovyOptions) {
         forkOptions.jvmArgs = ['-Xmx4096m']
