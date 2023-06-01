@@ -87,8 +87,8 @@ dependencies {
     implementation "org.hibernate:hibernate-core:5.6.11.Final"
     implementation "org.hibernate:hibernate-ehcache:5.6.11.Final"
     implementation "org.grails.plugins:gsp"
-    console "org.grails:grails-console"
-    compileOnly "io.micronaut:micronaut-inject-groovy"
+    //console "org.grails:grails-console"
+    implementation "io.micronaut:micronaut-inject-groovy"
     implementation "org.codehaus.groovy.modules.http-builder:http-builder:0.7.2"
     implementation "se.su.it.tomcat:tomcat-header-encoding-valve:2.3"
     implementation 'mysql:mysql-connector-java:8.0.22'
@@ -103,6 +103,7 @@ dependencies {
     } else {
         runtimeOnly "com.bertramlabs.plugins:sass-asset-pipeline:3.4.7"
     }
+    implementation "com.bertramlabs.plugins:asset-pipeline-grails:3.4.7"
     implementation 'org.grails.plugins:build-test-data:4.0.0'
     implementation group: 'org.springframework', name: 'spring-aspects'
     implementation group: 'org.aspectj', name: 'aspectjweaver'
@@ -123,9 +124,9 @@ dependencies {
     testRuntimeOnly "org.seleniumhq.selenium:selenium-firefox-driver:4.0.0"
 }
 
-springBoot {
+//springBoot {
     //mainClassName = 'vaulttool.Application'
-}
+//}
 
 ext {
     grailsVersion = project.grailsVersion
@@ -138,13 +139,13 @@ bootRun {
             '-Dspring.output.ansi.enabled=always',
             '-noverify',
             '-XX:TieredStopAtLevel=1',
-            '-Xmx1024m')
+            '-Xmx4096m')
     sourceResources sourceSets.main
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
 }
 
-bootWar {
+war {
     enabled = true
     archiveName 'vaulttool.war'
     classifier ''
@@ -152,7 +153,7 @@ bootWar {
 
 tasks.withType(GroovyCompile) {
     configure(groovyOptions) {
-        forkOptions.jvmArgs = ['-Xmx1024m']
+        forkOptions.jvmArgs = ['-Xmx4096m']
     }
 }
 
@@ -168,9 +169,9 @@ assets {
     minifyCss = true
 }
 
-publish {
-    dependsOn assemble
-}
+//publish {
+  //  dependsOn assemble
+//}
 
 publishing {
   publications {

@@ -18,7 +18,7 @@ suNodeWithNexusCredentials {
         suDockerBuildAndPull(projectName)
     }
 
-    docker.image(projectName).inside('-v /local/jenkins/conf:/local/jenkins/conf -v /local/jenkins/libexec:/local/jenkins/libexec') {
+    docker.image(projectName).inside('-v /local/jenkins/conf:/local/jenkins/conf -v /local/jenkins/libexec:/local/jenkins/libexec -v /etc/ssl/certs/java/cacerts:/local/jdk/jre/lib/security/cacerts:ro') {
 
         suGitHubBuildStatus {
 
@@ -28,10 +28,10 @@ suNodeWithNexusCredentials {
                     projectName : projectName,
                 ])
             }
-
+            
             stage("Build")
             {
-                sh "./gradlew bootWar"
+                sh "./gradlew war -PnexusUsername=${nexusUsername} -PnexusPassword=${nexusPassword}"
             }
 
             stage("Deploy to Nexus")
