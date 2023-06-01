@@ -1,5 +1,4 @@
 import org.gradle.nativeplatform.platform.internal.DefaultNativePlatform
-gradle.startParameter.showStacktrace = org.gradle.api.logging.configuration.ShowStacktrace.ALWAYS
 
 buildscript {
     ext {
