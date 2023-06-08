@@ -163,6 +163,11 @@ tasks.named("bootWar") {
     enabled = false
 }
 
+tasks.named("war") {
+    archiveClassifier = ''
+    enabled = false
+}
+
 assets {
     minifyJs = true
     minifyCss = true
