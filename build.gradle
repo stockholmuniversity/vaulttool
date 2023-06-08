@@ -160,12 +160,10 @@ tasks.withType(Test) {
 
 tasks.named("bootWar") {
     archiveClassifier = 'boot'
-    enabled = false
 }
 
 tasks.named("war") {
     archiveClassifier = ''
-    enabled = false
 }
 
 assets {
