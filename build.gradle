@@ -158,14 +158,6 @@ tasks.withType(Test) {
     systemProperty "webdriver.gecko.driver", System.getProperty('webdriver.gecko.driver')
 }
 
-tasks.named("bootWar") {
-    archiveClassifier = 'boot'
-}
-
-tasks.named("war") {
-    archiveClassifier = ''
-}
-
 assets {
     minifyJs = true
     minifyCss = true
@@ -179,7 +171,7 @@ publishing {
   publications {
     mavenJava(MavenPublication) {
         artifactId = 'vaulttool'
-        from components.web
+        artifact bootWar
     }
   }
 
