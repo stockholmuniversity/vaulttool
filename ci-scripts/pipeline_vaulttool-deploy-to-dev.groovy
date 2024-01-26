@@ -6,7 +6,7 @@ if (! version) {
     error 'Missing argument "version"'
 }
 
-String jenkinsAgent = 'jenkins-agent/stretch'
+String jenkinsAgent = 'jenkins-agent/bullseye'
 String groupId = 'se.su.it'
 String projectName = 'vaulttool'
 
