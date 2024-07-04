@@ -67,3 +67,4 @@ Andra viktiga förberedelser:
 4. Sedan behöver man antingen sätta upp en Apache framför denna web-app som är shibbad eller gå via någon shibproxy.
 5. Glöm heller inte att sätta upp den externa configurationsfilen /local/vaulttool/conf/application.yml med vault-entries för root-token och url till vault.
 6. Denna app körs under Java 1.8 och startas med: java -jar build/libs/vaulttool.jar
+
