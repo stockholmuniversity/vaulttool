@@ -10,7 +10,7 @@ buildscript {
         maven { url "https://dl.bintray.com/ctoestreich/grails-plugins" }
     }
     dependencies {
-        classpath "org.grails:grails-gradle-plugin:$grailsGradlePluginVersion"
+        classpath "org.grails:grails-gradle-plugin:6.1.2"
         classpath "gradle.plugin.com.github.erdi.webdriver-binaries:webdriver-binaries-gradle-plugin:2.0"
         classpath "com.bertramlabs.plugins:asset-pipeline-gradle:3.4.7"
         if(DefaultNativePlatform.currentArchitecture.name.toLowerCase().contains("aarch64") || DefaultNativePlatform.currentArchitecture.name.toLowerCase().contains("arm-v8")) {
@@ -24,7 +24,7 @@ buildscript {
     }
 }
 
-version "2.0.8-rc01"
+version "2.0.9-rc01-SNAPSHOT"
 group "se.su.it"
 
 apply plugin:"eclipse"
@@ -143,6 +143,13 @@ bootRun {
     sourceResources sourceSets.main
     String springProfilesActive = 'spring.profiles.active'
     systemProperty springProfilesActive, System.getProperty(springProfilesActive)
+    systemProperty "grails.env", "development"
+}
+
+tasks.processResources {
+    filesMatching("META-INF/grails.build.info") {
+        expand(version: project.version, appName: rootProject.name, grailsVersion: project.grailsVersion)
+    }
 }
 
 tasks.withType(GroovyCompile) {
@@ -162,10 +169,6 @@ assets {
     minifyJs = true
     minifyCss = true
 }
-
-//publish {
-  //  dependsOn assemble
-//}
 
 publishing {
   publications {
