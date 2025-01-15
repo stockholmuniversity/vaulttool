@@ -146,11 +146,31 @@ bootRun {
     systemProperty "grails.env", "development"
 }
 
-tasks.processResources {
+springBoot {
+    buildInfo {
+        properties {
+            // Preserve default properties
+            artifact = project.name
+            group = project.group
+            name = project.name
+            version = project.version
+            time = java.time.Instant.now() // Correctly set as Instant
+
+            // Add custom properties
+            additional = [
+                    'grails.version' : grailsVersion,
+                    'app.description': 'A Grails application for managing Vault secrets'
+            ]
+        }
+    }
+}
+
+
+/*tasks.processResources {
     filesMatching("META-INF/grails.build.info") {
         expand(version: project.version, appName: rootProject.name, grailsVersion: project.grailsVersion)
     }
-}
+}*/
 
 tasks.withType(GroovyCompile) {
     configure(groovyOptions) {
