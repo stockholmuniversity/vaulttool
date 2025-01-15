@@ -34,7 +34,9 @@ spring:
 
 management:
     endpoints:
-        enabled-by-default: false
+        web:
+            exposure:
+                include: info
 ---
 grails:
     mime:
