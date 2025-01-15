@@ -5,7 +5,7 @@ suSetProperties(["github": "true"])
 def projectName = 'vaulttool'
 
 //env.JAVA_HOME="/local/jdk"
-env.JAVA_HOME="/usr/lib/jvm/java-8-openjdk-amd64"
+env.JAVA_HOME="/usr/lib/jvm/java-11-openjdk-amd64"
 
 suNodeWithNexusCredentials {
 
