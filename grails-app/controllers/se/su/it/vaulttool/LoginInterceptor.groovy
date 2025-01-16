@@ -10,7 +10,7 @@ class LoginInterceptor {
 
     LoginInterceptor() {
         matchAll().excludes(controller: "public")
-        matchAll().excludes(controller: "actuator")
+        matchAll().excludes(uri: "/actuator/**")
     }
 
     boolean before() {
