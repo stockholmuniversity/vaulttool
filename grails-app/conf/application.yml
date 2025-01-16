@@ -37,6 +37,9 @@ management:
         web:
             exposure:
                 include: info
+    info:
+        git:
+            enabled: false
 ---
 grails:
     mime:
