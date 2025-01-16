@@ -9,7 +9,9 @@ class LoginInterceptor {
     def vaultRestService
 
     LoginInterceptor() {
-        matchAll().excludes(controller: "public")
+        matchAll()
+                .excludes(controller: 'public')
+                .excludes(uri: '/actuator/**')
     }
 
     boolean before() {
