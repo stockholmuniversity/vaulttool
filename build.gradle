@@ -24,7 +24,7 @@ buildscript {
     }
 }
 
-version "2.0.9-rc01"
+version "2.0.9-rc02"
 group "se.su.it"
 
 apply plugin:"eclipse"
