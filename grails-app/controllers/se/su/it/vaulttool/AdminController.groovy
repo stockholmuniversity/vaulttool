@@ -386,6 +386,7 @@ class AdminController {
                 UserData userData = UserData.findBySecretKey(secret)
                 if(null == userData) {
                     log.warn("UserData is null for user-secret: ${user.key}, sms: ${user.smsNumber}")
+                    log.warn("Secret: ${secret}")
                 }
                 if(user && user.key && !user.key.empty) {
                     ZipEntry entry = new ZipEntry(usersPath+user.key + "/key.txt")
