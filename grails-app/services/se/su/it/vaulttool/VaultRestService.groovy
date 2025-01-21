@@ -56,6 +56,7 @@ class VaultRestService {
                         result = reader
                 }
                 response.'404' = { resp, reader ->
+                    log.warn("404 error, method:${method}, restPath: ${restPath}, mediaType: ${mediaType}, theBody: ${theBody != null ? prettyPrintMap(theBody) : 'theBody is null'}, ${query != null ? prettyPrintMap(query) : 'query is null'}")
                     if(internalMethod == groovyx.net.http.Method.GET) {
                         result = null
                     } else {
@@ -64,10 +65,12 @@ class VaultRestService {
                 }
                 response.failure = { resp, reader ->
                     log.warn("Failure while doing REST REQUEST: ${resp?.statusLine}, ${reader}")
+                    log.warn("method:${method}, restPath: ${restPath}, mediaType: ${mediaType}, theBody: ${theBody != null ? prettyPrintMap(theBody) : 'theBody is null'}, ${query != null ? prettyPrintMap(query) : 'query is null'}")
                     result = ["status": resp.status]
                 }
             }.get()
         } catch (Throwable ex) {
+            log.error("Exception ${ex.message} - method:${method}, restPath: ${restPath}, mediaType: ${mediaType}, theBody: ${theBody != null ? prettyPrintMap(theBody) : 'theBody is null'}, ${query != null ? prettyPrintMap(query) : 'query is null'}")
             ex.printStackTrace()
         }
     }
@@ -279,5 +282,9 @@ class VaultRestService {
 
     Map deleteUserSecret(String token, String key) {
         return deleteJsonByUrlAndType(token,"/v1/secret/${VAULTTOOLUSERSPATHNAME}/${key}", null, null)
+    }
+
+    private String prettyPrintMap(map) {
+        map.collect { k, v -> "  ${k}: ${v}" }.join('\n').with { "{\n${it}\n}" }
     }
 }
