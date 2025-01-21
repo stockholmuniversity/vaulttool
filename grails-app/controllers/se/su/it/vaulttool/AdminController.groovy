@@ -384,6 +384,9 @@ class AdminController {
             vaultRestService.listUserSecrets(session.token).each{String secret ->
                 User user = vaultRestService.getUserSecret(session.token, secret)
                 UserData userData = UserData.findBySecretKey(secret)
+                if(null == userData) {
+                    log.warn("UserData is null for user-secret: ${user.key}, sms: ${user.smsNumber}")
+                }
                 if(user && user.key && !user.key.empty) {
                     ZipEntry entry = new ZipEntry(usersPath+user.key + "/key.txt")
                     zos.putNextEntry(entry)
